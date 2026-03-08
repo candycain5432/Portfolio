@@ -1,458 +1,775 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Willaim's Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
-    <link rel="shortcut icon" href="https://i.postimg.cc/QMXXk0G1/Screenshot-20.png" type="image/x-icon">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>William Cain — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;900&family=Playfair+Display:ital@1&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #05050a;
+  --purple: #7c3aed;
+  --violet: #a855f7;
+  --pink: #ec4899;
+  --teal: #14b8a6;
+  --white: #f0eeff;
+  --muted: rgba(240,238,255,0.45);
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --glow-purple: rgba(124,58,237,0.35);
+  --glow-pink: rgba(236,72,153,0.25);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* BG */
+.bg-canvas { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.5; animation: drift 18s ease-in-out infinite alternate; }
+.orb-1 { width: 700px; height: 700px; background: var(--purple); top: -200px; left: -200px; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: var(--pink); bottom: -150px; right: -100px; animation-delay: -6s; }
+.orb-3 { width: 400px; height: 400px; background: var(--teal); bottom: 30%; left: 40%; animation-delay: -12s; opacity: 0.3; }
+@keyframes drift { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(60px,40px) scale(1.08)} 100%{transform:translate(-40px,80px) scale(0.95)} }
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+  background-size: 80px 80px;
+}
+
+.content { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.2rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(5,5,10,0.6); backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--glass-border);
+}
+.logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; color: var(--white); display: flex; align-items: center; gap: 0.5rem; }
+.logo-dot { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(135deg, var(--violet), var(--pink)); }
+.nav-pills { display: flex; gap: 0.4rem; }
+.nav-pill { padding: 0.45rem 1.1rem; border-radius: 100px; font-size: 0.78rem; font-weight: 400; color: var(--muted); text-decoration: none; transition: all 0.25s; border: 1px solid transparent; }
+.nav-pill:hover { background: var(--glass); border-color: var(--glass-border); color: var(--white); }
+.nav-status { display: flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; color: var(--muted); }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80; animation: blink 2.5s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: 0.4; box-shadow: none; } }
+
+/* HERO */
+#hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 3rem 5rem; position: relative; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px); border-radius: 100px;
+  padding: 0.45rem 1.2rem; font-size: 0.72rem; letter-spacing: 0.12em;
+  color: var(--violet); font-weight: 500; margin-bottom: 1.5rem;
+  animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+}
+@keyframes popIn { from { opacity:0; transform:scale(0.8) translateY(10px); } }
+
+.hero-h1 {
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-weight: 900; line-height: 0.95; letter-spacing: -0.03em;
+  margin-bottom: 0.8rem;
+  animation: slideIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.3s both;
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(40px); } }
+.hero-h1 .gradient-text {
+  background: linear-gradient(135deg, var(--violet) 0%, var(--pink) 60%, #f97316 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-h1 .ghost { -webkit-text-stroke: 1px rgba(240,238,255,0.2); color: transparent; display: block; }
+
+.hero-age-line {
+  display: inline-flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  animation: slideIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.4s both;
+}
+.age-chip {
+  background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25);
+  border-radius: 100px; padding: 0.35rem 1rem;
+  font-size: 0.72rem; color: #4ade80; font-weight: 500; letter-spacing: 0.1em;
+}
+.grade-chip {
+  background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25);
+  border-radius: 100px; padding: 0.35rem 1rem;
+  font-size: 0.72rem; color: var(--violet); font-weight: 500; letter-spacing: 0.1em;
+}
+
+.hero-sub {
+  font-size: 1.05rem; color: var(--muted); font-weight: 300;
+  max-width: 520px; line-height: 1.8; margin-bottom: 3rem;
+  animation: slideIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.45s both;
+}
+.hero-sub em { font-family: 'Playfair Display', serif; font-style: italic; color: rgba(240,238,255,0.7); }
+.hero-sub strong { color: var(--white); font-weight: 500; }
+
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; animation: slideIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.6s both; }
+.btn-glow {
+  padding: 0.9rem 2.2rem;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: #fff; font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 500;
+  letter-spacing: 0.05em; text-decoration: none; border-radius: 12px; border: none; cursor: pointer;
+  box-shadow: 0 0 30px var(--glow-purple); transition: all 0.3s; position: relative; overflow: hidden;
+}
+.btn-glow:hover { transform: translateY(-2px); box-shadow: 0 0 50px var(--glow-purple), 0 0 20px var(--glow-pink); }
+.btn-glass {
+  padding: 0.9rem 2.2rem; background: var(--glass); backdrop-filter: blur(10px);
+  color: var(--white); font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 400;
+  letter-spacing: 0.05em; text-decoration: none; border-radius: 12px; border: 1px solid var(--glass-border); transition: all 0.3s;
+}
+.btn-glass:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+.hero-scroll-hint {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  animation: fadeUpHint 1s ease 1.2s both;
+}
+@keyframes fadeUpHint { from { opacity:0; transform:translateX(-50%) translateY(10px); } }
+.scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--violet), transparent); animation: scrollLine 2s ease-in-out infinite; }
+@keyframes scrollLine { 0%,100%{opacity:0.3;height:30px} 50%{opacity:1;height:50px} }
+
+/* STATS STRIP */
+.stats-row {
+  padding: 2rem 3rem; display: flex; gap: 1rem; flex-wrap: wrap;
+  border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+}
+.stat-pill {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--glass); backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border); border-radius: 16px;
+  padding: 1rem 1.8rem; flex: 1; min-width: 160px; transition: all 0.3s;
+}
+.stat-pill:hover { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.3); }
+.stat-icon { font-size: 1.4rem; }
+.stat-num {
+  font-size: 1.6rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--violet), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block;
+}
+.stat-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em; }
+
+/* SECTIONS */
+section { padding: 6rem 3rem; }
+.sec-eyebrow {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  background: linear-gradient(135deg, var(--violet), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 1rem;
+}
+.sec-title { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1rem; }
+.sec-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.8; max-width: 520px; margin-bottom: 3.5rem; }
+
+/* ABOUT */
+#about { border-bottom: 1px solid var(--glass-border); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+.about-card {
+  background: var(--glass); backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem;
+}
+.about-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.9; margin-bottom: 1rem; }
+.about-card p:last-child { margin-bottom: 0; }
+.about-card p strong { color: var(--white); font-weight: 500; }
+.about-card p .hi {
+  background: linear-gradient(135deg, var(--violet), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-weight: 500;
+}
+.fact-list { display: flex; flex-direction: column; gap: 1px; background: var(--glass-border); border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); }
+.fact-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.4rem; background: var(--bg); font-size: 0.8rem; transition: background 0.2s;
+}
+.fact-row:first-child { border-radius: 16px 16px 0 0; }
+.fact-row:last-child { border-radius: 0 0 16px 16px; }
+.fact-row:hover { background: rgba(124,58,237,0.08); }
+.fact-key { color: var(--muted); }
+.fact-val { color: var(--white); font-weight: 400; }
+.fact-val.purple { color: var(--violet); }
+.fact-val.green { color: #4ade80; }
+
+/* SKILLS */
+#skills { border-bottom: 1px solid var(--glass-border); }
+.skills-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; align-items: start; }
+.skills-left { position: sticky; top: 7rem; }
+.skills-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.skill-card {
+  background: var(--glass); backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem;
+  transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); position: relative; overflow: hidden;
+}
+.skill-card::before {
+  content: ''; position: absolute; inset: 0; border-radius: 20px;
+  background: linear-gradient(135deg, var(--card-a, var(--purple)), var(--card-b, var(--pink)));
+  opacity: 0; transition: opacity 0.35s;
+}
+.skill-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.skill-card:hover::before { opacity: 0.07; }
+.skill-card > * { position: relative; z-index: 1; }
+.skill-emoji { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.skill-name { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+.skill-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.7; margin-bottom: 0.7rem; }
+.skill-note { font-size: 0.65rem; color: #4ade80; font-style: italic; margin-bottom: 0.8rem; }
+.skill-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.skill-pill {
+  font-size: 0.58rem; font-weight: 500; letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem; border-radius: 100px;
+  background: rgba(255,255,255,0.06); color: rgba(240,238,255,0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* PROJECTS */
+#projects { border-bottom: 1px solid var(--glass-border); }
+.projects-list { display: flex; flex-direction: column; gap: 1rem; }
+.project-item {
+  background: var(--glass); backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem;
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: center; gap: 2.5rem; cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); position: relative; overflow: hidden;
+}
+.project-item::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 2px;
+  background: linear-gradient(to bottom, var(--item-a, var(--violet)), var(--item-b, var(--pink)));
+  transform: scaleY(0); transform-origin: top; transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.project-item:hover { transform: translateX(8px); border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.06); }
+.project-item:hover::before { transform: scaleY(1); }
+.project-item.featured {
+  grid-template-columns: 1fr 1fr; grid-template-rows: auto; padding: 3rem;
+  background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(236,72,153,0.08));
+  border-color: rgba(124,58,237,0.3);
+}
+.project-item.featured::before { transform: scaleY(1); }
+.proj-num { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; font-weight: 500; white-space: nowrap; }
+.proj-cat {
+  display: inline-block; font-size: 0.62rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.2rem 0.7rem; border-radius: 100px; margin-bottom: 0.6rem;
+}
+.cat-c { background: rgba(20,184,166,0.15); color: var(--teal); }
+.cat-d { background: rgba(168,85,247,0.15); color: var(--violet); }
+.cat-p { background: rgba(236,72,153,0.15); color: var(--pink); }
+.proj-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+.proj-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.7; }
+.proj-honest {
+  font-size: 0.72rem; color: #4ade80; font-style: italic;
+  margin-top: 0.6rem; padding-left: 0.8rem;
+  border-left: 2px solid rgba(74,222,128,0.4);
+}
+.proj-stack { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 1rem; }
+.proj-tag {
+  font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: 6px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: var(--muted);
+}
+.proj-arrow {
+  width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: var(--muted); transition: all 0.3s; flex-shrink: 0; background: var(--glass);
+}
+.project-item:hover .proj-arrow {
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  border-color: transparent; color: white; transform: rotate(45deg);
+}
+.proj-visual {
+  aspect-ratio: 16/10; border-radius: 12px; background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em;
+  position: relative; overflow: hidden;
+}
+.proj-visual-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-family: 'Outfit', monospace; text-align: center; position: relative; z-index: 1;
+}
+.proj-visual-inner span {
+  display: block; font-size: clamp(2rem,3.5vw,3.5rem); font-weight: 900;
+  background: linear-gradient(135deg, var(--violet), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* PHOTOGRAPHY */
+#photography { border-bottom: 1px solid var(--glass-border); }
+.photo-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem; }
+.photo-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: 200px 200px; gap: 10px;
+}
+.photo-tile {
+  border-radius: 16px; overflow: hidden; position: relative; cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.photo-tile:hover { transform: scale(1.02); z-index: 2; }
+.photo-tile.c2 { grid-column: span 2; }
+.photo-tile.c3 { grid-column: span 3; }
+.photo-tile.r2 { grid-row: span 2; }
+.tile-bg { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); display: flex; align-items: center; justify-content: center; }
+.photo-tile:hover .tile-bg { transform: scale(1.06); }
+.t1 { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%); }
+.t2 { background: linear-gradient(160deg, #1a0826 0%, #3b0764 100%); }
+.t3 { background: linear-gradient(140deg, #0f172a 0%, #1e3a5f 100%); }
+.t4 { background: linear-gradient(150deg, #0c0a1a 0%, #2d1b69 100%); }
+.t5 { background: linear-gradient(135deg, #1a0a2e 0%, #7c3aed30 100%); }
+.t6 { background: linear-gradient(160deg, #0d0221 0%, #3c1361 100%); }
+.tile-overlay {
+  position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,10,0.85) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1.2rem;
+}
+.photo-tile:hover .tile-overlay { opacity: 1; }
+.tile-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.8); }
+.tile-inner-icon { font-size: 2.5rem; opacity: 0.25; }
+
+/* CONTACT */
+#contact {}
+.contact-card {
+  background: var(--glass); backdrop-filter: blur(30px);
+  border: 1px solid var(--glass-border); border-radius: 28px; padding: 4rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto;
+}
+.contact-card::before {
+  content: ''; position: absolute; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
+  top: -200px; right: -200px; pointer-events: none;
+}
+.contact-title {
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1rem;
+}
+.contact-title span {
+  background: linear-gradient(135deg, var(--violet), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.contact-body { font-size: 0.88rem; color: var(--muted); line-height: 1.8; margin-bottom: 2.5rem; }
+.contact-links { display: flex; flex-direction: column; gap: 0.6rem; }
+.contact-link {
+  display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.2rem; border-radius: 14px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+  color: var(--white); text-decoration: none; font-size: 0.82rem; font-weight: 400; transition: all 0.25s;
+}
+.contact-link:hover { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.3); transform: translateX(5px); }
+.contact-link-icon { font-size: 1rem; }
+.contact-link-label { font-size: 0.65rem; color: var(--muted); }
+.contact-link-right { margin-left: auto; font-size: 0.8rem; color: var(--muted); }
+.contact-right { position: relative; z-index: 1; }
+.honest-card {
+  background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(124,58,237,0.08));
+  border: 1px solid rgba(74,222,128,0.2); border-radius: 20px;
+  padding: 2rem; margin-bottom: 1.5rem;
+}
+.honest-card-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.8rem; color: #4ade80; }
+.honest-card-body { font-size: 0.82rem; color: var(--muted); line-height: 1.8; }
+.honest-card-body strong { color: var(--white); font-weight: 500; }
+.what-im-looking { display: flex; flex-direction: column; gap: 0.5rem; }
+.looking-row {
+  display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1.2rem;
+  border-radius: 12px; background: var(--glass); border: 1px solid var(--glass-border); font-size: 0.82rem;
+}
+.looking-icon { font-size: 1rem; }
+
+footer {
+  border-top: 1px solid var(--glass-border); padding: 1.8rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em;
+}
+.footer-logo { font-weight: 700; color: var(--white); text-decoration: none; letter-spacing: 0.05em; }
+
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.4); border-radius: 2px; }
+
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-pills { display: none; }
+  #hero, section { padding: 5rem 1.5rem 3rem; }
+  .hero-h1 { font-size: clamp(3rem, 14vw, 5rem); }
+  .stats-row { padding: 1.5rem; }
+  .about-grid { grid-template-columns: 1fr; }
+  .skills-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .skills-left { position: static; }
+  .skills-cards { grid-template-columns: 1fr; }
+  .project-item { grid-template-columns: 1fr; }
+  .project-item.featured { grid-template-columns: 1fr; }
+  .proj-num, .proj-arrow { display: none; }
+  .photo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4,160px); }
+  .photo-tile.c2, .photo-tile.c3 { grid-column: span 1; }
+  .photo-tile.r2 { grid-row: span 1; }
+  .contact-card { grid-template-columns: 1fr; gap: 2rem; padding: 2rem; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
 </head>
 <body>
-    <main>
-        <aside class="sidebar " data-sidebar>
-            <div class="sidebar-info">
-                <figure class="avatar-box">
-                    <img src="https://avatars.githubusercontent.com/u/151270872?v=4" alt="avatar" width="80">
-                </figure>
 
-                <div class="info-content">
-                    <h1 class="name" title="Richard Hanrick">William Cain</h1>
-                    <p class="title">Web Developer</p>
-                    <br/>
-                    <p class="title">photographer</p>
-                </div>
-
-                <button class="info-more-btn" data-sidebar-btn>
-                    <span>Show Contacts</span>
-                    <ion-icon name="chevron-down"></ion-icon>
-                </button>
-            </div>
-
-            <div class="sidebar-info-more">
-                <div class="separator"></div>
-
-                <ul class="contacts-list">
-                    <li class="contact-item">
-                        <div class="icon-box">
-                            <ion-icon name="mail-outline"></ion-icon>
-                        </div>
-
-                        <div class="contact-info">
-                            <p class="contact-title">Email</p>
-
-                            <a href="mailto:wcosmail@gmail.com" class="contact-links">williamtylercain441@gmail.com</a>
-                        </div>
-                    </li>
-
-                    <li class="contact-item">
-                        <div class="icon-box">
-                            <ion-icon name="phone-portrait-outline"></ion-icon>
-                        </div>
-
-                        <div class="contact-info">
-                            <p class="contact-title">Phone</p>
-
-                            <a href="tel:no" class="contact-links">(984)-298-3211</a>
-                        </div>
-                    </li>
-
-                    <li class="contact-item">
-                        <div class="icon-box">
-                            <ion-icon name="calendar-outline"></ion-icon>
-                        </div>
-
-                        <div class="contact-info">
-                            <p class="contact-title">Birthday</p>
-
-                            <time datetime="1982-06-23">April 14, 2010</time>
-                        </div>
-                    </li>
-
-                    <li class="contact-item">
-                        <div class="icon-box">
-                            <ion-icon name="location-outline"></ion-icon>
-                        </div>
-
-                        <div class="contact-info">
-                            <p class="contact-title">Location</p>
-
-                            <address>Youngsville, North Carolina, USA</address>
-                        </div>
-                    </li>
-                </ul>
-
-                <div class="separator"></div>
-
-                
-            </div>
-        </aside>
-
-        <div class="main-content">
-            <nav class="navbar">
-                <ul class="navbar-list">
-                    <li class="navbar-item"><button class="navbar-links active" data-nav-links>About</button></li>
-                    <li class="navbar-item"><button class="navbar-links" data-nav-links>Resume</button></li>
-                    <li class="navbar-item"><button class="navbar-links" data-nav-links>Portfolio</button></li>
-                    <li class="navbar-item"><button class="navbar-links" data-nav-links>links</button></li>
-                </ul>
-            </nav>
-
-            <article class="about active" data-page="about">
-                <header>
-                    <h2 class="h2 article-title">About me</h2>
-                </header>
-
-                <section class="about-text">
-                    <p>As a 15-year-old web developer and photographer, I've already discovered two of my greatest passions. Coding and creating websites allows me to bring my ideas to life in the digital world, while photography lets me capture the beauty and complexity of the world around me. I love the challenge of solving problems through coding and the creativity involved in composing the perfect shot. Balancing these two interests keeps me engaged and constantly learning new skills. Whether I'm designing a sleek, user-friendly website or framing a stunning photo, I strive to push my boundaries and make each project better than the last. The journey has just begun, and I'm excited to see where it takes me! </p>
-                    <p>My job is to build your website so that it is functional and user-friendly but at the same time attractive. Moreover, I add personal touch to your product and make sure that is eye-catching and easy to use. My aim is to bring across your message and identity in the most creative way.</p>
-                </section>
-
-                <section class="service">
-                    <h3 class="h3 service-title">What I'm doing</h3>
-
-                    <ul class="service-list">
-                        <li class="service-item">
-                            <div class="service-icon-box">
-                                <img src="https://i.postimg.cc/4389jZkP/icon-design.png" alt="icon" width="40">
-                            </div>
-
-                            <div class="service-content-box">
-                                <h4 class="h4 service-item-title">Web Design</h4>
-                                <p class="service-item-text">As a dedicated web designer, I blend creativity with modern aesthetics to craft high-quality websites. My attention to detail and commitment to staying current with design trends ensure that each project is visually stunning and user-friendly. I take pride in creating digital spaces that engage and captivate visitors, reflecting my passion for web design.
-
-</p>
-                            </div>
-                        </li>
-
-                        <li class="service-item">
-                            <div class="service-icon-box">
-                                <img src="https://i.postimg.cc/ZqgqrqzG/icon-dev.png" alt="icon" width="40">
-                            </div>
-
-                            <div class="service-content-box">
-                                <h4 class="h4 service-item-title">Web development</h4>
-                                <p class="service-item-text">As a dedicated web developer, I combine technical expertise with innovative solutions to build high-quality, functional websites. My commitment to excellence is evident in my ability to stay current with the latest development trends and technologies. I create user-friendly, efficient, and scalable digital solutions that meet the unique needs of each project. My passion for web development drives me to deliver top-tier online experiences.
-
-                                </p>
-                            </div>
-                        </li>
-
-                        <li class="service-item">
-                            <div class="service-icon-box">
-                                <img src="https://i.postimg.cc/0NL8zHpx/icon-photo.png" alt="icon" width="40">
-                            </div>
-
-                            <div class="service-content-box">
-                                <h4 class="h4 service-item-title">Photography</h4>
-                                <p class="service-item-text">As a passionate photographer, I capture the world through my lens with creativity and precision. My commitment to excellence shines through in every shot, whether it's a candid moment or a meticulously composed scene. I strive to evoke emotions and tell stories with my photographs, ensuring each image resonates with beauty and meaning. My dedication to photography allows me to create lasting memories and artistic expressions.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </section>
-
-               
-
-                <div class="modal-container " data-modal-container>
-                    <div class="overlay " data-overlay></div>
-
-                    <section class="testimonials-modal">
-                        <button class="modal-close-btn" data-modal-close-btn><ion-icon name="close-outline"></ion-icon></button>
-
-                        <div class="modal-img-wrapper">
-                            <figure class="modal-avatar-box">
-                                <img src="https://i.postimg.cc/zGDHfn3G/avatar-1.png" alt="Daniel Lewis" width="80" data-modal-img>
-                            </figure>
-
-                            <img src="https://i.postimg.cc/mZ00RwX7/icon-quote.png" alt="quote icon">
-                        </div>
-
-                        <div class="modal-content">
-                            <h4 class="h3 modal-title" data-modal-title>Daniel Lewis</h4>
-                            <time datetime="2023-06-14">14 June, 2023</time>
-
-                            <div class="modal-text" data-modal-text>
-                                <p>Richard was hired to create a corporate identity. It's modern, clean and with a beautiful design that got a lot of praises from colleagues and visitors. We were very pleased with the work done. He has a lot of experience and is very concerned about the needs of client.</p>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-               
-
-            </article>
-            
-            <article class="resume " data-page="resume">
-                <header>
-                    <h2 class="h2 article-title">Resume</h2>
-                </header>
-
-                <section class="timeline">
-                    <div class="title-wrapper">
-                        <div class="icon-box"><ion-icon name="book-outline"></ion-icon></div>
-
-                        <h3 class="h3">Education</h3>
-                    </div>
-
-                    <ol class="timeline-list">
-                        <li class="timeline-item">
-                            <h4 class="h4 timeline-item-title">Heritage Middle School</h4>
-                            <span>2021 - 2022</span>
-                            <p class="timeline-text">Heritage Middle School holds a special place in my journey as a web developer. It was there that I took my first steps into the world of coding, creating my very first website. The supportive learning environment and dedicated teachers at Heritage Middle School nurtured my curiosity and encouraged my passion for technology. The experience not only sparked my interest in web development but also laid the foundation for my future pursuits in the field. Heritage Middle School will always be remembered as the place where my coding adventure began.</p>
-                        </li>
-
-                        <li class="timeline-item">
-                            <h4 class="h4 timeline-item-title">Wake Prepartory Academy</h4>
-                            <span>2022 - Present</span>
-                            <p class="timeline-text">Wake Preparatory Academy played a pivotal role in my development as a web developer. It was there that I crafted my first main website, Cleverz, along with two other projects. The supportive and innovative environment at Wake Preparatory Academy fueled my passion for web development and provided the resources and mentorship needed to bring my ideas to life. These experiences allowed me to hone my skills and gain confidence in my abilities, laying a strong foundation for my future endeavors in the field. Wake Preparatory Academy will always be remembered as the place where my journey into professional web development truly began.</p>
-                        </li>
-
-                    </ol>
-                </section>
-
-                
-
-                <section class="skill">
-                    <h3 class="h3 skills-title">My Skills</h3>
-
-                    <ul class="skills-list content-card">
-                        <li class="skills-item">
-                            <div class="title-wrapper">
-                                <h5 class="h5">Html</h5>
-                                <data value="100">100%</data>
-                            </div>
-
-                            <div class="skills-progress-bg">
-                                <div class="skills-progress-fill" style="width: 100%;"></div>
-                            </div>
-                        </li>
-
-                        <li class="skills-item">
-                            <div class="title-wrapper">
-                                <h5 class="h5">CSS</h5>
-                                <data value="70">70%</data>
-                            </div>
-
-                            <div class="skills-progress-bg">
-                                <div class="skills-progress-fill" style="width: 70%;"></div>
-                            </div>
-                        </li>
-
-                        <li class="skills-item">
-                            <div class="title-wrapper">
-                                <h5 class="h5">Web Developing</h5>
-                                <data value="90">90%</data>
-                            </div>
-
-                            <div class="skills-progress-bg">
-                                <div class="skills-progress-fill" style="width: 90%;"></div>
-                            </div>
-                        </li>
-
-                        <li class="skills-item">
-                            <div class="title-wrapper">
-                                <h5 class="h5">Javascript</h5>
-                                <data value="65">65%</data>
-                            </div>
-
-                            <div class="skills-progress-bg">
-                                <div class="skills-progress-fill" style="width: 65%;"></div>
-                            </div>
-                        </li>
-                        <li class="skills-item">
-                            <div class="title-wrapper">
-                                <h5 class="h5">Photography</h5>
-                                <data value="85">85%</data>
-                            </div>
-
-                            <div class="skills-progress-bg">
-                                <div class="skills-progress-fill" style="width: 85%;"></div>
-                            </div>
-                        </li>
-                    </ul>
-                </section>
-            </article>
-
-            <article class="portfolio " data-page="portfolio">
-                <header>
-                    <h2 class="h2 article-title">Portfolio</h2>
-                </header>
-
-                <section class="projects">
-                    <ul class="filter-list">
-                        <li class="filter-item"><button class="active" data-filter-btn>All</button></li>
-                        <li class="filter-item"><button data-filter-btn>Web Design</button></li>
-                        <li class="filter-item"><button data-filter-btn>Applications</button></li>
-                        <li class="filter-item"><button data-filter-btn>Web Development</button></li>
-                    </ul>
-
-                    <div class="filter-select-box">
-                        <button class="filter-select " data-select>
-                            <div class="select-value" data-select-value>Select Category</div>
-
-                            <div class="select-icon">
-                                <ion-icon name="chevron-down"></ion-icon>
-                            </div>
-                        </button>
-
-                        <ul class="select-list">
-                            <li class="select-item"><button data-select-item>All</button></li>
-                            <li class="select-item"><button data-select-item>Web Design</button></li>
-                            <li class="select-item"><button data-select-item>Applications</button></li>
-                            <li class="select-item"><button data-select-item>Web Development</button></li>
-                        </ul>
-                    </div>
-
-                    <ul class="project-list">
-                        <li class="project-item active" data-filter-item data-category="web development">
-                            <a href="https://Cleverz.42web.io">
-                                <figure class="project-img">
-                                    <div class="project-item-icon-box">
-                                        <ion-icon name="eye-outline"></ion-icon>
-                                    </div>
-
-                                    <img src="https://i.postimg.cc/q7fKJfK0/Screenshot-30.png" alt="finance" loading="lazy">
-                                </figure>
-
-                                <h3 class="project-title">Cleverz</h3>
-                                <p class="project-category">Web Development</p>
-                            </a>
-                        </li>
-
-                        <li class="project-item active" data-filter-item data-category="web development">
-                            <a href="https://WPAhistory.42web.io">
-                                <figure class="project-img">
-                                    <div class="project-item-icon-box">
-                                        <ion-icon name="eye-outline"></ion-icon>
-                                    </div>
-
-                                    <img src="https://i.postimg.cc/Y0y4TT75/image-2025-01-06-135554344.png" alt="orizon" loading="lazy">
-                                </figure>
-
-                                <h3 class="project-title">WPAhistory</h3>
-                                <p class="project-category">Web Development</p>
-                            </a>
-                        </li>
-
-                        <li class="project-item active" data-filter-item data-category="web development">
-                            <a href="https://gotw.42web.io">
-                                <figure class="project-img">
-                                    <div class="project-item-icon-box">
-                                        <ion-icon name="eye-outline"></ion-icon>
-                                    </div>
-
-                                    <img src="https://i.postimg.cc/y8RJrfbG/image-2025-01-06-135704643.png" alt="fundo" loading="lazy">
-                                </figure>
-
-                                <h3 class="project-title">Game Of The Week</h3>
-                                <p class="project-category">Web Development</p>
-                            </a>
-                        </li>
-
-                        
-                    </ul>
-                </section>
-            </article>
-
-            <article class=" " data-page="links">
-                <header>
-                    <h2 class="h2 article-title">links</h2>
-                </header>
-
-                <section class="links-posts">
-                    <ul class="links-posts-list">
-                        <li class="links-post-item">
-                            <a href="https://Cleverz.42web.io">
-                                    <figure class="links-banner-box">
-                                        <img src="https://i.postimg.cc/q7fKJfK0/Screenshot-30.png" alt="Design conferences in 2024" loading="lazy">
-                                    </figure>
-
-                                <div class="links-content">
-                                    <div class="links-meta">
-                                        <p class="links-category">Development</p>
-                                        
-                                        <time datetime="2024-02-23"></time>
-                                    </div>
-
-                                    <h3 class="h3 links-item-title">Cleverz.42web.io</h3>
-                                    <p class="links-text"></p>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="links-post-item">
-                            <a href="https://WPAhistory.42web.io">
-                                <figure class="links-banner-box">
-                                    <img src="https://i.postimg.cc/Y0y4TT75/image-2025-01-06-135554344.png" alt="Best fonts every designer" loading="lazy">
-                                </figure>
-
-
-                                <div class="links-content">
-                                    <div class="links-meta">
-                                        <p class="links-category">Development</p>
-                                        
-                                        <time datetime="2024-01-29"></time>
-                                    </div>
-
-                                    <h3 class="h3 links-item-title">WPAhistory.42web.io</h3>
-                                    <p class="links-text"></p>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="links-post-item">
-                            <a href="https://gotw.42web.io">
-                                <figure class="links-banner-box">
-                                    <img src="https://i.postimg.cc/y8RJrfbG/image-2025-01-06-135704643.png" alt="Design digest #80" loading="lazy">
-                                </figure>
-
-                                <div class="links-content">
-                                    <div class="links-meta">
-                                        <p class="links-category">Development</p>
-                                        
-                                        <time datetime="2023-12-20"></time>
-                                    </div>
-
-                                    <h3 class="h3 links-item-title">gotw.42web.io</h3>
-                                    <p class="links-text"></p>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="links-post-item">
-                            <a href="https://github.com/candycain5432">
-                                <figure class="links-banner-box">
-                                    <img src="https://i.postimg.cc/vZDRQksP/Screenshot-34.png" alt="Best fonts every designer" loading="lazy">
-                                </figure>
-
-
-                                <div class="links-content">
-                                    <div class="links-meta">
-                                        <p class="links-category">Repositories</p>
-                                        
-                                        <time datetime="2024-01-29"></time>
-                                    </div>
-
-                                    <h3 class="h3 links-item-title">GitHub</h3>
-                                    <p class="links-text"></p>
-                                </div>
-                            </a>
-                        </li>
-
-                       
-                    </ul>
-                </section>
-            
-
-            
+<div class="bg-canvas">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="bg-grid"></div>
+</div>
+
+<div class="content">
+
+<nav>
+  <a class="logo" href="#">
+    <span class="logo-dot"></span>
+    William Cain
+  </a>
+  <div class="nav-pills">
+    <a class="nav-pill" href="#about">About</a>
+    <a class="nav-pill" href="#skills">Skills</a>
+    <a class="nav-pill" href="#projects">Projects</a>
+    <a class="nav-pill" href="#photography">Photos</a>
+    <a class="nav-pill" href="#contact">Contact</a>
+  </div>
+  <div class="nav-status">
+    <span class="status-dot"></span>
+    15 · Sophomore
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag">
+    🎓 Cybersecurity · Dev · Photography
+  </div>
+  <h1 class="hero-h1">
+    <span class="gradient-text">William</span><br>
+    <span class="ghost">Cain.</span>
+  </h1>
+  <div class="hero-age-line">
+    <span class="age-chip">Age 15</span>
+    <span class="grade-chip">10th Grade · Sophomore</span>
+  </div>
+  <p class="hero-sub">
+    I'm a <strong>self-taught developer, security enthusiast, and photographer</strong> — still in high school, <em>not waiting until later</em> to build things that matter to me.
+  </p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn-glow">See What I've Built →</a>
+    <a href="#contact" class="btn-glass">Say Hello</a>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-pill">
+    <span class="stat-icon">🎂</span>
+    <div>
+      <span class="stat-num">15</span>
+      <span class="stat-label">Years Old</span>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <span class="stat-icon">📚</span>
+    <div>
+      <span class="stat-num">10th</span>
+      <span class="stat-label">Grade</span>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <span class="stat-icon">🧠</span>
+    <div>
+      <span class="stat-num">3+</span>
+      <span class="stat-label">Disciplines</span>
+    </div>
+  </div>
+  <div class="stat-pill">
+    <span class="stat-icon">🔥</span>
+    <div>
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Self-Taught</span>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div style="margin-bottom:3rem;" class="reveal">
+    <p class="sec-eyebrow">Who I am</p>
+    <h2 class="sec-title">Just a curious 15-year-old<br>who builds real things.</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-card">
+      <p>Hey — I'm <strong>William</strong>, a sophomore in high school from Oxford, NC. I got into tech because I couldn't stop asking <span class="hi">how things work</span>. That curiosity turned into teaching myself cybersecurity, full-stack development, and picking up photography along the way.</p>
+      <p>I don't have a job history or a list of clients. What I have is <strong>genuine obsession</strong> — real hours spent doing the things I say I do, not just watching tutorials.</p>
+      <p>This portfolio is <strong>honest</strong>. Everything here is a personal project or something I've learned on my own. No fluff, no fake experience. Just real work from someone who's still figuring it out — and loving every second of it.</p>
+    </div>
+    <div class="fact-list">
+      <div class="fact-row"><span class="fact-key">Name</span><span class="fact-val">William Cain</span></div>
+      <div class="fact-row"><span class="fact-key">Age</span><span class="fact-val purple">15 years old</span></div>
+      <div class="fact-row"><span class="fact-key">Grade</span><span class="fact-val">Sophomore · 10th</span></div>
+      <div class="fact-row"><span class="fact-key">Location</span><span class="fact-val">Oxford, NC</span></div>
+      <div class="fact-row"><span class="fact-key">How I learned</span><span class="fact-val green">100% self-taught</span></div>
+      <div class="fact-row"><span class="fact-key">Cybersecurity</span><span class="fact-val green">CTFs · home lab · research</span></div>
+      <div class="fact-row"><span class="fact-key">Development</span><span class="fact-val green">Personal projects</span></div>
+      <div class="fact-row"><span class="fact-key">Photography</span><span class="fact-val green">Passion project</span></div>
+      <div class="fact-row"><span class="fact-key">Looking for</span><span class="fact-val purple">Mentors · opportunities</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-layout">
+    <div class="skills-left reveal">
+      <p class="sec-eyebrow">What I know</p>
+      <h2 class="sec-title">Self-taught.<br>Still learning.<br>That's the point.</h2>
+      <p class="sec-sub">Everything here I picked up on my own — books, YouTube, documentation, breaking things, fixing them. No classroom, no diploma. Just curiosity.</p>
+    </div>
+    <div class="skills-cards">
+      <div class="skill-card reveal reveal-d1" style="--card-a:#7c3aed;--card-b:#a855f7;">
+        <span class="skill-emoji">🔐</span>
+        <h3 class="skill-name">Cybersecurity</h3>
+        <p class="skill-desc">Started by asking "how do people get hacked?" — now I'm doing CTF challenges and running a home lab to practice safely and legally.</p>
+        <p class="skill-note">Self-taught · CTF player · Home lab</p>
+        <div class="skill-pills">
+          <span class="skill-pill">CTFs</span>
+          <span class="skill-pill">Networking</span>
+          <span class="skill-pill">Kali Linux</span>
+          <span class="skill-pill">OWASP</span>
         </div>
-    </main>
+      </div>
+      <div class="skill-card reveal reveal-d2" style="--card-a:#ec4899;--card-b:#f97316;">
+        <span class="skill-emoji">📷</span>
+        <h3 class="skill-name">Photography</h3>
+        <p class="skill-desc">Photography taught me to slow down and actually look. I mostly shoot street and urban — finding something interesting in everyday places.</p>
+        <p class="skill-note">Passion project · Always improving</p>
+        <div class="skill-pills">
+          <span class="skill-pill">Street</span>
+          <span class="skill-pill">Urban</span>
+          <span class="skill-pill">Lightroom</span>
+        </div>
+      </div>
+      <div class="skill-card reveal reveal-d1" style="--card-a:#14b8a6;--card-b:#3b82f6;">
+        <span class="skill-emoji">⚡</span>
+        <h3 class="skill-name">Frontend Dev</h3>
+        <p class="skill-desc">I love making things look good and work well. Started with plain HTML/CSS, now building with React. Every project teaches me something new.</p>
+        <p class="skill-note">Self-taught · Personal projects</p>
+        <div class="skill-pills">
+          <span class="skill-pill">HTML/CSS</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">React</span>
+        </div>
+      </div>
+      <div class="skill-card reveal reveal-d2" style="--card-a:#6366f1;--card-b:#8b5cf6;">
+        <span class="skill-emoji">🛠️</span>
+        <h3 class="skill-name">Backend Dev</h3>
+        <p class="skill-desc">Building APIs and wiring up databases so my projects actually do something. Python and Node.js are my tools of choice right now.</p>
+        <p class="skill-note">Self-taught · Still growing</p>
+        <div class="skill-pills">
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">Node.js</span>
+          <span class="skill-pill">SQL</span>
+          <span class="skill-pill">REST APIs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script src="main.js"></script>
+<!-- PROJECTS -->
+<section id="projects">
+  <div style="margin-bottom:3.5rem;" class="reveal">
+    <p class="sec-eyebrow">Things I've built</p>
+    <h2 class="sec-title">Personal projects<br>& experiments.</h2>
+    <p class="sec-sub">No client work, no job history — just real projects I built to learn and because I wanted them to exist.</p>
+  </div>
+  <div class="projects-list">
 
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <div class="project-item featured reveal" style="--item-a:#7c3aed;--item-b:#ec4899;">
+      <div>
+        <p class="proj-num">01 — MOST PROUD OF THIS ONE</p>
+        <span class="proj-cat cat-c">Cybersecurity</span>
+        <h3 class="proj-title">Home Lab Network Monitor</h3>
+        <p class="proj-desc">Built a network monitoring dashboard for my home lab. Tracks traffic across my local network, flags patterns that look unusual, and helped me actually understand what's happening on a network in real time.</p>
+        <p class="proj-honest">Personal project built purely to learn — not production software, but it's real and it works.</p>
+        <div class="proj-stack">
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">Wireshark</span>
+          <span class="proj-tag">HTML/CSS</span>
+          <span class="proj-tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="proj-visual">
+        <div class="proj-visual-inner">
+          <span>HOME<br>LAB</span>
+          <div style="font-size:0.7rem;letter-spacing:0.15em;color:var(--teal);">● NETWORK CLEAR</div>
+        </div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(20,184,166,0.08) 0%,transparent 70%);"></div>
+      </div>
+    </div>
+
+    <div class="project-item reveal" style="--item-a:#a855f7;--item-b:#6366f1;">
+      <span class="proj-num">02</span>
+      <div>
+        <span class="proj-cat cat-d">Full-Stack</span>
+        <h3 class="proj-title">Personal Link-in-Bio App</h3>
+        <p class="proj-desc">Built my own link-in-bio page from scratch instead of using a service like Linktree — custom backend, designed it myself, deployed it and actually used it.</p>
+        <p class="proj-honest">Small but complete. Built it, shipped it, use it daily.</p>
+        <div class="proj-stack">
+          <span class="proj-tag">React</span><span class="proj-tag">Node.js</span><span class="proj-tag">CSS</span>
+        </div>
+      </div>
+      <div class="proj-arrow">↗</div>
+    </div>
+
+    <div class="project-item reveal" style="--item-a:#ec4899;--item-b:#f97316;">
+      <span class="proj-num">03</span>
+      <div>
+        <span class="proj-cat cat-p">Photography</span>
+        <h3 class="proj-title">Urban Photography — Ongoing Series</h3>
+        <p class="proj-desc">A personal photo project shooting around Oxford and wherever I go. Streets, structures, everyday moments. Learning to see before I shoot.</p>
+        <p class="proj-honest">Always in progress. Every shoot I get a little better.</p>
+        <div class="proj-stack">
+          <span class="proj-tag">Camera</span><span class="proj-tag">Lightroom</span><span class="proj-tag">Patience</span>
+        </div>
+      </div>
+      <div class="proj-arrow">↗</div>
+    </div>
+
+    <div class="project-item reveal" style="--item-a:#14b8a6;--item-b:#3b82f6;">
+      <span class="proj-num">04</span>
+      <div>
+        <span class="proj-cat cat-c">CTF / Security</span>
+        <h3 class="proj-title">CTF Challenges & Learning Notes</h3>
+        <p class="proj-desc">Actively working through beginner and intermediate CTF challenges on PicoCTF and HackTheBox. Writing notes on everything I learn from each one.</p>
+        <p class="proj-honest">Still climbing the ranks. Each challenge teaches me something I didn't know.</p>
+        <div class="proj-stack">
+          <span class="proj-tag">PicoCTF</span><span class="proj-tag">HackTheBox</span><span class="proj-tag">Linux</span>
+        </div>
+      </div>
+      <div class="proj-arrow">↗</div>
+    </div>
+
+    <div class="project-item reveal" style="--item-a:#f97316;--item-b:#ec4899;">
+      <span class="proj-num">05</span>
+      <div>
+        <span class="proj-cat cat-d">Frontend</span>
+        <h3 class="proj-title">This Portfolio Website</h3>
+        <p class="proj-desc">Built this entire site myself — every line of HTML, CSS, and JavaScript. No template, no website builder, no tutorial I just copied. You're looking at it.</p>
+        <p class="proj-honest">Proof of work. You're already seeing it.</p>
+        <div class="proj-stack">
+          <span class="proj-tag">HTML</span><span class="proj-tag">CSS</span><span class="proj-tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="proj-arrow">↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PHOTOGRAPHY -->
+<section id="photography">
+  <div class="photo-header reveal">
+    <div>
+      <p class="sec-eyebrow">Through my lens</p>
+      <h2 class="sec-title">Photography.</h2>
+    </div>
+  </div>
+  <div class="photo-grid reveal">
+    <div class="photo-tile c3 r2 t1">
+      <div class="tile-bg"><span class="tile-inner-icon">🏙️</span></div>
+      <div class="tile-overlay"><span class="tile-label">Urban Geometry</span></div>
+    </div>
+    <div class="photo-tile c2 t2">
+      <div class="tile-bg"><span class="tile-inner-icon">🌆</span></div>
+      <div class="tile-overlay"><span class="tile-label">Street</span></div>
+    </div>
+    <div class="photo-tile t3">
+      <div class="tile-bg"><span class="tile-inner-icon">🌉</span></div>
+      <div class="tile-overlay"><span class="tile-label">Long Exposure</span></div>
+    </div>
+    <div class="photo-tile t4">
+      <div class="tile-bg"><span class="tile-inner-icon">🏗️</span></div>
+      <div class="tile-overlay"><span class="tile-label">Around Oxford</span></div>
+    </div>
+    <div class="photo-tile c2 t5">
+      <div class="tile-bg"><span class="tile-inner-icon">🌃</span></div>
+      <div class="tile-overlay"><span class="tile-label">Golden Hour</span></div>
+    </div>
+    <div class="photo-tile t6">
+      <div class="tile-bg"><span class="tile-inner-icon">📷</span></div>
+      <div class="tile-overlay"><span class="tile-label">Your photo here</span></div>
+    </div>
+  </div>
+  <p style="margin-top:1.5rem;font-size:0.72rem;color:var(--muted);text-align:right;letter-spacing:0.08em;">Replace placeholders with your actual shots ↑</p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-card reveal">
+    <div>
+      <p class="sec-eyebrow">Get in touch</p>
+      <h2 class="contact-title">Want to <span>connect?</span></h2>
+      <p class="contact-body">I'm a 15-year-old who's serious about this stuff. If you're a developer, security researcher, photographer, or just someone willing to help a curious student grow — I'd genuinely love to hear from you.</p>
+      <div class="contact-links">
+        <a href="mailto:your@email.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          <div><div>your@email.com</div><div class="contact-link-label">Best way to reach me</div></div>
+          <span class="contact-link-right">→</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-icon">⌥</span>
+          <div><div>GitHub</div><div class="contact-link-label">See my code</div></div>
+          <span class="contact-link-right">→</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-icon">📷</span>
+          <div><div>Instagram</div><div class="contact-link-label">Photography & everything else</div></div>
+          <span class="contact-link-right">→</span>
+        </a>
+      </div>
+    </div>
+    <div class="contact-right">
+      <div class="honest-card">
+        <p class="honest-card-title">✅ What I'm looking for</p>
+        <p class="honest-card-body">I'm not expecting to land a job at 15. I'm looking for <strong>mentors, feedback, and opportunities to learn</strong> — internships, shadowing, open-source contributions, or just people willing to point me in the right direction.</p>
+      </div>
+      <div class="what-im-looking">
+        <div class="looking-row"><span class="looking-icon">🧑‍💻</span> Mentorship from developers or security pros</div>
+        <div class="looking-row"><span class="looking-icon">🏕️</span> Summer programs or internships</div>
+        <div class="looking-row"><span class="looking-icon">🔓</span> Open source contributions</div>
+        <div class="looking-row"><span class="looking-icon">📸</span> Photography feedback & collabs</div>
+        <div class="looking-row"><span class="looking-icon">🤝</span> Just connecting with cool people</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="footer-logo" href="#">William Cain</a>
+  <span>15 years old · Oxford, NC · Built this myself</span>
+  <span>© 2024</span>
+</footer>
+
+</div>
+
+<script>
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
 </body>
 </html>
-
-
