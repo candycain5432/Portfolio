@@ -29,7 +29,7 @@ window.PORTFOLIO = {
       { k: "Currently", v: "Daily Python challenge and AI Buddy" },
       { k: "Cert", v: "FAA Part 107 (planned)" },
     ],
-    email: "williamtylercain441@gmail.com",
+    email: "contact@williamcain.net",
     socials: [
       { label: "GitHub", href: "https://github.com/candycain5432" },
       { label: "YouTube", href: "https://www.youtube.com/@CandyCain5432" },
