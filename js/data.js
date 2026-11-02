@@ -1,81 +1,69 @@
 /* ============================================================================
-   data.js: single source of truth for the whole site.
-   Edit THIS file to add/change projects, links, bio, skills, photography.
-   Everything else (constellation + cards + modal) is generated from here.
+   data.js: all the site's content lives here (projects, bio, skills, photos).
    ========================================================================== */
 
 window.PORTFOLIO = {
 
-  /* --- Who you are. Placeholders in [brackets]: swap them in. ------------ */
   profile: {
     name: "William Cain",
     initials: "WC",
-    // Rotating roles shown under the hero headline:
-    roles: [
-      "Developer & maker",
-      "Security + homelab tinkerer",
-      "Game developer",
-      "Photographer & drone pilot",
-      "Hardware & AI builder",
-    ],
-    headline: "I build across the whole stack:",
-    // The highlighted, animated part of the headline:
-    headlineAccent: "PWAs, game engines, Arduino radars, and security labs.",
+    headline: "Hi, I'm William.",
+    headlineAccent: "I write code, build gadgets, and take pictures of planes.",
     blurb:
-      "I'm a developer and maker who refuses to pick one lane. One week it's a " +
-      "faith PWA with an auto-updating service worker, the next it's a provably-fair " +
-      "Python game engine, an ultrasonic radar on an Arduino, or a WireGuard homelab. " +
-      "I like shipping things that actually run, and documenting them well.",
+      "Some weeks that means a Catholic daily-faith app. Other weeks it's a Python " +
+      "game engine, an Arduino radar, or the WireGuard setup on my home network. " +
+      "I like finishing things and writing down how they work.",
     bio: [
-      "My work spans six worlds: web apps, game development, hardware & IoT, " +
-      "security & Linux, AI tooling, and creative projects. The constellation above " +
-      "maps how they connect. Drag a node, hover to light up its links, click to dig in.",
-      "I care about craft on both ends: a clean design system and a silent service " +
-      "worker on the front, a provably-fair RNG or an EEPROM-backed calibration routine " +
-      "underneath. When something's finished, I write it up: engineering PDFs, OSINT " +
-      "reports, and GitHub READMEs that someone else could actually follow.",
+      "I've never been able to stick to one thing, so my projects are all over the " +
+      "place: web apps, games, Arduino hardware, home networking and security, AI " +
+      "tools, and some creative stuff on the side.",
+      "What ties it together is wanting to know how things work from top to bottom. " +
+      "I'm just as happy working on how an app looks as I am tuning the calibration " +
+      "on a soil sensor. When I finish something I usually write it up, whether " +
+      "that's an engineering PDF, an OSINT report, or a README someone else can follow.",
+      "Outside of all that, it's planes. I take my camera out to the airport, and a " +
+      "couple of my sites borrow their look from glass cockpits.",
     ],
     facts: [
-      { k: "Based in", v: "[Your city / region]" },
-      { k: "Focus", v: "Full-stack · hardware · security" },
-      { k: "Currently", v: "Daily Python challenge + AI Buddy build" },
+      { k: "Focus", v: "Web, hardware, security" },
+      { k: "Currently", v: "Daily Python challenge and AI Buddy" },
       { k: "Cert", v: "FAA Part 107 (planned)" },
     ],
     email: "williamtylercain441@gmail.com",
-    // Fill real URLs in; "#" renders as a muted “add link” placeholder.
     socials: [
-      { label: "GitHub",   href: "#", handle: "[your-github]" },
-      { label: "LinkedIn", href: "#", handle: "[your-linkedin]" },
-      { label: "YouTube",  href: "#", handle: "[optional]" },
-      { label: "Discord",  href: "#", handle: "[optional]" },
+      { label: "GitHub", href: "https://github.com/candycain5432" },
+      { label: "YouTube", href: "https://www.youtube.com/@CandyCain5432" },
+      { label: "Discord", href: "https://discord.com/users/948328159475007509" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/william-cain-98458b448/" },
     ],
   },
 
-  /* --- The six domains. Colors drive the constellation clusters. ---------- */
+  /* Colors drive the clusters on the project map. */
   domains: [
-    { id: "web",      label: "Web & Apps",       color: "#46d6a4", blurb: "PWAs, portfolios, and sites that ship." },
-    { id: "games",    label: "Games",            color: "#a78bfa", blurb: "Engines, Roblox, and hand-rolled physics." },
-    { id: "hardware", label: "Hardware & IoT",   color: "#f6a94a", blurb: "Arduino, sensors, radars, and robots." },
-    { id: "security", label: "Security & Linux", color: "#ff6b81", blurb: "Homelab, OSINT, VPNs, and a daily-driver Arch rice." },
-    { id: "ai",       label: "AI & Software",    color: "#5cc8ff", blurb: "Agents, tooling, and a daily Python habit." },
-    { id: "creative", label: "Creative",         color: "#f574b8", blurb: "Manga, math animation, and a snarky desk robot." },
-    { id: "photo",    label: "Photography",      color: "#e9c45f", blurb: "Aviation, aerial, and long-exposure work." },
+    { id: "web",      label: "Web & Apps",       color: "#46d6a4", blurb: "Apps and websites." },
+    { id: "games",    label: "Games",            color: "#a78bfa", blurb: "Engines, Roblox games, and homemade physics." },
+    { id: "hardware", label: "Hardware & IoT",   color: "#f6a94a", blurb: "Arduino projects, sensors, and a radar." },
+    { id: "security", label: "Security & Linux", color: "#ff6b81", blurb: "My homelab, OSINT work, and Arch." },
+    { id: "ai",       label: "AI & Software",    color: "#5cc8ff", blurb: "AI experiments and daily Python." },
+    { id: "creative", label: "Creative",         color: "#f574b8", blurb: "A manga, math animations, and a sarcastic desk robot." },
+    { id: "photo",    label: "Photography",      color: "#e9c45f", blurb: "Mostly planes." },
   ],
 
-  /* --- Every project. `related` draws cross-links in the constellation. --- */
+  /* `related` draws the links between projects on the map. */
   projects: [
     /* ---------------- FEATURED ---------------- */
     {
       id: "anchor", title: "Anchor", tagline: "Project Lumen",
       domain: "web", featured: true, status: "Live", year: "2026",
       blurb:
-        "A Catholic daily-faith progressive web app. Node/Express backend on Render, " +
-        "a silent auto-updating service worker, and a gold-and-navy design system with " +
-        "a UI inspired by the Garmin G3000 glass cockpit.",
+        "A Catholic daily-faith web app you can install on your phone. The backend is " +
+        "Node and Express on Render, the service worker updates itself in the " +
+        "background, and the gold-and-navy interface is modeled on the Garmin G3000 " +
+        "glass cockpit.",
       highlights: [
-        "Offline-first PWA with a silent, auto-updating service worker",
+        "Works offline, and the service worker updates itself",
         "Node/Express backend deployed on Render",
-        "Gold/navy design system, G3000-inspired interface",
+        "Gold and navy design inspired by the G3000",
       ],
       stack: ["JavaScript", "Node", "Express", "PWA", "Render"],
       related: ["cockpit-portfolio"], links: [],
@@ -84,13 +72,13 @@ window.PORTFOLIO = {
       id: "exposure", title: "EXPOSURE", tagline: "Roblox horror",
       domain: "games", featured: true, status: "In progress", year: "2026",
       blurb:
-        "A photography-stealth horror game I'm building with a friend. The camera " +
-        "prototype already does shot validation, a viewfinder HUD with a live " +
-        "requirement checklist, lens switching, and long exposure.",
+        "A photography-stealth horror game on Roblox that I'm making with a friend. " +
+        "The camera prototype checks each shot against a list of photo requirements, " +
+        "and it already has a viewfinder HUD, lens switching, and long exposure.",
       highlights: [
-        "Shot validation against live photo requirements",
-        "Viewfinder HUD + requirement checklist",
-        "Lens switching and long-exposure capture",
+        "Checks each shot against the photo requirements",
+        "Viewfinder HUD with a live checklist",
+        "Lens switching and long exposure",
       ],
       stack: ["Lua", "Roblox Studio"],
       related: ["magic-combat", "photo"], links: [],
@@ -99,25 +87,26 @@ window.PORTFOLIO = {
       id: "pysino", title: "Pysino", tagline: "Game engine",
       domain: "games", featured: true, status: "Built", year: "2026",
       blurb:
-        "A Python/Pygame game engine with a provably-fair RNG (server seed, client " +
-        "seed, nonce). It has a scene stack, a Bank, audio, a particle system, and a " +
-        "headless mode for testing.",
+        "A game engine I wrote in Python and Pygame. The RNG is provably fair (server " +
+        "seed, client seed, nonce), and it has a scene stack, a Bank, audio, particles, " +
+        "and a headless mode for testing.",
       highlights: [
-        "Provably-fair RNG: server seed · client seed · nonce",
-        "Scene stack, Bank, audio, and particle system",
+        "Provably fair RNG using a server seed, client seed, and nonce",
+        "Scene stack, Bank, audio, and particles",
         "Headless mode for automated runs",
       ],
       stack: ["Python", "Pygame"],
       related: ["blackjack", "platformer", "dungeon"], links: [],
     },
     {
-      id: "debate", title: "Multi-Agent AI Debate", tagline: "Judged by a blinded moderator",
+      id: "debate", title: "Multi-Agent AI Debate", tagline: "AI agents with a blinded moderator",
       domain: "ai", featured: true, status: "Built", year: "2026",
       blurb:
-        "AI agents debate while a blinded moderator judges the exchange. Includes bias " +
-        "detection, anti-reframe anchoring, double-verdict runs, and batch testing.",
+        "AI agents debate each other while a blinded moderator judges the exchange. " +
+        "I added bias detection, anti-reframe anchoring, double-verdict runs, and " +
+        "batch testing.",
       highlights: [
-        "Blinded moderator + double-verdict runs",
+        "Blinded moderator and double-verdict runs",
         "Bias detection and anti-reframe anchoring",
         "Batch testing across many prompts",
       ],
@@ -128,11 +117,12 @@ window.PORTFOLIO = {
       id: "wall-r", title: "WALL·R", tagline: "Ultrasonic radar",
       domain: "hardware", featured: true, status: "Built", year: "2026",
       blurb:
-        "An Arduino ultrasonic radar with an OLED display, a proximity buzzer, and a " +
-        "WiFi web dashboard, shipped with a full engineering reference PDF.",
+        "An ultrasonic radar on an Arduino. It sweeps an HC-SR04 on a servo, shows " +
+        "readings on an OLED, beeps when something gets close, and runs a dashboard " +
+        "over WiFi. I also wrote a full engineering reference PDF for it.",
       highlights: [
-        "Servo-swept HC-SR04 radar with OLED readout",
-        "Proximity buzzer + live WiFi web dashboard",
+        "HC-SR04 on a servo with an OLED readout",
+        "Proximity buzzer and a live WiFi dashboard",
         "Full engineering reference PDF",
       ],
       stack: ["Arduino", "C++", "HC-SR04", "Servo"],
@@ -142,12 +132,13 @@ window.PORTFOLIO = {
       id: "plant-monitor", title: "Plant Monitor", tagline: "UNO R4 WiFi",
       domain: "hardware", featured: true, status: "Built", year: "2026",
       blurb:
-        "Soil-moisture and light sensors with an OLED readout and a WiFi dashboard on " +
-        "an UNO R4 WiFi, with EEPROM-backed calibration and 14-bit ADC tuning.",
+        "Tracks soil moisture and light on an UNO R4 WiFi, with an OLED readout and a " +
+        "WiFi dashboard. Calibration gets saved to EEPROM, and I tuned it around the " +
+        "board's 14-bit ADC.",
       highlights: [
-        "Soil-moisture + light sensing on UNO R4 WiFi",
-        "EEPROM-backed calibration, 14-bit ADC tuning",
-        "OLED readout + WiFi dashboard",
+        "Soil moisture and light sensors on an UNO R4 WiFi",
+        "Calibration saved to EEPROM, 14-bit ADC tuning",
+        "OLED readout and WiFi dashboard",
       ],
       stack: ["Arduino", "C++", "UNO R4 WiFi"],
       related: ["wall-r"], links: [],
@@ -155,16 +146,16 @@ window.PORTFOLIO = {
 
     /* ---------------- SECURITY & LINUX ---------------- */
     {
-      id: "seclab", title: "Home Network Security Lab", tagline: "Audit + tooling",
+      id: "seclab", title: "Home Network Security Lab", tagline: "Audit and tooling",
       domain: "security", status: "Ongoing", year: "2026",
       blurb:
-        "A WireGuard VPN (split and full tunnel, DDNS), Kali Linux in Docker, and " +
-        "network analysis with Wireshark, Nmap, and Bettercap. The audit turned up an " +
-        "open SOCKS5 proxy and several exposed IoT devices.",
+        "My home network setup: WireGuard with split and full tunnel plus DDNS, Kali " +
+        "running in Docker, and analysis with Wireshark, Nmap, and Bettercap. When I " +
+        "audited the network I found an open SOCKS5 proxy and several exposed IoT devices.",
       highlights: [
-        "WireGuard split/full tunnel with DDNS",
-        "Kali-in-Docker analysis rig",
-        "Audit found an open SOCKS5 proxy + IoT exposure",
+        "WireGuard split and full tunnel with DDNS",
+        "Kali in Docker for analysis",
+        "Found an open SOCKS5 proxy and exposed IoT devices",
       ],
       stack: ["WireGuard", "Kali", "Docker", "Wireshark", "Nmap", "Bettercap"],
       related: ["debian-server", "arch", "cloudflare"], links: [],
@@ -173,11 +164,11 @@ window.PORTFOLIO = {
       id: "phishing-osint", title: "Phishing OSINT Investigation", tagline: "Threat intel",
       domain: "security", status: "Report", year: "2026",
       blurb:
-        "A formatted threat-intelligence report that traced a phishing campaign through " +
-        "a redirector all the way to its backend infrastructure.",
+        "I traced a phishing campaign through its redirector back to the infrastructure " +
+        "behind it, then wrote it up as a threat-intelligence report.",
       highlights: [
-        "Traced campaign: redirector → backend infra",
-        "Formatted threat-intelligence writeup",
+        "Followed the campaign from redirector to backend",
+        "Written up as a threat-intelligence report",
       ],
       stack: ["OSINT", "Threat Intel"],
       related: ["osint-tool", "shinyhunters"], links: [],
@@ -186,11 +177,11 @@ window.PORTFOLIO = {
       id: "osint-tool", title: "Infra OSINT Recon Tool", tagline: "Attack surface",
       domain: "security", status: "Built", year: "2026",
       blurb:
-        "A Python attack-surface reconnaissance tool focused on infrastructure rather " +
-        "than people, mapping what's exposed, not who's behind it.",
+        "A Python recon tool that maps what a piece of infrastructure has exposed. " +
+        "It looks at systems and leaves people out of it.",
       highlights: [
-        "Infrastructure-first recon, not people-OSINT",
-        "Attack-surface mapping in Python",
+        "Focused on infrastructure instead of people",
+        "Attack surface mapping in Python",
       ],
       stack: ["Python", "OSINT"],
       related: ["phishing-osint"], links: [],
@@ -199,11 +190,11 @@ window.PORTFOLIO = {
       id: "shinyhunters", title: "ShinyHunters Breach Case Study", tagline: "Canvas / Instructure",
       domain: "security", status: "Writeup", year: "2026",
       blurb:
-        "A case study of the Canvas/Instructure ShinyHunters breach, covering API-key " +
-        "mechanics, bearer tokens, and the phases of incident response.",
+        "A case study of the ShinyHunters breach of Canvas/Instructure, going through " +
+        "how API keys and bearer tokens work and each phase of the incident response.",
       highlights: [
-        "API-key mechanics + bearer-token abuse",
-        "Walked the incident-response phases",
+        "How API keys and bearer tokens were abused",
+        "Walked through the incident response phases",
       ],
       stack: ["Case Study", "Incident Response"],
       related: ["phishing-osint"], links: [],
@@ -212,11 +203,11 @@ window.PORTFOLIO = {
       id: "debian-server", title: "Headless Debian Homelab", tagline: "on a 2008 MacBook",
       domain: "security", status: "Running", year: "2026",
       blurb:
-        "A headless Debian server running Pi-hole, WireGuard, Jellyfin, and Docker on a " +
-        "2008 MacBook, documented end-to-end in a GitHub README.",
+        "A 2008 MacBook that now runs headless Debian with Pi-hole, WireGuard, Jellyfin, " +
+        "and Docker. I documented the whole setup in a GitHub README.",
       highlights: [
-        "Pi-hole · WireGuard · Jellyfin · Docker",
-        "Second life for 2008 hardware",
+        "Runs Pi-hole, WireGuard, Jellyfin, and Docker",
+        "A second life for 2008 hardware",
         "Documented in a GitHub README",
       ],
       stack: ["Debian", "Docker", "Pi-hole", "Jellyfin", "WireGuard"],
@@ -226,12 +217,13 @@ window.PORTFOLIO = {
       id: "arch", title: "Arch Linux Daily Driver", tagline: "Hyprland rice",
       domain: "security", status: "Daily driver", year: "2026",
       blurb:
-        "A LUKS-encrypted btrfs Arch install with a custom Hyprland rice (Waybar, a " +
-        "dock, and a Quickshell shell), cloned and migrated between drives.",
+        "The computer I use every day: Arch on LUKS-encrypted btrfs with a custom " +
+        "Hyprland rice (Waybar, a dock, and a Quickshell shell). I've cloned and " +
+        "moved the install between drives.",
       highlights: [
         "LUKS-encrypted btrfs root",
-        "Custom Hyprland rice: Waybar · dock · Quickshell",
-        "Cloned + migrated install across drives",
+        "Custom Hyprland rice with Waybar, a dock, and Quickshell",
+        "Cloned and migrated across drives",
       ],
       stack: ["Arch Linux", "Hyprland", "btrfs", "LUKS"],
       related: ["seclab", "debian-server"], links: [],
@@ -240,11 +232,11 @@ window.PORTFOLIO = {
       id: "cloudflare", title: "Cloudflare Tunnel + Scramjet", tagline: "Self-hosted proxy",
       domain: "security", status: "Built", year: "2026",
       blurb:
-        "A self-hosted Scramjet proxy exposed over a Cloudflare Tunnel on my own domain, " +
-        "with no open ports, no public IP.",
+        "A self-hosted Scramjet proxy on my own domain, exposed through a Cloudflare " +
+        "Tunnel so I don't have to open any ports.",
       highlights: [
         "Scramjet proxy behind a Cloudflare Tunnel",
-        "Runs on a custom domain, no open ports",
+        "Runs on a custom domain with no open ports",
       ],
       stack: ["Cloudflare Tunnel", "Scramjet", "Self-host"],
       related: ["seclab"], links: [],
@@ -252,32 +244,28 @@ window.PORTFOLIO = {
 
     /* ---------------- GAMES & PYTHON ---------------- */
     {
-      id: "blackjack", title: "Blackjack", tagline: "Console → Pygame",
+      id: "blackjack", title: "Blackjack", tagline: "Console to Pygame",
       domain: "games", status: "Built", year: "2026",
       blurb:
-        "A console blackjack with chips and standard dealer rules, then rebuilt with a " +
-        "full graphical table in Pygame.",
-      highlights: ["Chips + standard dealer rules", "Rebuilt from console into Pygame"],
+        "Started as console blackjack with chips and standard dealer rules, then I " +
+        "rebuilt it with a full graphical table in Pygame.",
+      highlights: ["Chips and standard dealer rules", "Rebuilt from console into Pygame"],
       stack: ["Python", "Pygame"],
       related: ["pysino"], links: [],
     },
     {
       id: "platformer", title: "2D Platformer", tagline: "Hand-written physics",
       domain: "games", status: "Built", year: "2026",
-      blurb:
-        "A 2D platformer in Pygame with physics written from scratch: gravity, " +
-        "collision, and movement, no engine shortcuts.",
-      highlights: ["From-scratch physics + collision", "Built in Pygame"],
+      blurb: "A 2D platformer in Pygame where I wrote the gravity, collision, and movement myself.",
+      highlights: ["Physics and collision written from scratch", "Built in Pygame"],
       stack: ["Python", "Pygame"],
       related: ["pysino"], links: [],
     },
     {
       id: "dungeon", title: "Dungeon Crawler", tagline: "Text adventure",
       domain: "games", status: "Built", year: "2026",
-      blurb:
-        "A text-adventure dungeon crawler built using only the Python standard library, " +
-        "with no dependencies at all.",
-      highlights: ["Standard library only, zero deps", "Classic text-adventure loop"],
+      blurb: "A text-adventure dungeon crawler using nothing but the Python standard library.",
+      highlights: ["Standard library only", "Classic text-adventure loop"],
       stack: ["Python"],
       related: ["pysino"], links: [],
     },
@@ -285,11 +273,11 @@ window.PORTFOLIO = {
       id: "magic-combat", title: "Magic Combat", tagline: "Roblox",
       domain: "games", status: "Built", year: "2026",
       blurb:
-        "A Roblox magic-combat game with server-authoritative spells, a lock-on system, " +
-        "a combat HUD, and a melee combo system.",
+        "A magic combat game on Roblox with server-authoritative spells, lock-on " +
+        "targeting, a combat HUD, and melee combos.",
       highlights: [
         "Server-authoritative spellcasting",
-        "Lock-on targeting + combat HUD",
+        "Lock-on targeting and a combat HUD",
         "Melee combo system",
       ],
       stack: ["Lua", "Roblox Studio"],
@@ -299,8 +287,8 @@ window.PORTFOLIO = {
       id: "daily-python", title: "Daily Python Challenge", tagline: "One build a day",
       domain: "ai", status: "Ongoing", year: "2026",
       blurb:
-        "One small Python project every day, started October 2026: a growing streak of " +
-        "experiments that may become a repo or a page of its own.",
+        "In October 2026 I started building one small Python project a day. Some of " +
+        "them might turn into their own repos.",
       highlights: ["Started October 2026", "A new small build every day"],
       stack: ["Python"],
       related: ["debate", "pysino", "manim"], links: [],
@@ -311,26 +299,26 @@ window.PORTFOLIO = {
       id: "cs-portfolio", title: "CS Portfolio", tagline: "Terminal theme",
       domain: "web", status: "Built", year: "2026",
       blurb:
-        "A computer-science portfolio with a dark terminal look, interactive project " +
-        "cards, and a built-in Big-O reference table.",
-      highlights: ["Dark terminal aesthetic", "Interactive cards + Big-O reference"],
+        "A computer science portfolio with a dark terminal look, interactive project " +
+        "cards, and a Big-O reference table.",
+      highlights: ["Dark terminal look", "Interactive cards and a Big-O table"],
       stack: ["HTML", "CSS", "JavaScript"],
       related: ["cockpit-portfolio"], links: [],
     },
     {
-      id: "cockpit-portfolio", title: "Cockpit Portfolio", tagline: "Glass-cockpit theme",
+      id: "cockpit-portfolio", title: "Cockpit Portfolio", tagline: "Glass cockpit theme",
       domain: "web", status: "Built", year: "2026",
       blurb:
-        "A cockpit-themed portfolio with an animated attitude indicator and an " +
-        "annunciator strip that reacts as you scroll.",
-      highlights: ["Animated attitude indicator", "Live annunciator strip"],
+        "A portfolio styled like a cockpit, with an animated attitude indicator and " +
+        "an annunciator strip that reacts as you scroll.",
+      highlights: ["Animated attitude indicator", "Annunciator strip that follows your scroll"],
       stack: ["HTML", "CSS", "JavaScript", "SVG"],
       related: ["cs-portfolio", "anchor"], links: [],
     },
     {
       id: "family-photos", title: "Family Photo Site", tagline: "GitHub Pages",
       domain: "web", status: "Live", year: "2026",
-      blurb: "A family photo site, hosted on GitHub Pages for everyone to browse.",
+      blurb: "A photo site for my family, hosted on GitHub Pages.",
       highlights: ["Hosted on GitHub Pages"],
       stack: ["HTML", "CSS", "GitHub Pages"],
       related: ["photo"], links: [],
@@ -339,9 +327,9 @@ window.PORTFOLIO = {
       id: "readykit", title: "ReadyKit", tagline: "Emergency prep",
       domain: "web", status: "Built", year: "2026",
       blurb:
-        "An emergency-preparedness app built in Code.org App Lab with data persistence " +
-        "and multiple screens.",
-      highlights: ["Multi-screen App Lab build", "Persistent local data"],
+        "An emergency-preparedness app I built in Code.org App Lab, with multiple " +
+        "screens and saved data.",
+      highlights: ["Multiple screens in App Lab", "Saves data between uses"],
       stack: ["App Lab", "JavaScript"],
       related: [], links: [],
     },
@@ -351,12 +339,12 @@ window.PORTFOLIO = {
       id: "ai-buddy", title: "AI Buddy", tagline: "Snarky desk companion",
       domain: "creative", status: "In progress", year: "2026",
       blurb:
-        "A snarky desk companion on a Raspberry Pi with an animated face on a screen. " +
-        "It has a swappable brain (cloud API now, local model later) and 3D-printed " +
-        "chassis parts.",
+        "A snarky desk companion on a Raspberry Pi, with an animated face on a screen " +
+        "and 3D-printed chassis parts. It runs on a cloud API for now, and I plan to " +
+        "swap in a local model later.",
       highlights: [
         "Animated face on a Raspberry Pi",
-        "Swappable brain: cloud API now, local later",
+        "Cloud API now, local model later",
         "3D-printed chassis",
       ],
       stack: ["Raspberry Pi", "Python", "3D Printing"],
@@ -365,35 +353,32 @@ window.PORTFOLIO = {
     {
       id: "two-eternals", title: "Two Eternals", tagline: "Original manga",
       domain: "creative", status: "Concept", year: "2026",
-      blurb:
-        "An original manga concept with its own cast of characters and worldbuilding: " +
-        "story, design, and lore developed from scratch.",
-      highlights: ["Original characters + world", "Ongoing worldbuilding"],
+      blurb: "An original manga I'm developing, with my own characters, story, and world.",
+      highlights: ["Original characters and world", "Worldbuilding still in progress"],
       stack: ["Worldbuilding", "Illustration"],
       related: ["exposure"], links: [],
     },
     {
       id: "manim", title: "Manim Explainers", tagline: "Animated math",
       domain: "creative", status: "Exploring", year: "2026",
-      blurb:
-        "Exploring animated math explainers with Manim, turning concepts into clean, " +
-        "narrated motion.",
+      blurb: "I've been trying out Manim to make animated math explainers.",
       highlights: ["Animated math with Manim"],
       stack: ["Python", "Manim"],
       related: ["daily-python"], links: [],
     },
 
-    /* ---------------- PHOTOGRAPHY (also has its own section) ---------------- */
+    /* ---------------- PHOTOGRAPHY ---------------- */
     {
-      id: "photo", title: "Photography & Aerial", tagline: "Aviation + drone",
+      id: "photo", title: "Photography & Aerial", tagline: "Planes and drones",
       domain: "photo", status: "Ongoing", year: "2026",
       blurb:
-        "Plane spotting at RDU: a Breeze A220, a NetJets Challenger 350, an American " +
-        "737-800 in anniversary livery, all shot on a Canon Rebel T3i with a 75–300mm lens. " +
-        "Drone work is next, with FAA Part 107 certification planned.",
+        "I spot planes at RDU with a Canon Rebel T3i and a 75–300mm lens. Some favorites " +
+        "so far are an Air France 777, a Breeze A220, a NetJets Challenger 350, and an " +
+        "American 737-800 in anniversary livery. Drone work is next, and I'm planning " +
+        "on getting my FAA Part 107.",
       highlights: [
-        "Aviation spotting at RDU",
-        "Gear: Canon T3i & T100, Panasonic FZ1000, DJI Mini 3 Pro",
+        "Plane spotting at RDU",
+        "Canon T3i and T100, Panasonic FZ1000, DJI Mini 3 Pro",
         "FAA Part 107 planned",
       ],
       stack: ["Canon T3i", "Panasonic FZ1000", "DJI Mini 3 Pro"],
@@ -401,30 +386,34 @@ window.PORTFOLIO = {
     },
   ],
 
-  /* --- Photography section detail -------------------------------------- */
   photography: {
     intro:
-      "Aviation pulls most of my shooting: long lenses at the fence line, and " +
-      "increasingly the view from above. Here's the kit and a few recent captures.",
+      "Most of what I shoot is airplanes. These are all from one fall afternoon at " +
+      "RDU, on the T3i with the 75–300mm.",
     gear: [
-      { name: "Canon Rebel T3i", note: "+ 75–300mm, main spotting body" },
-      { name: "Canon T100", note: "lightweight second body" },
-      { name: "Panasonic FZ1000", note: "bridge / reach" },
-      { name: "DJI Mini 3 Pro", note: "aerial & drone work" },
+      { name: "Canon Rebel T3i", note: "with a 75–300mm, my main camera" },
+      { name: "Canon T100", note: "lighter second body" },
+      { name: "Panasonic FZ1000", note: "bridge camera" },
+      { name: "DJI Mini 3 Pro", note: "drone" },
     ],
-    // Add real photos to assets/img and list them here (src + caption).
+    // The first shot gets the big spot in the gallery.
     shots: [
-      { caption: "Breeze A220 · RDU" },
-      { caption: "NetJets Challenger 350 · RDU" },
-      { caption: "American 737-800 · anniversary livery" },
-      { caption: "Aerial · DJI Mini 3 Pro" },
-      { caption: "[ Add your shot ]" },
-      { caption: "[ Add your shot ]" },
+      { src: "assets/img/air-france-777.jpg", caption: "Air France 777" },
+      { src: "assets/img/american-737.jpg", caption: "American 737 over the fall colors" },
+      { src: "assets/img/breeze-a220.jpg", caption: "Breeze A220" },
+      { src: "assets/img/copa-737.jpg", caption: "Copa 737, wheels up" },
+      { src: "assets/img/frontier-a321.jpg", caption: "Frontier A321" },
+      { src: "assets/img/pilatus-pc12.jpg", caption: "Pilatus PC-12" },
+      { src: "assets/img/united-star-alliance.jpg", caption: "United 737 in Star Alliance colors" },
+      { src: "assets/img/avelo-737.jpg", caption: "Avelo 737" },
+      { src: "assets/img/volaris-a320.jpg", caption: "Volaris A320" },
+      { src: "assets/img/united-737.jpg", caption: "United 737" },
+      { src: "assets/img/delta-crj.jpg", caption: "Delta CRJ" },
+      { src: "assets/img/delta-a319.jpg", caption: "Delta A319" },
     ],
-    note: "FAA Part 107 certification planned, with more aerial work to come.",
+    note: "I'm planning on getting my FAA Part 107 so I can do more with the drone.",
   },
 
-  /* --- Skills, grouped. Edit freely. ----------------------------------- */
   skills: [
     { group: "Languages",      items: ["Python", "JavaScript", "Lua", "C++", "HTML / CSS"] },
     { group: "Web & Runtime",  items: ["Node", "Express", "PWA / Service Workers", "Pygame"] },

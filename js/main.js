@@ -30,7 +30,6 @@
   const P = D.profile;
   $("#brandInitials").textContent = P.initials;
   $("#footBrandInitials").textContent = P.initials;
-  $("#heroName") && ($("#heroName").textContent = P.name);
   $("#footName").textContent = P.name;
   $("#year").textContent = new Date().getFullYear();
   $("#headlineText").textContent = P.headline + " ";
@@ -39,41 +38,6 @@
   $("#emailLink").href = "mailto:" + P.email;
   $("#emailLink2").href = "mailto:" + P.email;
   $("#emailText").textContent = P.email;
-  const mapCount = $("#mapCount"); if (mapCount) mapCount.textContent = D.projects.length;
-
-  /* ---------------- Rotating roles ---------------- */
-  (function roles() {
-    const el = $("#rotator");
-    if (!el) return;
-    if (REDUCED) { el.textContent = P.roles[0]; el.style.borderRight = "none"; return; }
-    let i = 0, ch = 0, deleting = false;
-    (function tick() {
-      const word = P.roles[i];
-      el.textContent = word.slice(0, ch);
-      if (!deleting && ch < word.length) ch++;
-      else if (deleting && ch > 0) ch--;
-      else if (!deleting && ch === word.length) { deleting = true; return setTimeout(tick, 1500); }
-      else { deleting = false; i = (i + 1) % P.roles.length; }
-      setTimeout(tick, deleting ? 42 : 72);
-    })();
-  })();
-
-  /* ---------------- Hero stats ---------------- */
-  (function stats() {
-    const box = $("#heroStats");
-    const total = D.projects.length;
-    const domCount = D.domains.length;
-    const live = D.projects.filter(p => /live|running|ongoing|daily/i.test(p.status)).length;
-    const data = [
-      { n: total, suffix: "+", l: "Projects" },
-      { n: domCount, suffix: "", l: "Domains" },
-      { n: 4, suffix: "", l: "Cameras + 1 drone" },
-      { n: live, suffix: "", l: "Live / ongoing" },
-    ];
-    box.innerHTML = data.map(s =>
-      `<div class="stat"><div class="n" data-count="${s.n}" data-suffix="${s.suffix}">0</div><div class="l">${s.l}</div></div>`
-    ).join("");
-  })();
 
   /* ---------------- Domain strip ---------------- */
   (function domains() {
@@ -147,11 +111,11 @@
   (function photo() {
     const ph = D.photography;
     $("#photoIntro").textContent = ph.intro;
-    $("#photoNote").querySelector("span").textContent = ph.note;
+    $("#photoNote").textContent = ph.note;
     $("#gearList").innerHTML = ph.gear.map(g =>
       `<li><span class="gn">${esc(g.name)}</span> <span class="gnote">${esc(g.note)}</span></li>`).join("");
     $("#photoGallery").innerHTML = ph.shots.map(s =>
-      `<figure class="shot reveal">${s.src ? `<img src="${esc(s.src)}" alt="${esc(s.caption)}">` : ""}<figcaption class="cap">${esc(s.caption)}</figcaption></figure>`
+      `<figure class="shot reveal"><img src="${esc(s.src)}" alt="${esc(s.caption)}" loading="lazy" decoding="async"><figcaption class="cap">${esc(s.caption)}</figcaption></figure>`
     ).join("");
   })();
 
@@ -167,11 +131,9 @@
 
   /* ---------------- Socials ---------------- */
   (function socials() {
-    $("#socials").innerHTML = P.socials.map(s => {
-      const ph = s.href === "#";
-      return `<a class="social ${ph ? "placeholder" : ""}" href="${esc(s.href)}" ${ph ? "" : 'target="_blank" rel="noopener"'}>
-        <strong>${esc(s.label)}</strong> <span>${esc(s.handle)}</span></a>`;
-    }).join("");
+    $("#socials").innerHTML = P.socials.map(s =>
+      `<a class="social" href="${esc(s.href)}" target="_blank" rel="noopener"><strong>${esc(s.label)}</strong></a>`
+    ).join("");
   })();
 
   /* ---------------- Modal ---------------- */
@@ -197,7 +159,7 @@
         <ul class="m-high" style="--c:${d.color}">${p.highlights.map(h => `<li>${esc(h)}</li>`).join("")}</ul>` : ""}
       <h4>Stack</h4>
       <div class="m-stack">${(p.stack || []).map(s => `<span class="chip-xs">${esc(s)}</span>`).join("")}</div>
-      ${links ? `<div class="m-links">${links}</div>` : `<p class="m-note">↳ Add links for this project in <code>js/data.js</code> (the <code>links</code> array).</p>`}
+      ${links ? `<div class="m-links">${links}</div>` : ""}
     `;
     lastFocus = document.activeElement;
     modalRoot.classList.add("open");
@@ -256,32 +218,17 @@
     sections.forEach(s => spy.observe(s));
   })();
 
-  /* ---------------- Reveal on scroll + counters ---------------- */
+  /* ---------------- Reveal on scroll ---------------- */
   (function reveal() {
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
         e.target.classList.add("in");
-        if (e.target.matches(".hero-stats") || e.target.id === "heroStats") countUp(e.target);
         obs.unobserve(e.target);
       });
     }, { threshold: 0.12 });
     $$(".reveal").forEach(el => io.observe(el));
-    const hs = $("#heroStats"); if (hs) io.observe(hs);
   })();
-  function countUp(scope) {
-    $$("[data-count]", scope).forEach(el => {
-      const target = +el.dataset.count, suffix = el.dataset.suffix || "";
-      if (REDUCED) { el.textContent = target + suffix; return; }
-      const dur = 1100, t0 = performance.now();
-      (function f(now) {
-        const k = Math.min((now - t0) / dur, 1);
-        const e = 1 - Math.pow(1 - k, 3);
-        el.textContent = Math.round(target * e) + (k === 1 ? suffix : "");
-        if (k < 1) requestAnimationFrame(f);
-      })(performance.now());
-    });
-  }
 
   /* ---------------- Back to top ---------------- */
   (function toTop() {
@@ -289,23 +236,4 @@
     window.addEventListener("scroll", () => btn.classList.toggle("show", window.scrollY > 600), { passive: true });
     btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" }));
   })();
-
-  /* ---------------- Cursor glow (desktop, fine pointer) ---------------- */
-  (function cursor() {
-    if (REDUCED || !window.matchMedia("(pointer:fine)").matches) return;
-    const g = $("#cursorGlow");
-    g.style.display = "block";
-    let x = 0, y = 0, tx = 0, ty = 0;
-    window.addEventListener("mousemove", e => { tx = e.clientX; ty = e.clientY; });
-    (function loop() { x += (tx - x) * .18; y += (ty - y) * .18; g.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
-    document.addEventListener("mouseover", e => {
-      const big = e.target.closest("a,button,.card,.domain-chip");
-      g.style.width = g.style.height = big ? "46px" : "26px";
-    });
-  })();
-
-  /* ---------------- Preloader ---------------- */
-  window.addEventListener("load", () => {
-    setTimeout(() => $("#preloader").classList.add("done"), REDUCED ? 0 : 320);
-  });
 })();
