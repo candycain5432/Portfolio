@@ -109,6 +109,10 @@ img { max-width: 100%; display: block; }
 .btn svg { width: 16px; height: 16px; }
 .btn-primary { border: none; color: #0a0b12; background: var(--fill); }
 .btn-ghost { background: transparent; }
+.btn-kofi { border: none; color: #fff; background: #ff5e5b; box-shadow: 0 6px 20px -8px #ff5e5b; }
+.btn-kofi:hover { background: #ff4542; box-shadow: 0 10px 26px -8px #ff5e5b; }
+.btn-kofi svg { width: 20px; height: 20px; }
+.btn-kofi svg path:last-child { fill: #ff5e5b; }
 
 /* ---------- Nav ---------- */
 .nav {
@@ -346,6 +350,7 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 880px) {
   .nav-actions .btn-primary { display: none; }
+  .nav-actions .btn-kofi { padding: 10px 14px; }
 }
 @media (max-width: 720px) {
   .nav-links { position: fixed; inset: 64px 16px auto 16px; flex-direction: column; align-items: stretch; gap: 4px;

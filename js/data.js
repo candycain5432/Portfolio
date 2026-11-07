@@ -35,6 +35,7 @@ window.PORTFOLIO = {
       { label: "YouTube", href: "https://www.youtube.com/@CandyCain5432" },
       { label: "Discord", href: "https://discord.com/users/948328159475007509" },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/william-cain-98458b448/" },
+      { label: "Ko-fi", href: "https://ko-fi.com/williamcain" },
     ],
   },
 
