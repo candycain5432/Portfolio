@@ -20,6 +20,7 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/source-serif-4.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/b612-mono-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/img/profile-sky.jpg" as="image" fetchpriority="high">
   <link rel="stylesheet" href="css/styles.css">
@@ -27,7 +28,7 @@
 <body>
   <a class="skip sign" href="#work">Skip to work</a>
 
-  <!-- The sky. The photo's edges are matched to this gradient (see tools/sky-plate.py). -->
+  <!-- Outside: the sky. The photo's edges are matched to this gradient (see tools/sky-plate.py). -->
   <header class="hero sky" id="top">
     <div class="wrap bar">
       <a class="brand" href="#top">
@@ -46,7 +47,7 @@
     <div class="wrap hero-body">
       <div class="hero-copy">
         <h1 id="headline">I write code, build gadgets, and take pictures of planes.</h1>
-        <p class="hero-intro" id="intro"></p>
+        <p class="hero-intro" id="intro">Some weeks that means a Catholic daily-faith app. Other weeks it’s a Python game engine, an Arduino radar, or the WireGuard setup on my home network. I like finishing things and writing down how they work.</p>
         <p class="hero-note">Looking for internships and people to build things with.
           <a href="#contact" data-email data-email-text>Email me</a></p>
       </div>
@@ -58,51 +59,93 @@
     </figure>
   </header>
 
+  <!-- Sticky bar; appears once the hero has scrolled away. -->
+  <div class="dock" id="dock" inert>
+    <div class="wrap dock-in">
+      <a class="brand" href="#top">
+        <span class="sign" aria-hidden="true">WC</span>
+        <span class="brand-name">William Cain</span>
+      </a>
+      <nav class="dock-nav" aria-label="Sections">
+        <a href="#work">Work</a>
+        <a href="#photos">Photos</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Inside: the flight deck. -->
   <main>
-    <section class="section" id="work" aria-labelledby="work-h">
+    <section class="deck-section" id="work" aria-labelledby="work-h">
       <div class="wrap">
-        <div class="section-head">
-          <h2 class="sign" id="work-h">Work</h2>
-          <p class="section-note">Start with these six. Everything else is listed below them.</p>
+        <div class="s-head">
+          <div>
+            <p class="sign">Work</p>
+            <h2 class="s-title" id="work-h">Selected work</h2>
+          </div>
+          <p class="s-desc">Six projects I’d start with. Open any of them for the details. Smaller builds and writeups are listed underneath.</p>
         </div>
 
-        <div class="entries" id="entries"></div>
+        <div class="bento" id="bento"></div>
 
         <div class="index">
           <div class="index-head">
-            <h3 class="index-title">Everything else</h3>
-            <p class="index-note">Smaller builds, writeups, and things still in progress. Open any of them for the details.</p>
+            <h3 class="index-title">More projects <span id="indexCount"></span></h3>
+            <label class="search">
+              <span class="sr-only">Search projects</span>
+              <input type="search" id="q" placeholder="Search projects" autocomplete="off" spellcheck="false">
+              <kbd aria-hidden="true">/</kbd>
+            </label>
           </div>
-          <div id="groups"></div>
+          <div class="filters" id="filters" role="group" aria-label="Filter by type"></div>
+          <div class="items-head" aria-hidden="true">
+            <span>Project</span><span>What it is</span><span>Type</span><span>Status</span><span>Year</span><span></span>
+          </div>
+          <ul class="items" id="items"></ul>
+          <p class="empty" id="empty" hidden></p>
         </div>
       </div>
     </section>
 
-    <section class="section photos" id="photos" aria-labelledby="photos-h">
+    <section class="deck-section" id="photos" aria-labelledby="photos-h">
       <div class="wrap">
-        <div class="section-head">
-          <div class="sign-array">
-            <h2 class="sign" id="photos-h">Photos</h2>
-            <span class="sign sign--dir" aria-hidden="true">RDU</span>
+        <div class="s-head">
+          <div>
+            <div class="sign-array">
+              <span class="sign">Photos</span>
+              <span class="sign sign--dir">RDU</span>
+            </div>
+            <h2 class="s-title" id="photos-h">Photography</h2>
           </div>
+          <p class="s-desc" id="photoIntro"></p>
         </div>
-        <div class="photos-intro">
-          <p class="lede" id="photoIntro"></p>
-          <dl class="spec gear" id="gear" aria-label="Camera gear"></dl>
-        </div>
-        <div class="sheet" id="sheet"></div>
+        <dl class="gear" id="gear" aria-label="Camera gear"></dl>
+      </div>
+
+      <div class="strip" id="strip" tabindex="0" aria-label="Photos. Scroll sideways or use the arrow buttons."></div>
+
+      <div class="wrap strip-foot">
         <p class="photo-note" id="photoNote"></p>
+        <div class="strip-ctrl">
+          <button class="icon-btn" type="button" data-dir="-1" aria-label="Previous photo">←</button>
+          <span class="strip-count" id="stripCount"></span>
+          <button class="icon-btn" type="button" data-dir="1" aria-label="Next photo">→</button>
+        </div>
       </div>
     </section>
 
-    <section class="section" id="about" aria-labelledby="about-h">
+    <section class="deck-section" id="about" aria-labelledby="about-h">
       <div class="wrap">
-        <div class="section-head">
-          <h2 class="sign" id="about-h">About</h2>
+        <div class="s-head">
+          <div>
+            <p class="sign">About</p>
+            <h2 class="s-title" id="about-h">Hi, I’m William.</h2>
+          </div>
         </div>
         <div class="about-grid">
           <div class="bio" id="bio"></div>
-          <dl class="spec facts" id="facts"></dl>
+          <dl class="readout" id="facts"></dl>
         </div>
         <h3 class="tools-title">Tools I use</h3>
         <div class="tools" id="tools"></div>
@@ -110,11 +153,10 @@
     </section>
   </main>
 
+  <!-- Outside again. -->
   <div class="end sky">
     <section class="wrap contact" id="contact" aria-labelledby="contact-h">
-      <div class="section-head">
-        <h2 class="sign" id="contact-h">Contact</h2>
-      </div>
+      <h2 class="sign" id="contact-h">Contact</h2>
       <p class="contact-lede">If you have an internship, a project idea, or just want to talk about planes or Linux, send me an email.</p>
       <p class="contact-email"><a href="#contact" data-email data-email-text>Email me</a></p>
       <div class="contact-more">
@@ -125,10 +167,24 @@
 
     <footer class="wrap foot">
       <p>© <span id="year">2026</span> William Cain</p>
-      <p>Set in Source Serif and B612 Mono, the typeface Airbus commissioned for its cockpit displays.</p>
+      <p>Set in Mona Sans, Source Serif and B612 Mono, the typeface Airbus commissioned for its cockpit displays.</p>
     </footer>
   </div>
 
+  <!-- Project details -->
+  <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+    <div class="sheet-bar">
+      <span class="sheet-crumb" id="sheetCrumb"></span>
+      <div class="sheet-actions">
+        <button class="icon-btn" type="button" data-move="-1" aria-label="Previous project">←</button>
+        <button class="icon-btn" type="button" data-move="1" aria-label="Next project">→</button>
+        <button class="icon-btn close" type="button" data-close autofocus>Close</button>
+      </div>
+    </div>
+    <div class="sheet-scroll" id="sheetBody"></div>
+  </dialog>
+
+  <!-- Photo viewer -->
   <dialog class="viewer" id="viewer" aria-label="Photo viewer">
     <div class="viewer-stage">
       <img id="viewerImg" alt="">
@@ -136,9 +192,9 @@
     <div class="viewer-bar">
       <p class="viewer-cap"><span id="viewerCap"></span> <span class="viewer-count" id="viewerCount"></span></p>
       <div class="viewer-actions">
-        <button type="button" data-step="-1"><span aria-hidden="true">←</span> Prev</button>
-        <button type="button" data-step="1">Next <span aria-hidden="true">→</span></button>
-        <button type="button" data-close autofocus>Close</button>
+        <button class="icon-btn" type="button" data-step="-1"><span aria-hidden="true">←</span>&nbsp;Prev</button>
+        <button class="icon-btn" type="button" data-step="1">Next&nbsp;<span aria-hidden="true">→</span></button>
+        <button class="icon-btn" type="button" data-close autofocus>Close</button>
       </div>
     </div>
   </dialog>

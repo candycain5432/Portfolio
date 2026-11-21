@@ -1,7 +1,8 @@
 /* ============================================================================
    figures.js: the little technical drawings next to each featured project.
    Keyed by project id. A featured project without an entry here just shows
-   without a figure. Drawn on a 360 × 270 grid; styles live in styles.css (.fg-*).
+   without a figure. Drawn on a 360 × 270 grid; styles live in styles.css (.fg-*). `page` is the
+   label shown in the corner of the little screen, like a cockpit display page.
    ========================================================================== */
 (function () {
   "use strict";
@@ -26,6 +27,7 @@
 
     /* ---- Anchor: phone, service worker, cache, server ---- */
     anchor: {
+      page: "SYSTEM",
       caption: "Requests go through a service worker, which answers from its cache when there is no signal. The navy and gold come from the Garmin G3000.",
       svg: svg("Diagram: the Anchor app on a phone talks to a service worker, which uses a cache or reaches the Node and Express server on Render.", `
         ${arrows("anchor")}
@@ -78,9 +80,10 @@
 
     /* ---- EXPOSURE: the in-game viewfinder ---- */
     exposure: {
+      page: "HUD",
       caption: "The viewfinder HUD. Every shot is checked against the photo requirements, and the list ticks off as you go.",
       svg: svg("Drawing of a camera viewfinder with corner brackets, a framed subject, a long exposure indicator, lens controls and a checklist of shot requirements.", `
-        <rect x="16" y="18" width="328" height="208" rx="8" fill="#17191c"/>
+        <rect x="16" y="18" width="328" height="208" rx="8" fill="#14171b" stroke="#2a3038"/>
         <g stroke="#fff" stroke-opacity=".13" stroke-width="1">
           <line x1="131" y1="34" x2="131" y2="210"/><line x1="229" y1="34" x2="229" y2="210"/>
           <line x1="32" y1="93" x2="328" y2="93"/><line x1="32" y1="151" x2="328" y2="151"/>
@@ -95,7 +98,7 @@
         </g>
         <rect x="159" y="86" width="54" height="118" fill="none" stroke="#ffc928" stroke-width="1.25" stroke-dasharray="4 3"/>
         <path d="M173 97v-5h5M194 92h5v5M199 113v5h-5M178 118h-5v-5" fill="none" stroke="#e9e9e2" stroke-width="1"/>
-        <rect x="240" y="38" width="84" height="64" fill="#17191c"/>
+        <rect x="240" y="38" width="84" height="64" fill="#14171b"/>
 
         <rect x="40" y="41" width="7" height="7" fill="#ffc928"/>
         <text x="52" y="48" fill="#e9e9e2" class="fg-font" font-size="8.5">LONG EXP</text>
@@ -112,6 +115,7 @@
 
     /* ---- Pysino: provably fair rolls ---- */
     pysino: {
+      page: "RNG",
       caption: "Provably fair: every result comes from a server seed, a client seed and a nonce, so any roll can be recomputed and checked.",
       svg: svg("Flow diagram: server seed, client seed and nonce go into a hash, which produces the result. The result can be re-run to verify it.", `
         ${arrows("pysino")}
@@ -139,6 +143,7 @@
 
     /* ---- Multi-agent debate ---- */
     debate: {
+      page: "FLOW",
       caption: "Two agents argue for a few rounds. The moderator only sees the transcript with the names taken out, and each debate is judged twice.",
       svg: svg("Diagram: agent A and agent B exchange rounds; their transcript has the names removed before a blinded moderator reads it and gives two verdicts.", `
         ${arrows("debate")}
@@ -179,9 +184,10 @@
 
     /* ---- WALL·R: ultrasonic radar ---- */
     "wall-r": {
+      page: "RADAR",
       caption: "The servo sweeps the HC-SR04 back and forth. Anything that gets too close sets off the buzzer, and every reading goes to the OLED and the WiFi dashboard.",
       svg: svg("Radar display: a half circle with range rings, a sweeping beam, two echoes further out and one close echo inside the buzzer zone.", `
-        <path class="fg-yel" fill-opacity=".38" d="M124 236a56 56 0 0 1 112 0z"/>
+        <path class="fg-zone" d="M124 236a56 56 0 0 1 112 0z"/>
         <g class="fg-ln fg-thin fg-mut">
           <path d="M12 236a168 168 0 0 1 336 0"/><path d="M68 236a112 112 0 0 1 224 0"/><path d="M124 236a56 56 0 0 1 112 0"/>
           <line x1="180" y1="236" x2="325.5" y2="152"/><line x1="180" y1="236" x2="264" y2="90.5"/>
@@ -208,6 +214,7 @@
 
     /* ---- Plant monitor: calibration mapping ---- */
     "plant-monitor": {
+      page: "CAL",
       caption: "Dry and wet readings get saved to EEPROM as calibration points, and every raw 14-bit reading is mapped between them to get a moisture percentage.",
       svg: svg("Diagram: a raw 14-bit scale from 0 to 16383 with dry and wet calibration marks saved in EEPROM, mapped onto a 0 to 100 percent moisture scale. An example reading maps to 40 percent.", `
         <text class="fg-tx fg-sm fg-mid fg-mut" x="74" y="28">raw, 14-bit</text>
