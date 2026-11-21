@@ -1,195 +1,150 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>William Cain</title>
-  <meta name="description" content="William Cain's portfolio: web apps, games, hardware, security projects, and airplane photos." />
-  <meta name="author" content="William Cain" />
-  <meta name="theme-color" content="#070910" />
+  <meta name="description" content="William Cain writes code, builds gadgets, and takes pictures of planes: web apps, games, Arduino hardware, home-lab security, and plane spotting at RDU.">
+  <meta name="author" content="William Cain">
+  <meta name="theme-color" content="#426390">
+  <link rel="canonical" href="https://williamcain.net/">
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="William Cain" />
-  <meta property="og:description" content="Web apps, games, hardware, security projects, and airplane photos." />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://williamcain.net/">
+  <meta property="og:title" content="William Cain">
+  <meta property="og:description" content="I write code, build gadgets, and take pictures of planes.">
+  <meta property="og:image" content="https://williamcain.net/assets/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/source-serif-4.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/b612-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/img/profile-sky.jpg" as="image" fetchpriority="high">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <a class="skip sign" href="#work">Skip to work</a>
 
-  <div class="bg-field" aria-hidden="true"></div>
-
-  <!-- Nav -->
-  <header class="nav" id="nav">
-    <div class="wrap">
-      <a class="brand" href="#top" aria-label="Home">
-        <span class="mark" id="brandInitials">WC</span>
-        <span>William&nbsp;Cain</span>
+  <!-- The sky. The photo's edges are matched to this gradient (see tools/sky-plate.py). -->
+  <header class="hero sky" id="top">
+    <div class="wrap bar">
+      <a class="brand" href="#top">
+        <span class="sign" aria-hidden="true">WC</span>
+        <span class="brand-name">William Cain</span>
       </a>
-      <nav class="nav-links" id="navLinks" aria-label="Primary">
-        <a href="#map">Map</a>
+      <nav class="nav" aria-label="Sections">
         <a href="#work">Work</a>
-        <a href="#photography">Photography</a>
+        <a href="#photos">Photos</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
+        <a href="https://ko-fi.com/williamcain" data-kofi target="_blank" rel="noopener">Ko-fi<span aria-hidden="true">&nbsp;↗</span></a>
       </nav>
-      <div class="nav-actions">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">
-          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
-        </button>
-        <a class="btn btn-kofi" href="https://ko-fi.com/williamcain" target="_blank" rel="noopener" aria-label="Support me on Ko-fi">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 5h14a1 1 0 0 1 1 1v1h1.5a3.5 3.5 0 0 1 0 7H18a6 6 0 0 1-6 5H8a6 6 0 0 1-6-6V6a1 1 0 0 1 1-1Zm15 4v3h1.5a1.5 1.5 0 0 0 0-3H18Z"/><path fill="#fff" d="M10 16.2 6.9 13.3a1.9 1.9 0 0 1 2.7-2.7l.4.4.4-.4a1.9 1.9 0 0 1 2.7 2.7Z"/></svg><span>Ko-fi</span>
-        </a>
-        <a class="btn btn-primary" id="emailLink" href="#">Email me</a>
-        <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+
+    <div class="wrap hero-body">
+      <div class="hero-copy">
+        <h1 id="headline">I write code, build gadgets, and take pictures of planes.</h1>
+        <p class="hero-intro" id="intro"></p>
+        <p class="hero-note">Looking for internships and people to build things with.
+          <a href="#contact" data-email data-email-text>Email me</a></p>
       </div>
     </div>
+
+    <figure class="hero-photo">
+      <img src="assets/img/profile-sky.jpg" width="597" height="597" fetchpriority="high"
+           alt="William Cain in a dark suit against a blue sky, with a plane flying behind him">
+    </figure>
   </header>
 
   <main>
-    <!-- HERO -->
-    <section class="section hero" id="top">
-      <div class="wrap hero-inner">
-        <img class="hero-photo reveal" src="assets/img/profile.jpg" width="597" height="597"
-          alt="William Cain in a dark suit against a blue sky, with a plane flying behind him">
-        <div class="hero-text">
-        <h1 class="reveal"><span id="headlineText"></span><span class="accent" id="headlineAccent"></span></h1>
-        <p class="lede reveal d1" id="lede"></p>
-        <p class="hero-note reveal d2">I'm looking for internships and people to build things with.</p>
-        <div class="hero-cta reveal d2">
-          <a class="btn btn-primary" href="#work">
-            See my projects
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn" id="emailLink2" href="#">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-            Email me
-          </a>
+    <section class="section" id="work" aria-labelledby="work-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 class="sign" id="work-h">Work</h2>
+          <p class="section-note">Start with these six. Everything else is listed below them.</p>
         </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- PROJECT MAP -->
-    <section class="section constellation-section" id="map">
-      <div class="wrap">
-        <h2 class="section-title reveal">How my projects connect</h2>
-        <p class="section-sub reveal">Everything I've worked on, grouped by type. The lines show which projects are related. You can drag things around, or click one to read about it.</p>
-        <div class="cp-controls reveal">
-          <button class="cp-reset" id="cpReset">Reset layout</button>
-        </div>
-      </div>
-      <div class="constellation-stage reveal" id="cstage">
-        <canvas id="constellation" role="img"
-          aria-label="Interactive graph of William Cain's projects, grouped into seven domains and linked by shared technology."></canvas>
-        <ul class="sr-only" id="constellationFallback">
-          <li>This is an interactive map. The Work section below lists the same projects as cards.</li>
-        </ul>
-      </div>
-      <div class="wrap">
-        <div class="cp-legend" id="cpLegend"></div>
-      </div>
-    </section>
+        <div class="entries" id="entries"></div>
 
-    <!-- DOMAINS -->
-    <section class="section" style="padding-top:0" aria-label="Domains">
-      <div class="wrap">
-        <div class="domains" id="domainStrip"></div>
-      </div>
-    </section>
-
-    <!-- WORK -->
-    <section class="section" id="work">
-      <div class="wrap">
-        <h2 class="section-title reveal">Things I've made</h2>
-        <p class="section-sub reveal">Click any of these for more detail.</p>
-        <div class="filters reveal" id="filters" role="tablist" aria-label="Filter projects"></div>
-        <div class="grid" id="projectGrid"></div>
-      </div>
-    </section>
-
-    <!-- PHOTOGRAPHY -->
-    <section class="section" id="photography">
-      <div class="wrap">
-        <h2 class="section-title reveal">Photography</h2>
-        <div class="photo-head">
-          <div class="reveal">
-            <p class="section-sub" id="photoIntro" style="margin-top:0"></p>
-            <p class="photo-note" id="photoNote"></p>
+        <div class="index">
+          <div class="index-head">
+            <h3 class="index-title">Everything else</h3>
+            <p class="index-note">Smaller builds, writeups, and things still in progress. Open any of them for the details.</p>
           </div>
-          <ul class="gear-list reveal d1" id="gearList"></ul>
+          <div id="groups"></div>
         </div>
-        <div class="photo-gallery" id="photoGallery"></div>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="section" id="about">
+    <section class="section photos" id="photos" aria-labelledby="photos-h">
       <div class="wrap">
+        <div class="section-head">
+          <div class="sign-array">
+            <h2 class="sign" id="photos-h">Photos</h2>
+            <span class="sign sign--dir" aria-hidden="true">RDU</span>
+          </div>
+        </div>
+        <div class="photos-intro">
+          <p class="lede" id="photoIntro"></p>
+          <dl class="spec gear" id="gear" aria-label="Camera gear"></dl>
+        </div>
+        <div class="sheet" id="sheet"></div>
+        <p class="photo-note" id="photoNote"></p>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 class="sign" id="about-h">About</h2>
+        </div>
         <div class="about-grid">
-          <div class="reveal">
-            <h2 class="section-title" style="margin-bottom:20px">About me</h2>
-            <div id="bio"></div>
-          </div>
-          <ul class="facts reveal d1" id="facts"></ul>
+          <div class="bio" id="bio"></div>
+          <dl class="spec facts" id="facts"></dl>
         </div>
-        <div class="skills" id="skills"></div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="section" id="contact">
-      <div class="wrap">
-        <div class="contact-card reveal">
-          <h2>Say hi</h2>
-          <p>If you have an internship, a project idea, or just want to talk about planes or Linux, send me an email.</p>
-          <div class="contact-actions">
-            <a class="btn btn-primary" id="emailLinkBig" href="#" onclick="this.href=document.getElementById('emailLink').href">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-              <span id="emailText"></span>
-            </a>
-            <a class="btn btn-kofi" href="https://ko-fi.com/williamcain" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 5h14a1 1 0 0 1 1 1v1h1.5a3.5 3.5 0 0 1 0 7H18a6 6 0 0 1-6 5H8a6 6 0 0 1-6-6V6a1 1 0 0 1 1-1Zm15 4v3h1.5a1.5 1.5 0 0 0 0-3H18Z"/><path fill="#fff" d="M10 16.2 6.9 13.3a1.9 1.9 0 0 1 2.7-2.7l.4.4.4-.4a1.9 1.9 0 0 1 2.7 2.7Z"/></svg><span>Support me on Ko-fi</span>
-            </a>
-          </div>
-          <div class="socials" id="socials"></div>
-        </div>
+        <h3 class="tools-title">Tools I use</h3>
+        <div class="tools" id="tools"></div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="wrap">
-      <span class="foot-brand"><span class="mark" id="footBrandInitials" style="width:28px;height:28px;border-radius:8px">WC</span> <span id="footName">William Cain</span></span>
-      <span>© <span id="year"></span></span>
-    </div>
-  </footer>
+  <div class="end sky">
+    <section class="wrap contact" id="contact" aria-labelledby="contact-h">
+      <div class="section-head">
+        <h2 class="sign" id="contact-h">Contact</h2>
+      </div>
+      <p class="contact-lede">If you have an internship, a project idea, or just want to talk about planes or Linux, send me an email.</p>
+      <p class="contact-email"><a href="#contact" data-email data-email-text>Email me</a></p>
+      <div class="contact-more">
+        <ul class="socials" id="socials" aria-label="Elsewhere"></ul>
+        <a class="sign sign--dir kofi" href="https://ko-fi.com/williamcain" data-kofi target="_blank" rel="noopener">Support me on Ko-fi<span aria-hidden="true">&nbsp;↗</span></a>
+      </div>
+    </section>
 
-  <button class="to-top" id="toTop" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
-  </button>
-
-  <!-- Project modal -->
-  <div class="modal-root" id="modalRoot" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project details">
-    <div class="modal-backdrop" id="modalBackdrop"></div>
-    <div class="modal">
-      <button class="modal-close" id="modalClose" aria-label="Close">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-      <div id="modalBody"></div>
-    </div>
+    <footer class="wrap foot">
+      <p>© <span id="year">2026</span> William Cain</p>
+      <p>Set in Source Serif and B612 Mono, the typeface Airbus commissioned for its cockpit displays.</p>
+    </footer>
   </div>
 
+  <dialog class="viewer" id="viewer" aria-label="Photo viewer">
+    <div class="viewer-stage">
+      <img id="viewerImg" alt="">
+    </div>
+    <div class="viewer-bar">
+      <p class="viewer-cap"><span id="viewerCap"></span> <span class="viewer-count" id="viewerCount"></span></p>
+      <div class="viewer-actions">
+        <button type="button" data-step="-1"><span aria-hidden="true">←</span> Prev</button>
+        <button type="button" data-step="1">Next <span aria-hidden="true">→</span></button>
+        <button type="button" data-close autofocus>Close</button>
+      </div>
+    </div>
+  </dialog>
+
   <script src="js/data.js"></script>
-  <script src="js/constellation.js"></script>
+  <script src="js/figures.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

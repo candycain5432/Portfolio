@@ -1,239 +1,233 @@
 /* ============================================================================
-   main.js: renders content from data.js and wires up all interactions.
+   main.js: fills the page from data.js and handles the few interactive bits
+   (the project list, related-project links, and the photo viewer).
    ========================================================================== */
 (function () {
   "use strict";
+
   const D = window.PORTFOLIO;
+  const FIGS = window.FIGURES || {};
   const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const domainById = Object.fromEntries(D.domains.map(d => [d.id, d]));
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  document.documentElement.classList.add("js");
+  /* ---------- text helpers ---------- */
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-  /* ---------------- Theme ---------------- */
-  (function theme() {
-    const root = document.documentElement;
-    let saved;
-    try { saved = localStorage.getItem("theme"); } catch (e) {}
-    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-    root.setAttribute("data-theme", saved || (prefersLight ? "light" : "dark"));
-    $("#themeToggle").addEventListener("click", () => {
-      const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
-      root.setAttribute("data-theme", next);
-      try { localStorage.setItem("theme", next); } catch (e) {}
-    });
-  })();
+  // data.js is written with straight quotes; print typographer's quotes instead.
+  const smart = s => String(s == null ? "" : s)
+    .replace(/(^|[\s(\[{—–-])"(?=\S)/g, "$1“").replace(/"/g, "”")
+    .replace(/(^|[\s(\[{—–-])'(?=\S)/g, "$1‘").replace(/'/g, "’")
+    .replace(/\.\.\./g, "…");
 
-  /* ---------------- Fill profile ---------------- */
+  // B612 Mono's curly apostrophe looks like an accent, so text set in mono keeps
+  // straight typewriter quotes.
+  const straight = s => String(s == null ? "" : s).replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
+
+  const t = s => esc(smart(s));     // serif text
+  const m = s => esc(straight(s));  // mono text
+  const byId = Object.fromEntries(D.projects.map(p => [p.id, p]));
+  const domain = id => (D.domains.find(d => d.id === id) || { label: id }).label;
+
   const P = D.profile;
-  $("#brandInitials").textContent = P.initials;
-  $("#footBrandInitials").textContent = P.initials;
-  $("#footName").textContent = P.name;
-  $("#year").textContent = new Date().getFullYear();
-  $("#headlineText").textContent = P.headline + " ";
-  $("#headlineAccent").textContent = P.headlineAccent;
-  $("#lede").textContent = P.blurb;
-  $("#emailLink").href = "mailto:" + P.email;
-  $("#emailLink2").href = "mailto:" + P.email;
-  $("#emailText").textContent = P.email;
 
-  /* ---------------- Domain strip ---------------- */
-  (function domains() {
-    const box = $("#domainStrip");
-    box.innerHTML = D.domains.map(d => {
-      const count = D.projects.filter(p => p.domain === d.id).length;
-      return `<button class="domain-chip reveal" style="--c:${d.color}" data-domain="${d.id}">
-        <div class="dc-top"><span class="dot"></span><span class="dc-name">${esc(d.label)}</span>
-          <span class="dc-count">${count}</span></div>
-        <div class="dc-blurb">${esc(d.blurb)}</div>
-      </button>`;
-    }).join("");
-    $$(".domain-chip", box).forEach(c =>
-      c.addEventListener("click", () => applyFilter(c.dataset.domain, true)));
-  })();
+  /* ---------- hero ---------- */
+  $("#headline").textContent = smart(P.headline);
+  $("#intro").textContent = smart(P.blurb);
+  document.querySelectorAll("[data-email]").forEach(a => {
+    a.href = "mailto:" + P.email;
+    if (a.hasAttribute("data-email-text")) a.textContent = P.email;
+  });
 
-  /* ---------------- Filters ---------------- */
-  (function filters() {
-    const box = $("#filters");
-    const all = `<button class="filter active" data-filter="all">All<span class="n">${D.projects.length}</span></button>`;
-    const rest = D.domains.map(d => {
-      const count = D.projects.filter(p => p.domain === d.id).length;
-      return `<button class="filter" data-filter="${d.id}" style="--c:${d.color}">${esc(d.label)}<span class="n">${count}</span></button>`;
-    }).join("");
-    box.innerHTML = all + rest;
-    $$(".filter", box).forEach(f =>
-      f.addEventListener("click", () => applyFilter(f.dataset.filter, false)));
-  })();
+  /* ---------- shared bits ---------- */
+  const points = list => (list && list.length)
+    ? `<ul class="points">${list.map(h => `<li>${t(h)}</li>`).join("")}</ul>` : "";
 
-  let currentFilter = "all";
-  function applyFilter(id, scroll) {
-    currentFilter = id;
-    $$(".filter").forEach(f => f.classList.toggle("active", f.dataset.filter === id));
-    $$("#projectGrid .card").forEach(c => {
-      const show = id === "all" || c.dataset.domain === id;
-      c.hidden = !show;
-    });
-    if (scroll) {
-      document.getElementById("work").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" });
-    }
-  }
+  const relatedLinks = p => (p.related || [])
+    .filter(id => byId[id])
+    .map(id => `<a href="#p-${esc(id)}">${m(byId[id].title)}</a>`)
+    .join(", ");
 
-  /* ---------------- Project cards ---------------- */
-  (function cards() {
-    const grid = $("#projectGrid");
-    // featured first, then the rest
-    const ordered = [...D.projects].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-    grid.innerHTML = ordered.map((p, i) => {
-      const d = domainById[p.domain] || { color: "#9aa6c0", label: p.domain };
-      const statusClass = p.status.toLowerCase().replace(/[^a-z]/g, "");
-      return `<button class="card reveal ${p.featured ? "featured" : ""}" style="--c:${d.color}"
-                data-id="${p.id}" data-domain="${p.domain}">
-        <div class="c-top">
-          <span class="c-dot"></span>
-          <span class="c-domain">${esc(d.label)}</span>
-          <span class="c-status ${statusClass}">${esc(p.status)}</span>
+  const extLinks = p => (p.links && p.links.length)
+    ? `<p class="ext-links">${p.links.map(l =>
+        `<a href="${esc(l.href)}" target="_blank" rel="noopener">${m(l.label)}<span aria-hidden="true">&nbsp;↗</span></a>`).join("")}</p>`
+    : "";
+
+  /* ---------- selected work ---------- */
+  (function work() {
+    let n = 0;
+    $("#entries").innerHTML = D.projects.filter(p => p.featured).map(p => {
+      const fig = FIGS[p.id];
+      if (fig) n += 1;
+      const rel = relatedLinks(p);
+      return `
+      <article class="entry" id="p-${esc(p.id)}">
+        <header class="entry-head">
+          <h3 class="entry-title">${t(p.title)}</h3>
+          <p class="entry-tag">${m(p.tagline)}</p>
+          <dl class="spec">
+            <div><dt>Type</dt><dd>${m(domain(p.domain))}</dd></div>
+            <div><dt>Status</dt><dd>${m(p.status)}</dd></div>
+            <div><dt>Year</dt><dd>${m(p.year)}</dd></div>
+            ${rel ? `<div><dt>See also</dt><dd>${rel}</dd></div>` : ""}
+          </dl>
+        </header>
+        <div class="entry-body">
+          <p class="entry-blurb">${t(p.blurb)}</p>
+          ${points(p.highlights)}
+          <p class="stack"><span class="sr-only">Built with </span>${(p.stack || []).map(m).join("\u00a0· ")}</p>
+          ${extLinks(p)}
         </div>
-        <h3>${esc(p.title)}</h3>
-        <div class="c-tag">${esc(p.tagline || "")}</div>
-        <p class="c-blurb">${esc(trim(p.blurb, p.featured ? 180 : 125))}</p>
-        <div class="c-stack">${(p.stack || []).slice(0, p.featured ? 5 : 3).map(s => `<span class="chip-xs">${esc(s)}</span>`).join("")}</div>
-        <span class="c-more">View details →</span>
-      </button>`;
+        ${fig ? `
+        <figure class="fig">
+          <div class="fig-plate">${fig.svg}</div>
+          <figcaption><b>Fig.&nbsp;${n}</b> ${m(fig.caption)}</figcaption>
+        </figure>` : ""}
+      </article>`;
     }).join("");
-    $$(".card", grid).forEach(c =>
-      c.addEventListener("click", () => openModal(c.dataset.id)));
-  })();
-  function trim(s, n) { return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "…" : s; }
-
-  /* ---------------- Photography ---------------- */
-  (function photo() {
-    const ph = D.photography;
-    $("#photoIntro").textContent = ph.intro;
-    $("#photoNote").textContent = ph.note;
-    $("#gearList").innerHTML = ph.gear.map(g =>
-      `<li><span class="gn">${esc(g.name)}</span> <span class="gnote">${esc(g.note)}</span></li>`).join("");
-    $("#photoGallery").innerHTML = ph.shots.map(s =>
-      `<figure class="shot reveal"><img src="${esc(s.src)}" alt="${esc(s.caption)}" loading="lazy" decoding="async"><figcaption class="cap">${esc(s.caption)}</figcaption></figure>`
-    ).join("");
   })();
 
-  /* ---------------- About + skills ---------------- */
-  (function about() {
-    $("#bio").innerHTML = P.bio.map(b => `<p>${esc(b)}</p>`).join("");
-    $("#facts").innerHTML = P.facts.map(f =>
-      `<li><span class="fk">${esc(f.k)}</span><span class="fv">${esc(f.v)}</span></li>`).join("");
-    $("#skills").innerHTML = D.skills.map(g =>
-      `<div class="skill-group reveal"><h4>${esc(g.group)}</h4><div class="tags">${g.items.map(i => `<span class="chip-xs">${esc(i)}</span>`).join("")}</div></div>`
-    ).join("");
+  /* ---------- everything else ---------- */
+  (function index() {
+    const rest = D.projects.filter(p => !p.featured);
+    $("#groups").innerHTML = D.domains.map(d => {
+      const items = rest.filter(p => p.domain === d.id);
+      if (!items.length) return "";
+      return `
+      <section class="group" aria-labelledby="g-${esc(d.id)}">
+        <header class="group-head">
+          <h4 class="group-name" id="g-${esc(d.id)}">${t(d.label)}</h4>
+          <p class="group-blurb">${t(d.blurb)}</p>
+        </header>
+        <div class="rows">
+          ${items.map(p => {
+            const rel = relatedLinks(p);
+            return `
+          <details class="row" id="p-${esc(p.id)}">
+            <summary>
+              <span class="row-title">${t(p.title)}</span>
+              <span class="row-tag">${m(p.tagline)}</span>
+              <span class="row-status">${m(p.status)}</span>
+              <span class="row-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="row-body">
+              <div>
+                <p>${t(p.blurb)}</p>
+                ${points(p.highlights)}
+                ${extLinks(p)}
+              </div>
+              <dl class="spec">
+                <div><dt>Stack</dt><dd>${(p.stack || []).map(m).join("\u00a0· ")}</dd></div>
+                <div><dt>Year</dt><dd>${m(p.year)}</dd></div>
+                ${rel ? `<div><dt>See also</dt><dd>${rel}</dd></div>` : ""}
+              </dl>
+            </div>
+          </details>`;
+          }).join("")}
+        </div>
+      </section>`;
+    }).join("");
   })();
 
-  /* ---------------- Socials ---------------- */
-  (function socials() {
-    $("#socials").innerHTML = P.socials.map(s =>
-      `<a class="social" href="${esc(s.href)}" target="_blank" rel="noopener"><strong>${esc(s.label)}</strong></a>`
-    ).join("");
-  })();
-
-  /* ---------------- Modal ---------------- */
-  const modalRoot = $("#modalRoot"), modalBody = $("#modalBody");
-  let lastFocus = null;
-  function openModal(id) {
-    const p = D.projects.find(x => x.id === id);
-    if (!p) return;
-    const d = domainById[p.domain] || { color: "#9aa6c0", label: p.domain };
-    const links = (p.links && p.links.length)
-      ? p.links.map(l => `<a class="btn btn-ghost" href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")
-      : "";
-    modalBody.innerHTML = `
-      <div class="m-bar" style="--c:${d.color}"></div>
-      <div class="m-top">
-        <span class="m-domain" style="--c:${d.color}">${esc(d.label)}</span>
-        <span class="m-status">${esc(p.status)} · ${esc(p.year || "")}</span>
-      </div>
-      <h3>${esc(p.title)}</h3>
-      <div class="m-tag">${esc(p.tagline || "")}</div>
-      <p class="m-blurb">${esc(p.blurb)}</p>
-      ${(p.highlights && p.highlights.length) ? `<h4>Highlights</h4>
-        <ul class="m-high" style="--c:${d.color}">${p.highlights.map(h => `<li>${esc(h)}</li>`).join("")}</ul>` : ""}
-      <h4>Stack</h4>
-      <div class="m-stack">${(p.stack || []).map(s => `<span class="chip-xs">${esc(s)}</span>`).join("")}</div>
-      ${links ? `<div class="m-links">${links}</div>` : ""}
-    `;
-    lastFocus = document.activeElement;
-    modalRoot.classList.add("open");
-    modalRoot.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    $("#modalClose").focus();
+  /* Links to a project (#p-…) open its row if it's folded away. */
+  function reveal(hash, smooth) {
+    if (!/^#p-[\w-]+$/.test(hash)) return false;
+    const el = document.getElementById(hash.slice(1));
+    if (!el) return false;
+    if (el.tagName === "DETAILS") el.open = true;
+    el.scrollIntoView({ behavior: smooth && !REDUCED ? "smooth" : "auto", block: "start" });
+    const focusTarget = el.tagName === "DETAILS" ? el.querySelector("summary") : el.querySelector("h3");
+    if (focusTarget) {
+      if (!focusTarget.hasAttribute("tabindex") && focusTarget.tagName !== "SUMMARY") focusTarget.setAttribute("tabindex", "-1");
+      focusTarget.focus({ preventScroll: true });
+    }
+    return true;
   }
-  function closeModal() {
-    modalRoot.classList.remove("open");
-    modalRoot.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    if (lastFocus) lastFocus.focus();
-  }
-  $("#modalClose").addEventListener("click", closeModal);
-  $("#modalBackdrop").addEventListener("click", closeModal);
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && modalRoot.classList.contains("open")) closeModal(); });
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href^="#p-"]');
+    if (!a) return;
+    if (reveal(a.getAttribute("href"), true)) {
+      e.preventDefault();
+      history.pushState(null, "", a.getAttribute("href"));
+    }
+  });
+  window.addEventListener("hashchange", () => reveal(location.hash, false));
+  if (location.hash) reveal(location.hash, false);
 
-  /* ---------------- Constellation ---------------- */
-  (function graph() {
-    const canvas = $("#constellation");
-    if (!canvas || !window.Constellation) return;
-    const inst = window.Constellation.init(canvas, D, {
-      onSelectProject: p => openModal(p.id),
-      onSelectDomain: id => applyFilter(id, true),
-      onSelectCenter: () => document.getElementById("about").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" }),
+  /* ---------- photos ---------- */
+  const PH = D.photography;
+  const shots = PH.shots || [];
+  $("#photoIntro").textContent = smart(PH.intro);
+  $("#photoNote").textContent = smart(PH.note);
+  $("#gear").innerHTML = PH.gear.map(g =>
+    `<div><dt>${m(g.name)}</dt><dd>${m(g.note)}</dd></div>`).join("");
+
+  $("#sheet").innerHTML = shots.map((s, i) => `
+    <figure class="shot${i === 0 ? " shot--lead" : ""}">
+      <a href="${esc(s.src)}" data-i="${i}" aria-label="${t(s.caption)}, open larger">
+        <img src="${esc(s.src)}" alt="${t(s.alt || s.caption)}" ${i === 0 ? "" : 'loading="lazy"'} decoding="async">
+      </a>
+      <figcaption><span class="n">${String(i + 1).padStart(2, "0")}</span>${m(s.caption)}</figcaption>
+    </figure>`).join("");
+
+  (function viewer() {
+    const dlg = $("#viewer");
+    if (!dlg || typeof dlg.showModal !== "function" || !shots.length) return; // links still open the image
+    const img = $("#viewerImg"), cap = $("#viewerCap"), count = $("#viewerCount");
+    let i = 0;
+
+    function show(n) {
+      i = (n + shots.length) % shots.length;
+      const s = shots[i];
+      img.src = s.src;
+      img.alt = smart(s.alt || s.caption);
+      cap.textContent = straight(s.caption);
+      count.textContent = `${i + 1} / ${shots.length}`;
+      [i + 1, i - 1].forEach(k => { new Image().src = shots[(k + shots.length) % shots.length].src; });
+    }
+
+    $("#sheet").addEventListener("click", e => {
+      const a = e.target.closest("a[data-i]");
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+      e.preventDefault();
+      show(+a.dataset.i);
+      dlg.showModal();
     });
-    $("#cpReset").addEventListener("click", () => inst.reset());
-    // legend
-    $("#cpLegend").innerHTML = D.domains.map(d =>
-      `<button class="lg" data-domain="${d.id}"><span class="d" style="background:${d.color};color:${d.color}"></span>${esc(d.label)}</button>`).join("");
-    $$("#cpLegend .lg").forEach(b => {
-      b.addEventListener("mouseenter", () => inst.highlightDomain(b.dataset.domain));
-      b.addEventListener("mouseleave", () => inst.clearHover());
-      b.addEventListener("click", () => applyFilter(b.dataset.domain, true));
+    dlg.addEventListener("click", e => {
+      const step = e.target.closest("[data-step]");
+      if (step) return show(i + +step.dataset.step);
+      if (e.target.closest("[data-close]") || e.target === dlg || e.target.classList.contains("viewer-stage")) dlg.close();
+    });
+    dlg.addEventListener("keydown", e => {
+      if (e.key === "ArrowRight") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+    });
+
+    // Swipe on touch screens.
+    let x0 = null;
+    dlg.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+    dlg.addEventListener("touchend", e => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+      x0 = null;
     });
   })();
 
-  /* ---------------- Nav: scroll state, active link, mobile ---------------- */
-  (function nav() {
-    const nav = $("#nav"), links = $("#navLinks");
-    const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 24);
-    onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
+  /* ---------- about ---------- */
+  $("#bio").innerHTML = P.bio.map(b => `<p>${t(b)}</p>`).join("");
+  $("#facts").innerHTML = P.facts.map(f =>
+    `<div><dt>${m(f.k)}</dt><dd>${t(f.v)}</dd></div>`).join("");
+  $("#tools").innerHTML = D.skills.map(g => `
+    <div class="tool-group">
+      <h4>${m(g.group)}</h4>
+      <ul>${g.items.map(x => `<li>${t(x)}</li>`).join("")}</ul>
+    </div>`).join("");
 
-    $("#hamburger").addEventListener("click", () => links.classList.toggle("open"));
-    $$("#navLinks a").forEach(a => a.addEventListener("click", () => links.classList.remove("open")));
-
-    const sections = $$("section[id]");
-    const spy = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          $$("#navLinks a").forEach(a =>
-            a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
-        }
-      });
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    sections.forEach(s => spy.observe(s));
-  })();
-
-  /* ---------------- Reveal on scroll ---------------- */
-  (function reveal() {
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add("in");
-        obs.unobserve(e.target);
-      });
-    }, { threshold: 0.12 });
-    $$(".reveal").forEach(el => io.observe(el));
-  })();
-
-  /* ---------------- Back to top ---------------- */
-  (function toTop() {
-    const btn = $("#toTop");
-    window.addEventListener("scroll", () => btn.classList.toggle("show", window.scrollY > 600), { passive: true });
-    btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" }));
-  })();
+  /* ---------- contact ---------- */
+  const kofi = P.socials.find(s => /ko-?fi/i.test(s.label));
+  if (kofi) document.querySelectorAll("[data-kofi]").forEach(a => { a.href = kofi.href; });
+  $("#socials").innerHTML = P.socials.filter(s => s !== kofi).map(s =>
+    `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${m(s.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("");
+  $("#year").textContent = new Date().getFullYear();
 })();
