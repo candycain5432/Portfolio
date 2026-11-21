@@ -1,5 +1,6 @@
 /* ============================================================================
    data.js: all the site's content lives here (projects, bio, skills, photos).
+   Plain straight quotes are fine; the page turns them into curly ones.
    ========================================================================== */
 
 window.PORTFOLIO = {
@@ -7,8 +8,9 @@ window.PORTFOLIO = {
   profile: {
     name: "William Cain",
     initials: "WC",
-    headline: "Hi, I'm William.",
-    headlineAccent: "I write code, build gadgets, and take pictures of planes.",
+    // The big line at the top of the page.
+    headline: "I write code, build gadgets, and take pictures of planes.",
+    // The paragraph under it.
     blurb:
       "Some weeks that means a Catholic daily-faith app. Other weeks it's a Python " +
       "game engine, an Arduino radar, or the WireGuard setup on my home network. " +
@@ -39,18 +41,19 @@ window.PORTFOLIO = {
     ],
   },
 
-  /* Colors drive the clusters on the project map. */
+  /* The groups in the "Everything else" list, in this order. */
   domains: [
-    { id: "web",      label: "Web & Apps",       color: "#46d6a4", blurb: "Apps and websites." },
-    { id: "games",    label: "Games",            color: "#a78bfa", blurb: "Engines, Roblox games, and homemade physics." },
-    { id: "hardware", label: "Hardware & IoT",   color: "#f6a94a", blurb: "Arduino projects, sensors, and a radar." },
-    { id: "security", label: "Security & Linux", color: "#ff6b81", blurb: "My homelab, OSINT work, and Arch." },
-    { id: "ai",       label: "AI & Software",    color: "#5cc8ff", blurb: "AI experiments and daily Python." },
-    { id: "creative", label: "Creative",         color: "#f574b8", blurb: "A manga, math animations, and a sarcastic desk robot." },
-    { id: "photo",    label: "Photography",      color: "#e9c45f", blurb: "Mostly planes." },
+    { id: "web",      label: "Web & Apps",       blurb: "Apps and websites." },
+    { id: "games",    label: "Games",            blurb: "Engines, Roblox games, and homemade physics." },
+    { id: "hardware", label: "Hardware & IoT",   blurb: "Arduino projects, sensors, and a radar." },
+    { id: "security", label: "Security & Linux", blurb: "My homelab, OSINT work, and Arch." },
+    { id: "ai",       label: "AI & Software",    blurb: "AI experiments and daily Python." },
+    { id: "creative", label: "Creative",         blurb: "A manga, math animations, and a sarcastic desk robot." },
+    { id: "photo",    label: "Photography",      blurb: "Mostly planes." },
   ],
 
-  /* `related` draws the links between projects on the map. */
+  /* featured: true puts a project in the big list at the top (with its figure from
+     figures.js). `related` is a list of other project ids, shown as links. */
   projects: [
     /* ---------------- FEATURED ---------------- */
     {
