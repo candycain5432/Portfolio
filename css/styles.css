@@ -818,8 +818,17 @@ a.scrap-pic { cursor: zoom-in; }
 }
 .viewer[open] { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
 .viewer::backdrop { background: #0f141a; }
-.viewer-stage { display: grid; place-items: center; min-height: 0; padding: clamp(12px, 3vw, 40px); }
-.viewer-stage img { max-width: 100%; max-height: 100%; object-fit: contain; border: 10px solid #fff; border-bottom-width: 36px; box-shadow: 0 30px 60px rgb(0 0 0 / .5); }
+/* The photo is positioned inside the stage so its max size is measured against the space
+   actually left above the caption bar, in every browser and window size. */
+.viewer-stage { --pad: clamp(12px, 3vw, 40px); position: relative; min-height: 0; overflow: hidden; }
+.viewer-stage img {
+  position: absolute; inset: 0; margin: auto;
+  width: auto; height: auto;
+  max-width: calc(100% - 2 * var(--pad)); max-height: calc(100% - 2 * var(--pad));
+  object-fit: contain;
+  border: 10px solid #fff; border-bottom-width: 36px;
+  box-shadow: 0 30px 60px rgb(0 0 0 / .5);
+}
 .viewer-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 14px clamp(16px, 3vw, 40px) 18px; }
 .viewer-cap { margin: 0; font: 1.5rem/1.2 var(--hand); }
 .viewer-count { margin-left: .5em; font: .75rem/1 var(--mono); color: #9aa5b1; }
