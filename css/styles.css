@@ -50,15 +50,15 @@
 :root {
   --ink: #15202b;
   --ink-2: #3c4753;
-  --ink-3: #56606b;
+  --ink-3: #4b5560;
   --paper: #fffdf8;
   --line: rgb(21 32 43 / .14);
 
   --orange: #ff5a1f;        /* aviation orange: the name, the fuel button */
-  --orange-deep: #b8380a;   /* orange that's dark enough for small text */
-  --blue: #2457d6;
+  --orange-deep: #9a2c06;   /* orange that is dark enough for small text */
+  --blue: #1f4fc4;
   --blue-ink: #2b4a9a;      /* ballpoint pen */
-  --green-ink: #17803d;
+  --green-ink: #13703a;
   --sign: #121212;
   --yellow: #ffc928;
 
@@ -440,7 +440,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   letter-spacing: .12em; text-transform: uppercase; text-align: center;
   color: #1d3f8f;
   rotate: 10deg;
-  opacity: .88;
+  opacity: .94;
   mix-blend-mode: multiply;
 }
 .stamp small { display: block; margin-top: 4px; font: 700 .5625rem/1 var(--mono); letter-spacing: .14em; }
