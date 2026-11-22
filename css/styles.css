@@ -875,7 +875,7 @@ a.scrap-pic { cursor: zoom-in; }
   .note-plane { top: 50.5%; }
   .hero-text { grid-row: 4; padding: 34px 0 0; }
   .sticker { font-size: .6875rem; padding: 8px 12px 7px; }
-  .sticker:nth-child(1) { top: calc(var(--ph) * .62); right: auto; left: -6px; }
+  .sticker:nth-child(1) { --r: -6deg; top: calc(var(--ph) * .6); right: auto; left: 59%; }
   .sticker:nth-child(2) { top: calc(var(--ph) * .9); right: -6px; }
   .sticker:nth-child(3) { top: calc(var(--ph) * .76); right: auto; left: 4%; }
   .sticker:nth-child(4) { top: calc(var(--ph) * .015); right: -6px; }
@@ -932,4 +932,11 @@ a.scrap-pic { cursor: zoom-in; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; animation-iteration-count: 1 !important; }
   .marquee-track, .term-body .cursor { animation: none; }
+}
+
+/* very narrow phones: keep all five nav links in view */
+@media (max-width: 380px) {
+  .nav-in { gap: 8px; }
+  .logo { width: 36px; height: 36px; }
+  .nav-links a { padding: 8px 5px; }
 }
