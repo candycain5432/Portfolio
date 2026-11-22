@@ -74,19 +74,22 @@ window.PORTFOLIO = {
       related: ["cockpit-portfolio"], links: [],
     },
     {
-      id: "exposure", title: "EXPOSURE", tagline: "Roblox horror",
-      domain: "games", featured: true, status: "In progress", year: "2026",
+      id: "cull", title: "Cull", tagline: "Photo culling assistant",
+      domain: "ai", featured: true, status: "In progress", year: "2026",
       blurb:
-        "A photography-stealth horror game on Roblox that I'm making with a friend. " +
-        "The camera prototype checks each shot against a list of photo requirements, " +
-        "and it already has a viewfinder HUD, lens switching, and long exposure.",
+        "A command-line tool that goes through a photo shoot for you. It ranks every " +
+        "frame by sharpness and exposure, groups bursts and duplicates, and suggests " +
+        "the best shot in each group with a plain-language reason. Then a keyboard-only " +
+        "review screen in the browser lets you make the final call.",
       highlights: [
-        "Checks each shot against the photo requirements",
-        "Viewfinder HUD with a live checklist",
-        "Lens switching and long exposure",
+        "Sharpness from the variance of the Laplacian, exposure from histogram clipping",
+        "Groups bursts by capture time and finds duplicates with perceptual hashing",
+        "Reads RAW files (CR2, NEF, ARW, DNG...) through their embedded previews",
+        "Keyboard-driven review screen with side-by-side compare and 100% zoom",
       ],
-      stack: ["Lua", "Roblox Studio"],
-      related: ["magic-combat", "photo"], links: [],
+      stack: ["Python", "NumPy", "Pillow", "rawpy", "FastAPI", "Rich", "SQLite"],
+      related: ["photo", "daily-python"],
+      links: [{ label: "GitHub", href: "https://github.com/candycain5432/Cull" }],
     },
     {
       id: "pysino", title: "Pysino", tagline: "Game engine",
@@ -275,6 +278,21 @@ window.PORTFOLIO = {
       related: ["pysino"], links: [],
     },
     {
+      id: "exposure", title: "EXPOSURE", tagline: "Roblox horror",
+      domain: "games", status: "In progress", year: "2026",
+      blurb:
+        "A photography-stealth horror game on Roblox that I'm making with a friend. " +
+        "The camera prototype checks each shot against a list of photo requirements, " +
+        "and it already has a viewfinder HUD, lens switching, and long exposure.",
+      highlights: [
+        "Checks each shot against the photo requirements",
+        "Viewfinder HUD with a live checklist",
+        "Lens switching and long exposure",
+      ],
+      stack: ["Lua", "Roblox Studio"],
+      related: ["magic-combat", "photo"], links: [],
+    },
+    {
       id: "magic-combat", title: "Magic Combat", tagline: "Roblox",
       domain: "games", status: "Built", year: "2026",
       blurb:
@@ -445,6 +463,7 @@ window.PORTFOLIO = {
       { what: "What \"provably fair\" means: server seeds, client seeds, nonces", via: "pysino" },
       { what: "Writing gravity and collision from scratch", via: "platformer" },
       { what: "Getting AI agents to argue fairly, and catching bias", via: "debate" },
+      { what: "Measuring blur and exposure with plain math on pixels", via: "cull" },
       { what: "Ultrasonic sensing with an HC-SR04 on a servo", via: "wall-r" },
       { what: "Calibrating sensors on a 14-bit ADC and saving it to EEPROM", via: "plant-monitor" },
       { what: "WireGuard split and full tunnels, plus DDNS", via: "seclab" },
