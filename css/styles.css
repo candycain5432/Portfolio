@@ -136,15 +136,9 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 }
 .skip:focus { transform: none; }
 
-/* the WC logo: an airfield location sign */
-.sign {
-  display: inline-flex; align-items: center;
-  padding: .62em .66em .58em;
-  font: 700 .75rem/1 var(--mono); letter-spacing: .08em;
-  color: var(--yellow); background: var(--sign);
-  border-radius: 3px;
-  box-shadow: inset 0 0 0 3px var(--sign), inset 0 0 0 4.5px var(--yellow);
-}
+/* the WC logo: the same orange sticker as the favicon */
+.logo { display: block; width: 44px; height: 44px; transition: rotate .2s var(--pop), scale .2s var(--pop); }
+.brand:hover .logo { rotate: -8deg; scale: 1.08; }
 
 /* ---------- buttons ---------- */
 .btn {
@@ -573,7 +567,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   box-shadow: 0 1px 2px rgb(21 32 43 / .12);
 }
 
-.mtb {
+.spread {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   grid-template-areas: "main text" "main print";
@@ -581,11 +575,11 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   gap: 0 clamp(28px, 4vw, 60px);
   margin-bottom: clamp(64px, 8vw, 112px);
 }
-.mtb-main { grid-area: main; position: relative; align-self: start; margin: 0; rotate: -1.2deg; }
-.mtb-main a { display: block; overflow: hidden; border: 2px solid var(--ink); border-radius: 26px; box-shadow: 8px 8px 0 var(--ink); cursor: zoom-in; }
-.mtb-main img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; transition: scale .6s var(--ease); }
-.mtb-main a:hover img { scale: 1.03; }
-.mtb-main figcaption {
+.spread-main { grid-area: main; position: relative; align-self: start; margin: 0; rotate: -1.2deg; }
+.spread-main a { display: block; overflow: hidden; border: 2px solid var(--ink); border-radius: 26px; box-shadow: 8px 8px 0 var(--ink); cursor: zoom-in; }
+.spread-main img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; transition: scale .6s var(--ease); }
+.spread-main a:hover img { scale: 1.03; }
+.spread-main figcaption {
   position: absolute; left: 7%; top: 8%;
   display: flex; align-items: center; gap: 6px;
   color: #fff; font-size: clamp(1.5rem, 2.6vw, 2.25rem);
@@ -593,11 +587,61 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   rotate: -5deg;
   pointer-events: none;
 }
-.mtb-main figcaption .arr { --a: 20deg; filter: drop-shadow(0 1px 2px rgb(10 30 10 / .5)); }
-.mtb-text { grid-area: text; padding-top: 6px; }
-.mtb-title { margin: 12px 0 0; font: 860 clamp(2.5rem, 4.6vw, 3.9rem)/.88 var(--mona); font-stretch: 120%; letter-spacing: -.045em; }
-.mtb-copy { margin: 14px 0 0; font-size: 1.125rem; color: var(--ink-2); }
-.mtb-print { grid-area: print; align-self: start; justify-self: start; width: min(100%, 290px); margin: 30px 0 0 -96px; z-index: 2; --r: 4deg; }
+.spread-main figcaption .arr { --a: 20deg; filter: drop-shadow(0 1px 2px rgb(10 30 10 / .5)); }
+.spread-text { grid-area: text; padding-top: 6px; }
+.spread-title { margin: 12px 0 0; font: 860 clamp(2.5rem, 4.6vw, 3.9rem)/.88 var(--mona); font-stretch: 120%; letter-spacing: -.045em; }
+.spread-copy { margin: 14px 0 0; font-size: 1.125rem; color: var(--ink-2); }
+.spread-print { grid-area: print; align-self: start; justify-self: start; width: min(100%, 290px); margin: 30px 0 0 -96px; z-index: 2; --r: 4deg; }
+
+/* the same spread, mirrored: text on the left, big photo on the right */
+.spread--flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-areas: "text main" "print main"; }
+.spread--flip .spread-main { rotate: 1.2deg; }
+.spread--flip .spread-main figcaption { left: auto; right: 7%; top: 7%; flex-direction: row-reverse; rotate: 4deg; }
+.spread--flip .spread-main figcaption .arr { --a: 160deg; }
+.spread--flip .spread-print { justify-self: end; margin: 30px -96px 0 0; --r: -4deg; }
+
+/* ---------- life: before / during / after ---------- */
+.build { --gap: clamp(40px, 6vw, 88px); margin-bottom: clamp(64px, 8vw, 112px); }
+.build-text { max-width: 36rem; margin-bottom: clamp(76px, 7.5vw, 100px); }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px var(--gap); margin: 0; padding: 0; list-style: none; }
+.step {
+  position: relative;
+  padding: 12px 12px 14px;
+  background: #fff;
+  box-shadow: 0 22px 36px -24px rgb(21 32 43 / .6);
+  rotate: var(--r, 0deg);
+  transition: rotate .25s var(--ease), scale .25s var(--ease);
+}
+.step:hover { rotate: 0deg; scale: 1.02; }
+.step::before {
+  content: "";
+  position: absolute; top: 0; left: 50%; z-index: 1;
+  width: 96px; height: 24px;
+  translate: -50% -50%; rotate: -3deg;
+  background: rgb(255 238 160 / .75);
+  box-shadow: 0 1px 2px rgb(21 32 43 / .12);
+}
+/* the arrow to the next step; it stays level even though the card is tilted */
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute; top: 44%; left: calc(100% + 10px);
+  width: calc(var(--gap) - 20px); height: 34px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 24' fill='none' stroke='%2315202b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 17.5c7.5-6 17-9.6 30.5-9.2'/%3E%3Cpath d='M26.5 2.8c3.2 1.7 6 3.4 8.3 5.4-2.4 2-4.6 4.3-6.4 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  rotate: calc(var(--r) * -1);
+}
+.step-label { position: absolute; top: -46px; left: 6px; margin: 0; font-size: clamp(1.5rem, 2.2vw, 1.9rem); color: var(--orange-deep); rotate: -4deg; }
+.step-pic { position: relative; display: block; aspect-ratio: 3 / 4; overflow: hidden; background: #efe9dc; }
+.step-pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+a.step-pic { cursor: zoom-in; }
+.step-cap { margin: 10px 0 0; font-size: 1.35rem; text-align: center; }
+
+/* the pencil sketch standing in for the "before" photo */
+.step-pic--drawn { background: #fbf8ef; color: #3a434d; }
+.radio-sketch { display: block; width: 100%; height: 100%; }
+.radio-sketch .sk { fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+.radio-sketch .thin { stroke-width: 1.4; }
+.radio-sketch .thick { stroke-width: 3.4; }
+.radio-sketch .sk-note { font: 21px var(--hand); fill: var(--blue-ink); }
 
 .life-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; align-items: start; }
 .life-tiles > :nth-child(1) { rotate: -1deg; }
@@ -774,8 +818,17 @@ a.scrap-pic { cursor: zoom-in; }
 }
 .viewer[open] { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
 .viewer::backdrop { background: #0f141a; }
-.viewer-stage { display: grid; place-items: center; min-height: 0; padding: clamp(12px, 3vw, 40px); }
-.viewer-stage img { max-width: 100%; max-height: 100%; object-fit: contain; border: 10px solid #fff; border-bottom-width: 36px; box-shadow: 0 30px 60px rgb(0 0 0 / .5); }
+/* The photo is positioned inside the stage so its max size is measured against the space
+   actually left above the caption bar, in every browser and window size. */
+.viewer-stage { --pad: clamp(12px, 3vw, 40px); position: relative; min-height: 0; overflow: hidden; }
+.viewer-stage img {
+  position: absolute; inset: 0; margin: auto;
+  width: auto; height: auto;
+  max-width: calc(100% - 2 * var(--pad)); max-height: calc(100% - 2 * var(--pad));
+  object-fit: contain;
+  border: 10px solid #fff; border-bottom-width: 36px;
+  box-shadow: 0 30px 60px rgb(0 0 0 / .5);
+}
 .viewer-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 14px clamp(16px, 3vw, 40px) 18px; }
 .viewer-cap { margin: 0; font: 1.5rem/1.2 var(--hand); }
 .viewer-count { margin-left: .5em; font: .75rem/1 var(--mono); color: #9aa5b1; }
@@ -791,13 +844,18 @@ a.scrap-pic { cursor: zoom-in; }
   .postits { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 0; }
   .wall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .sticker:nth-child(3) { right: calc(var(--pw) - 160px); }
-  .mtb-print { margin-left: -64px; width: min(100%, 250px); }
+  .spread-print { margin-left: -64px; width: min(100%, 250px); }
+  .spread--flip .spread-print { margin: 30px -64px 0 0; }
 }
 
 @media (max-width: 860px) {
-  .mtb { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "print" "text"; grid-template-rows: auto; }
-  .mtb-print { justify-self: end; width: min(54%, 260px); margin: -84px 4% 0 0; }
-  .mtb-text { padding-top: 8px; }
+  .spread, .spread--flip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "print" "text"; grid-template-rows: auto; }
+  .spread-print { justify-self: end; width: min(54%, 260px); margin: -84px 4% 0 0; }
+  .spread--flip .spread-main { rotate: -1.2deg; }
+  .spread--flip .spread-print { justify-self: start; margin: -84px 0 0 4%; }
+  .build { --gap: 58px; }
+  .step-cap { font-size: 1.15rem; }
+  .spread-text { padding-top: 8px; }
   .life-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .life-tiles > :nth-child(3) { grid-column: 1 / -1; margin-top: 0; }
   .cards { grid-template-columns: minmax(0, 1fr); padding-bottom: 0; }
@@ -843,6 +901,9 @@ a.scrap-pic { cursor: zoom-in; }
   .notebook-title { font-size: 1.75rem; }
   .postits { grid-template-columns: minmax(0, 1fr); }
   .life-tiles { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 92px; justify-items: center; }
+  .step { width: min(100%, 290px); }
+  .step:not(:last-child)::after { top: auto; bottom: -76px; left: calc(50% - 30px); width: 60px; height: 40px; rotate: calc(90deg - var(--r)); }
   .scraps { columns: 2; column-gap: 16px; }
   .scrap { padding: 8px 8px 7px; margin-bottom: 26px; }
   .scrap-cap { font-size: 1.1rem; }

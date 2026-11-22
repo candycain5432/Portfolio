@@ -463,6 +463,7 @@ window.PORTFOLIO = {
   // "Off the clock".
   life: {
     mtb: {
+      label: "Off-road",
       title: "Mountain biking",
       text: "Trail rides, jumps, and the occasional race.",
       // The first photo is the big one; the second sits on top of it like a taped print.
@@ -473,6 +474,32 @@ window.PORTFOLIO = {
           alt: "William racing a mountain bike down a rocky section of a taped-off course, number 864" },
       ],
     },
+    // Same layout as mountain biking, mirrored. `full` is the bigger version opened on click.
+    flying: {
+      label: "Airborne",
+      title: "Flying",
+      text: "Got some time at the controls of a Cessna 172. Plane spotting is the cheap version.",
+      photos: [
+        { src: "assets/img/flying-cockpit.webp", full: "assets/img/flying-cockpit-full.webp", caption: "left seat",
+          alt: "William at the controls of a Cessna 172 in flight, wearing a headset, with farmland far below" },
+        { src: "assets/img/flying-ramp.webp", full: "assets/img/flying-ramp-full.webp", caption: "me + a Cessna 172",
+          alt: "William standing on an airport ramp in front of a white Cessna 172" },
+      ],
+    },
+    // Before / during / after. `drawing: true` shows the pencil sketch of the stock radio;
+    // to use a real photo instead, give that step a `src` (and `alt`) and remove `drawing`.
+    car: {
+      label: "Garage",
+      title: "Head unit swap",
+      text: "Pulled the stock radio out of my Elantra GT and wired in a Pioneer touchscreen.",
+      steps: [
+        { label: "before", caption: "the stock radio", drawing: true },
+        { label: "during", src: "assets/img/car-during.webp", full: "assets/img/car-during-full.webp", caption: "mid-surgery",
+          alt: "The middle of a car dashboard with the radio pulled out, showing the empty mounting frame and wiring plugs" },
+        { label: "after", src: "assets/img/car-after.webp", caption: "Pioneer, installed",
+          alt: "A Pioneer touchscreen installed in the dashboard above the climate controls" },
+      ],
+    },
     philosophy: {
       quote: "If you replace every part on a mountain bike, one at a time, is it still the same bike?",
       note: "The ship of Theseus, but make it MTB.",
@@ -481,28 +508,74 @@ window.PORTFOLIO = {
   },
 
   /* "Scrapbook": photos from life, taped into a sketchbook.
-     Put the photos in assets/img/scrapbook/, then fill in `src` for a spot.
-     A spot without a `src` shows as an empty "photo goes here" frame. Delete the spots
-     you don't need, or copy a line to add more.
-     shape: "tall" (3:4), "wide" (4:3) or "square". Photos are cropped to fit the shape. */
+     To add one, run it through tools/scrapbook-photo.py (it makes both files below,
+     handles iPhone HEIC photos and strips the GPS location), then paste the line it
+     prints into this list. Or put any photo in assets/img/scrapbook/ and add a line
+     with just `src`.
+     src:   the small version shown on the page
+     full:  (optional) the big version that opens when the photo is clicked
+     shape: "tall" (3:4), "wide" (4:3) or "square". Photos are cropped to fit.
+     A line with an empty `src` shows as an empty "photo goes here" frame. */
   scrapbook: {
-    note: "the camera roll, minus the planes",
+    note: "straight from the camera roll",
     photos: [
-      { src: "assets/img/scrapbook/friends.webp", caption: "the crew", shape: "wide",
+      { src: "assets/img/scrapbook/friends.webp", full: "assets/img/scrapbook/friends-full.webp",
+        caption: "the crew", shape: "wide",
         alt: "Four friends taking a selfie at night in front of tall hedges" },
-      { src: "", caption: "", shape: "tall" },
-      { src: "", caption: "", shape: "square" },
-      { src: "", caption: "", shape: "square" },
-      { src: "assets/img/scrapbook/puppy.webp", caption: "puppy. very important.", shape: "tall",
+      { src: "assets/img/scrapbook/tailgate.webp", full: "assets/img/scrapbook/tailgate-full.webp",
+        caption: "tailgate crew", shape: "wide",
+        alt: "William and three friends taking a selfie at night in front of an open car hatch" },
+      { src: "assets/img/scrapbook/pysino.webp", full: "assets/img/scrapbook/pysino-full.webp",
+        caption: "Pysino, mid-build", shape: "wide",
+        alt: "A monitor in a dark room showing the Pysino code in an editor next to a terminal on an Arch Linux desktop" },
+      { src: "assets/img/scrapbook/arches-raw.webp", full: "assets/img/scrapbook/arches-raw-full.webp",
+        caption: "Arches National Park, shot in raw", shape: "tall",
+        alt: "A tall, thin sandstone arch against a deep blue sky at Arches National Park" },
+      { src: "assets/img/scrapbook/winglet.webp", full: "assets/img/scrapbook/winglet-full.webp",
+        caption: "winglet view", shape: "square",
+        alt: "An airplane winglet over a sea of clouds" },
+      { src: "assets/img/scrapbook/send-it.webp", full: "assets/img/scrapbook/send-it-full.webp",
+        caption: "send it", shape: "square",
+        alt: "William in mid-air on a mountain bike after launching off a wooden ramp in the woods" },
+      { src: "assets/img/scrapbook/red-bull.webp", full: "assets/img/scrapbook/red-bull-full.webp",
+        caption: "refuel stop", shape: "tall",
+        alt: "William and a friend taking a selfie, each holding up a can of Red Bull" },
+      { src: "assets/img/scrapbook/essentials.webp", full: "assets/img/scrapbook/essentials-full.webp",
+        caption: "the essentials", shape: "wide",
+        alt: "A mountain bike leaning against a tree beside a table with a helmet and a can of Red Bull" },
+      { src: "assets/img/scrapbook/overlook.webp", full: "assets/img/scrapbook/overlook-full.webp",
+        caption: "up top", shape: "wide",
+        alt: "Pine trees growing out of a rocky summit above a sea of green forested hills" },
+      { src: "assets/img/scrapbook/chick-fil-a.webp", full: "assets/img/scrapbook/chick-fil-a-full.webp",
+        caption: "post-ride Chick-fil-A", shape: "wide",
+        alt: "Friends at a table covered in Chick-fil-A trays, with a mountain bike parked outside the window" },
+      { src: "assets/img/scrapbook/window-seat.webp", full: "assets/img/scrapbook/window-seat-full.webp",
+        caption: "window seat", shape: "tall",
+        alt: "Mountains and clouds seen from an airplane window" },
+      { src: "assets/img/scrapbook/turret-arch.webp", full: "assets/img/scrapbook/turret-arch-full.webp",
+        caption: "Turret Arch, Arches National Park", shape: "wide",
+        alt: "Turret Arch, a red sandstone arch in Arches National Park, under a deep blue sky" },
+      { src: "assets/img/scrapbook/kali-cat.webp", full: "assets/img/scrapbook/kali-cat-full.webp",
+        caption: "supervising the Kali install", shape: "square",
+        alt: "A calico cat sitting in front of a monitor showing the Kali Linux installer, next to an open laptop" },
+      { src: "assets/img/scrapbook/bike-rack.webp", full: "assets/img/scrapbook/bike-rack-full.webp",
+        caption: "loaded up", shape: "wide",
+        alt: "Three mountain bikes on a rack on the back of a black hatchback" },
+      { src: "assets/img/scrapbook/ride-crew.webp", full: "assets/img/scrapbook/ride-crew-full.webp",
+        caption: "the ride crew", shape: "wide",
+        alt: "Four friends sitting on a curb with their mountain bikes and drinks" },
+      { src: "assets/img/scrapbook/red-rock.webp", full: "assets/img/scrapbook/red-rock-full.webp",
+        caption: "Arches National Park", shape: "tall",
+        alt: "Tall red rock formations in Arches National Park against a bright blue sky" },
+      { src: "assets/img/scrapbook/puppy.webp", full: "assets/img/scrapbook/puppy-full.webp",
+        caption: "puppy. very important.", shape: "tall",
         alt: "William holding a fluffy black, white and brown puppy" },
-      { src: "", caption: "", shape: "wide" },
-      { src: "", caption: "", shape: "wide" },
-      { src: "", caption: "", shape: "square" },
-      { src: "assets/img/scrapbook/coke.webp", caption: "summer + glass-bottle Coke", shape: "tall",
+      { src: "assets/img/scrapbook/arches-arch.webp", full: "assets/img/scrapbook/arches-arch-full.webp",
+        caption: "Arches National Park", shape: "wide",
+        alt: "A wide sandstone arch glowing orange in the sun at Arches National Park" },
+      { src: "assets/img/scrapbook/coke.webp", full: "assets/img/scrapbook/coke-full.webp",
+        caption: "summer + glass-bottle Coke", shape: "tall",
         alt: "William and a friend holding glass bottles of Coke under a blue sky" },
-      { src: "", caption: "", shape: "tall" },
-      { src: "", caption: "", shape: "wide" },
-      { src: "", caption: "", shape: "square" },
     ],
   },
 

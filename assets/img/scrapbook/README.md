@@ -1,24 +1,37 @@
 # Scrapbook photos
 
-Photos for the **Scrapbook** section of the site go in this folder.
+Photos for the **Scrapbook** section of the site live in this folder. Each photo has two files:
+`name.webp` (the small, cropped one on the page) and `name-full.webp` (the big one that opens
+when someone clicks it).
 
-1. Upload them here. On GitHub: open this folder, then **Add file → Upload files**.
-2. In `js/data.js`, find `scrapbook` and put the file's path in an empty spot's `src`
-   (add a caption too if you like):
+## Adding a photo (the easy way)
 
-   ```js
-   { src: "assets/img/scrapbook/trail-ride.jpg", caption: "first ride of the year", shape: "tall" },
-   ```
+From the top folder of the repo:
 
-   The number on each empty spot on the site (#02, #03 …) is its position in that list.
-3. `shape` is `"tall"` (3:4), `"wide"` (4:3) or `"square"`. Photos are cropped to fit,
-   so pick the shape closest to the photo.
+```bash
+pip install pillow pillow-heif
+python3 tools/scrapbook-photo.py ~/Pictures/IMG_1234.HEIC trail-day --shape wide --caption "trail day"
+```
 
-Spots without a `src` show up as empty "photo goes here" frames. Delete the ones you
-don't need, or copy a line to add more spots.
+That makes both files here and prints a line to paste into `scrapbook.photos` in
+`js/data.js`. Fill in the `alt` text (a short description of the photo for screen readers).
 
-**Tips**
+It also reads iPhone HEIC photos, fixes iPhone colours for the web, and **removes the GPS
+location** your phone saves inside every photo, which matters for anything taken at home.
 
-- Use JPG, PNG or WebP. iPhone HEIC photos only show up in Safari, so export them as JPG.
-- Phone photos are big and slow the page down. About 1600px on the long side is plenty.
-- File names with no spaces are easiest (`beach-day.jpg`, not `Beach Day.jpg`).
+- `--shape` is `tall` (3:4), `wide` (4:3) or `square`.
+- `--focus 0.5,0.3` moves the crop (0,0 is top-left, 1,1 is bottom-right).
+- `--zoom 0.8` zooms in a bit.
+
+## Adding a photo (by hand)
+
+Drop a JPG, PNG or WebP in this folder and add a line to `scrapbook.photos`:
+
+```js
+{ src: "assets/img/scrapbook/trail-day.jpg", caption: "trail day", shape: "wide", alt: "..." },
+```
+
+Without `full`, the same file is used for both. Keep it around 1600px on the long side, use
+names without spaces, and avoid HEIC (only Safari can show it).
+
+A line with an empty `src` shows up as an empty "photo goes here" frame.
