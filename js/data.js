@@ -463,6 +463,7 @@ window.PORTFOLIO = {
   // "Off the clock".
   life: {
     mtb: {
+      label: "Off-road",
       title: "Mountain biking",
       text: "Trail rides, jumps, and the occasional race.",
       // The first photo is the big one; the second sits on top of it like a taped print.
@@ -471,6 +472,32 @@ window.PORTFOLIO = {
           alt: "William mid-air on a mountain bike, jumping a dirt lip in the woods" },
         { src: "assets/img/mtb-race.webp", caption: "race day, #864",
           alt: "William racing a mountain bike down a rocky section of a taped-off course, number 864" },
+      ],
+    },
+    // Same layout as mountain biking, mirrored. `full` is the bigger version opened on click.
+    flying: {
+      label: "Airborne",
+      title: "Flying",
+      text: "Got some time at the controls of a Cessna 172. Plane spotting is the cheap version.",
+      photos: [
+        { src: "assets/img/flying-cockpit.webp", full: "assets/img/flying-cockpit-full.webp", caption: "left seat",
+          alt: "William at the controls of a Cessna 172 in flight, wearing a headset, with farmland far below" },
+        { src: "assets/img/flying-ramp.webp", full: "assets/img/flying-ramp-full.webp", caption: "me + a Cessna 172",
+          alt: "William standing on an airport ramp in front of a white Cessna 172" },
+      ],
+    },
+    // Before / during / after. `drawing: true` shows the pencil sketch of the stock radio;
+    // to use a real photo instead, give that step a `src` (and `alt`) and remove `drawing`.
+    car: {
+      label: "Garage",
+      title: "Head unit swap",
+      text: "Pulled the stock radio out of my Elantra GT and wired in a Pioneer touchscreen.",
+      steps: [
+        { label: "before", caption: "the stock radio", drawing: true },
+        { label: "during", src: "assets/img/car-during.webp", full: "assets/img/car-during-full.webp", caption: "mid-surgery",
+          alt: "The middle of a car dashboard with the radio pulled out, showing the empty mounting frame and wiring plugs" },
+        { label: "after", src: "assets/img/car-after.webp", caption: "Pioneer, installed",
+          alt: "A Pioneer touchscreen installed in the dashboard above the climate controls" },
       ],
     },
     philosophy: {
@@ -495,15 +522,15 @@ window.PORTFOLIO = {
       { src: "assets/img/scrapbook/friends.webp", full: "assets/img/scrapbook/friends-full.webp",
         caption: "the crew", shape: "wide",
         alt: "Four friends taking a selfie at night in front of tall hedges" },
-      { src: "assets/img/scrapbook/cessna.webp", full: "assets/img/scrapbook/cessna-full.webp",
-        caption: "me + a Cessna 172", shape: "tall",
-        alt: "William standing on an airport ramp in front of a white Cessna 172, with another Cessna parked behind" },
       { src: "assets/img/scrapbook/essentials.webp", full: "assets/img/scrapbook/essentials-full.webp",
         caption: "the essentials", shape: "wide",
         alt: "A mountain bike leaning against a tree beside a table with a helmet and a can of Red Bull" },
       { src: "assets/img/scrapbook/pysino.webp", full: "assets/img/scrapbook/pysino-full.webp",
         caption: "Pysino, mid-build", shape: "wide",
         alt: "A monitor in a dark room showing the Pysino code in an editor next to a terminal on an Arch Linux desktop" },
+      { src: "assets/img/scrapbook/winglet.webp", full: "assets/img/scrapbook/winglet-full.webp",
+        caption: "winglet view", shape: "square",
+        alt: "An airplane winglet over a sea of clouds" },
       { src: "assets/img/scrapbook/send-it.webp", full: "assets/img/scrapbook/send-it-full.webp",
         caption: "send it", shape: "square",
         alt: "William in mid-air on a mountain bike after launching off a wooden ramp in the woods" },
@@ -513,9 +540,6 @@ window.PORTFOLIO = {
       { src: "assets/img/scrapbook/overlook.webp", full: "assets/img/scrapbook/overlook-full.webp",
         caption: "up top", shape: "wide",
         alt: "A view over forested hills from a rocky overlook" },
-      { src: "assets/img/scrapbook/winglet.webp", full: "assets/img/scrapbook/winglet-full.webp",
-        caption: "winglet view", shape: "square",
-        alt: "An airplane winglet over a sea of clouds" },
       { src: "assets/img/scrapbook/window-seat.webp", full: "assets/img/scrapbook/window-seat-full.webp",
         caption: "window seat", shape: "tall",
         alt: "Mountains and clouds seen from an airplane window" },

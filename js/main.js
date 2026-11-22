@@ -258,21 +258,90 @@
   /* ---------- off the clock ---------- */
   (function life() {
     const F = D.life || {};
-    const mtb = F.mtb || {}, ph = F.philosophy || {}, fuel = F.fuel || {};
+    const ph = F.philosophy || {}, fuel = F.fuel || {};
+    const ARR = '<svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg>';
 
-    // Mountain biking: one big photo, one taped-on print.
-    const mp = (mtb.photos || []).filter(p => p.src);
-    galleries.mtb = mp;
-    const link = (p, i) => `<a href="${esc(p.src)}" data-gallery="mtb" data-i="${i}" aria-label="${t(p.caption || mtb.title)}, open larger">
+    // A spread: one big photo, one taped-on print, and a bit of text.
+    function spread(el, block, gallery) {
+      if (!el || !block) return;
+      const photos = (block.photos || []).filter(p => p.src);
+      galleries[gallery] = photos;
+      const link = (p, i) => `<a href="${esc(p.full || p.src)}" data-gallery="${gallery}" data-i="${i}" aria-label="${t(p.caption || block.title)}, open larger">
           <img src="${esc(p.src)}" alt="${t(p.alt || p.caption)}" loading="lazy" decoding="async"></a>`;
-    $("#mtb").innerHTML = `
-      ${mp[0] ? `<figure class="mtb-main">${link(mp[0], 0)}${mp[0].caption ? `<figcaption class="hand">${t(mp[0].caption)} <svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg></figcaption>` : ""}</figure>` : ""}
-      <div class="mtb-text">
-        <p class="tile-label">Off-road</p>
-        <h3 class="mtb-title">${t(mtb.title)}</h3>
-        <p class="mtb-copy">${t(mtb.text)}</p>
+      el.innerHTML = `
+      ${photos[0] ? `<figure class="spread-main">${link(photos[0], 0)}${photos[0].caption ? `<figcaption class="hand">${t(photos[0].caption)} ${ARR}</figcaption>` : ""}</figure>` : ""}
+      <div class="spread-text">
+        ${block.label ? `<p class="tile-label">${t(block.label)}</p>` : ""}
+        <h3 class="spread-title">${t(block.title)}</h3>
+        <p class="spread-copy">${t(block.text)}</p>
       </div>
-      ${mp[1] ? `<figure class="polaroid mtb-print">${link(mp[1], 1)}${mp[1].caption ? `<figcaption>${t(mp[1].caption)}</figcaption>` : ""}</figure>` : ""}`;
+      ${photos[1] ? `<figure class="polaroid spread-print">${link(photos[1], 1)}${photos[1].caption ? `<figcaption>${t(photos[1].caption)}</figcaption>` : ""}</figure>` : ""}`;
+    }
+    spread($("#mtb"), F.mtb, "mtb");
+    spread($("#flying"), F.flying, "flying");
+
+    // Before / during / after, with hand-drawn arrows between the steps.
+    // The "before" step is a pencil sketch of the stock radio (there's no photo of it).
+    const RADIO = `<svg class="radio-sketch" viewBox="0 0 300 400" role="img" aria-label="A pencil drawing of the stock radio: a CD slot, a small screen and rows of buttons, above the climate controls">
+        <defs>
+          <filter id="pencil" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
+            <line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.1" opacity=".4"/>
+          </pattern>
+        </defs>
+        <g class="sk" filter="url(#pencil)">
+          <path d="M30 64C36 180 44 290 56 400M42 66C48 180 56 290 68 400M270 64C264 180 256 290 244 400M258 66C252 180 244 290 232 400"/>
+          <rect x="48" y="76" width="34" height="74" rx="6"/><rect x="218" y="76" width="34" height="74" rx="6"/>
+          <path class="thin" d="M53 90h24M53 102h24M53 114h24M53 126h24M53 138h24M223 90h24M223 102h24M223 114h24M223 126h24M223 138h24"/>
+          <rect x="88" y="74" width="124" height="108" rx="9"/>
+          <path class="thick" d="M112 86h76"/>
+          <circle cx="100" cy="96" r="6"/><circle cx="200" cy="96" r="6"/>
+          <rect x="112" y="98" width="76" height="34" rx="3" fill="url(#hatch)"/>
+          <path class="thin" d="M120 110h34M120 120h22"/>
+          <path class="thin" d="M94 110h12v9h-12zM94 124h12v9h-12zM94 138h12v9h-12zM194 110h12v9h-12zM194 124h12v9h-12zM194 138h12v9h-12z"/>
+          <path class="thin" d="M107 150h12v10h-12zM122 150h12v10h-12zM137 150h12v10h-12zM152 150h12v10h-12zM167 150h12v10h-12zM182 150h12v10h-12z"/>
+          <rect x="92" y="190" width="116" height="18" rx="5"/>
+          <path d="M150 192l8 13h-16z"/>
+          <path class="thin" d="M104 195h20v8h-20zM176 195h20v8h-20z"/>
+          <rect x="92" y="216" width="116" height="84" rx="8"/>
+          <rect x="116" y="224" width="68" height="18" rx="2"/>
+          <circle cx="150" cy="272" r="17"/><circle class="thin" cx="150" cy="272" r="9"/>
+          <path class="thin" d="M100 252h14v9h-14zM100 268h14v9h-14zM100 284h14v9h-14zM186 252h14v9h-14zM186 268h14v9h-14zM186 284h14v9h-14z"/>
+          <path class="thin" d="M140 313h20v8h-20z"/><circle class="thin" cx="118" cy="317" r="4"/><circle class="thin" cx="182" cy="317" r="4"/>
+          <path d="M122 400L132 356Q150 344 168 356L178 400"/>
+          <ellipse cx="150" cy="350" rx="15" ry="13"/>
+          <path class="thin" d="M66 40Q86 54 108 82M105.9 73.2L108 82L100 77.9"/>
+          <path class="thin" d="M232 42Q216 66 182 108M190.1 104.1L182 108L184.2 99.3"/>
+        </g>
+        <text class="sk-note" x="22" y="34">CD slot</text>
+        <text class="sk-note" x="282" y="34" text-anchor="end">tiny screen</text>
+      </svg>`;
+    (function build() {
+      const el = $("#build"), car = F.car;
+      if (!el || !car) return;
+      const steps = car.steps || [];
+      galleries.car = steps.filter(s => s.src);
+      const tilt = [-2.2, 1.6, -1.2];
+      let k = 0;
+      el.innerHTML = `
+      <div class="build-text">
+        ${car.label ? `<p class="tile-label">${t(car.label)}</p>` : ""}
+        <h3 class="spread-title">${t(car.title)}</h3>
+        <p class="spread-copy">${t(car.text)}</p>
+      </div>
+      <ol class="steps">${steps.map((s, n) => `
+        <li class="step" style="--r:${tilt[n % tilt.length]}deg">
+          <p class="step-label hand">${t(s.label)}</p>
+          ${s.src
+            ? `<a class="step-pic" href="${esc(s.full || s.src)}" data-gallery="car" data-i="${k++}" aria-label="${t(s.label)}: ${t(s.caption || "photo")}, open larger"><img src="${esc(s.src)}" alt="${t(s.alt || s.caption)}" loading="lazy" decoding="async"></a>`
+            : `<div class="step-pic step-pic--drawn">${s.drawing ? RADIO : ""}</div>`}
+          ${s.caption ? `<p class="step-cap hand">${t(s.caption)}</p>` : ""}
+        </li>`).join("")}
+      </ol>`;
+    })();
 
     const gauge = (() => {
       const cx = 100, cy = 112, r = 78;            // hub and dial radius
