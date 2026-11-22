@@ -41,7 +41,7 @@ window.PORTFOLIO = {
     ],
   },
 
-  /* The groups in the "Everything else" list, in this order. */
+  /* Project groups, used for the card colours and the filter buttons. */
   domains: [
     { id: "web",      label: "Web & Apps",       blurb: "Apps and websites." },
     { id: "games",    label: "Games",            blurb: "Engines, Roblox games, and homemade physics." },
@@ -52,8 +52,9 @@ window.PORTFOLIO = {
     { id: "photo",    label: "Photography",      blurb: "Mostly planes." },
   ],
 
-  /* featured: true puts a project in the big list at the top (with its figure from
-     figures.js). `related` is a list of other project ids, shown as links. */
+  /* featured: true puts a project in the big cards at the top. `related` is a list of
+     other project ids. `status` sets the stamp colour: Live / Running / Ongoing /
+     Daily driver are green, In progress / Concept / Exploring are orange. */
   projects: [
     /* ---------------- FEATURED ---------------- */
     {
@@ -416,6 +417,93 @@ window.PORTFOLIO = {
       { src: "assets/img/delta-a319.jpg", caption: "Delta A319" },
     ],
     note: "I'm planning on getting my FAA Part 107 so I can do more with the drone.",
+  },
+
+  /* ======================================================================
+     The personal stuff. All of this is meant to be rewritten in your words.
+     ====================================================================== */
+
+  // Stickers stuck around the top of the page (visitors can drag them around).
+  stickers: ["Arch btw", "Red Bull powered", "RDU plane spotter", "Part 107 soon"],
+
+  // The scrolling strip under the top section.
+  marquee: [
+    "Python", "JavaScript", "Lua", "Arduino", "Plane spotting", "Mountain biking",
+    "Philosophy", "Red Bull", "Arch Linux", "Photography", "Homelab", "Roblox", "Always learning",
+  ],
+
+  // "How I learn": things picked up while building. `via` is the id of the project it
+  // came from; `still: true` marks something still in progress.
+  learning: {
+    intro:
+      "I learn by building things. Almost every project here started with something " +
+      "I didn't know how to do yet. Here's some of what that's taught me so far.",
+    items: [
+      { what: "How a service worker keeps an app working offline", via: "anchor" },
+      { what: "Deploying a Node and Express backend on Render", via: "anchor" },
+      { what: "Server-authoritative game logic in Lua", via: "magic-combat" },
+      { what: "What \"provably fair\" means: server seeds, client seeds, nonces", via: "pysino" },
+      { what: "Writing gravity and collision from scratch", via: "platformer" },
+      { what: "Getting AI agents to argue fairly, and catching bias", via: "debate" },
+      { what: "Ultrasonic sensing with an HC-SR04 on a servo", via: "wall-r" },
+      { what: "Calibrating sensors on a 14-bit ADC and saving it to EEPROM", via: "plant-monitor" },
+      { what: "WireGuard split and full tunnels, plus DDNS", via: "seclab" },
+      { what: "Reading a network with Wireshark, Nmap and Bettercap", via: "seclab" },
+      { what: "Tracing a phishing campaign back to its infrastructure", via: "phishing-osint" },
+      { what: "How API keys and bearer tokens get abused", via: "shinyhunters" },
+      { what: "LUKS and btrfs on Arch, and moving it between drives", via: "arch" },
+      { what: "Self-hosting with no open ports through a Cloudflare Tunnel", via: "cloudflare" },
+      { what: "Animating math with Manim", via: "manim", still: true },
+      { what: "3D printing parts for a Raspberry Pi robot", via: "ai-buddy", still: true },
+    ],
+    now: "A small Python build every day (since October 2026), and AI Buddy.",
+    next: "FAA Part 107, so I can do more with the drone.",
+  },
+
+  // "Off the clock".
+  life: {
+    mtb: {
+      title: "Mountain biking",
+      text: "Trail rides, jumps, and the occasional race.",
+      // The first photo is the big one; the second sits on top of it like a taped print.
+      photos: [
+        { src: "assets/img/mtb-jump.webp", caption: "airtime",
+          alt: "William mid-air on a mountain bike, jumping a dirt lip in the woods" },
+        { src: "assets/img/mtb-race.webp", caption: "race day, #864",
+          alt: "William racing a mountain bike down a rocky section of a taped-off course, number 864" },
+      ],
+    },
+    philosophy: {
+      quote: "If you replace every part on a mountain bike, one at a time, is it still the same bike?",
+      note: "The ship of Theseus, but make it MTB.",
+    },
+    fuel: { title: "Fuel", text: "Runs on Red Bull. Currently running low.", cta: "Refuel me on Ko-fi" },
+  },
+
+  /* "Scrapbook": photos from life, taped into a sketchbook.
+     Put the photos in assets/img/scrapbook/, then fill in `src` for a spot.
+     A spot without a `src` shows as an empty "photo goes here" frame. Delete the spots
+     you don't need, or copy a line to add more.
+     shape: "tall" (3:4), "wide" (4:3) or "square". Photos are cropped to fit the shape. */
+  scrapbook: {
+    note: "the camera roll, minus the planes",
+    photos: [
+      { src: "assets/img/scrapbook/friends.webp", caption: "the crew", shape: "wide",
+        alt: "Four friends taking a selfie at night in front of tall hedges" },
+      { src: "", caption: "", shape: "tall" },
+      { src: "", caption: "", shape: "square" },
+      { src: "", caption: "", shape: "square" },
+      { src: "assets/img/scrapbook/puppy.webp", caption: "puppy. very important.", shape: "tall",
+        alt: "William holding a fluffy black, white and brown puppy" },
+      { src: "", caption: "", shape: "wide" },
+      { src: "", caption: "", shape: "wide" },
+      { src: "", caption: "", shape: "square" },
+      { src: "assets/img/scrapbook/coke.webp", caption: "summer + glass-bottle Coke", shape: "tall",
+        alt: "William and a friend holding glass bottles of Coke under a blue sky" },
+      { src: "", caption: "", shape: "tall" },
+      { src: "", caption: "", shape: "wide" },
+      { src: "", caption: "", shape: "square" },
+    ],
   },
 
   skills: [
