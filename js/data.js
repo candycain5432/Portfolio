@@ -486,14 +486,15 @@ window.PORTFOLIO = {
           alt: "William standing on an airport ramp in front of a white Cessna 172" },
       ],
     },
-    // Before / during / after. `drawing: true` shows the pencil sketch of the stock radio;
-    // to use a real photo instead, give that step a `src` (and `alt`) and remove `drawing`.
+    // Before / during / after. A step with `drawing: true` and no `src` shows a pencil
+    // sketch of the stock radio instead of a photo.
     car: {
       label: "Garage",
       title: "Head unit swap",
       text: "Pulled the stock radio out of my Elantra GT and wired in a Pioneer touchscreen.",
       steps: [
-        { label: "before", caption: "the stock radio", drawing: true },
+        { label: "before", src: "assets/img/car-before.webp", full: "assets/img/car-before-full.webp", caption: "the stock radio",
+          alt: "The stock Hyundai radio with a small screen and rows of buttons, above the climate controls" },
         { label: "during", src: "assets/img/car-during.webp", full: "assets/img/car-during-full.webp", caption: "mid-surgery",
           alt: "The middle of a car dashboard with the radio pulled out, showing the empty mounting frame and wiring plugs" },
         { label: "after", src: "assets/img/car-after.webp", caption: "Pioneer, installed",
