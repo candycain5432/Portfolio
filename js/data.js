@@ -462,19 +462,47 @@ window.PORTFOLIO = {
 
   // "Off the clock".
   life: {
-    mtb: { title: "Mountain biking", text: "Dirt, roots, and the occasional wipeout." },
+    mtb: {
+      title: "Mountain biking",
+      text: "Trail rides, jumps, and the occasional race.",
+      // The first photo is the big one; the second sits on top of it like a taped print.
+      photos: [
+        { src: "assets/img/mtb-jump.webp", caption: "airtime",
+          alt: "William mid-air on a mountain bike, jumping a dirt lip in the woods" },
+        { src: "assets/img/mtb-race.webp", caption: "race day, #864",
+          alt: "William racing a mountain bike down a rocky section of a taped-off course, number 864" },
+      ],
+    },
     philosophy: {
       quote: "If you replace every part on a mountain bike, one at a time, is it still the same bike?",
       note: "The ship of Theseus, but make it MTB.",
     },
     fuel: { title: "Fuel", text: "Runs on Red Bull. Currently running low.", cta: "Refuel me on Ko-fi" },
+  },
+
+  /* "Scrapbook": photos from life, taped into a sketchbook.
+     Put the photos in assets/img/scrapbook/, then fill in `src` for a spot.
+     A spot without a `src` shows as an empty "photo goes here" frame. Delete the spots
+     you don't need, or copy a line to add more.
+     shape: "tall" (3:4), "wide" (4:3) or "square". Photos are cropped to fit the shape. */
+  scrapbook: {
+    note: "the camera roll, minus the planes",
     photos: [
-      { src: "assets/img/life-friends.webp", caption: "the crew",
+      { src: "assets/img/scrapbook/friends.webp", caption: "the crew", shape: "wide",
         alt: "Four friends taking a selfie at night in front of tall hedges" },
-      { src: "assets/img/life-puppy.webp", caption: "puppy. very important.",
+      { src: "", caption: "", shape: "tall" },
+      { src: "", caption: "", shape: "square" },
+      { src: "", caption: "", shape: "square" },
+      { src: "assets/img/scrapbook/puppy.webp", caption: "puppy. very important.", shape: "tall",
         alt: "William holding a fluffy black, white and brown puppy" },
-      { src: "assets/img/life-coke.webp", caption: "summer + glass-bottle Coke",
+      { src: "", caption: "", shape: "wide" },
+      { src: "", caption: "", shape: "wide" },
+      { src: "", caption: "", shape: "square" },
+      { src: "assets/img/scrapbook/coke.webp", caption: "summer + glass-bottle Coke", shape: "tall",
         alt: "William and a friend holding glass bottles of Coke under a blue sky" },
+      { src: "", caption: "", shape: "tall" },
+      { src: "", caption: "", shape: "wide" },
+      { src: "", caption: "", shape: "square" },
     ],
   },
 

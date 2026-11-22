@@ -206,23 +206,74 @@
   $("#learnNow").textContent = smart(L.now);
   $("#learnNext").textContent = smart(L.next);
 
+  /* ---------- the photo viewer (shared by every gallery on the page) ---------- */
+  const galleries = {};   // name -> list of { src, caption, alt }
+  (function viewer() {
+    const dlg = $("#viewer");
+    if (!dlg || typeof dlg.showModal !== "function") return;  // links still open the image
+    const img = $("#viewerImg"), cap = $("#viewerCap"), count = $("#viewerCount");
+    const steps = $$("[data-step]", dlg);
+    let list = [], at = 0;
+    function show(n) {
+      at = (n + list.length) % list.length;
+      const s = list[at];
+      img.src = s.src;
+      img.alt = smart(s.alt || s.caption || "");
+      cap.textContent = smart(s.caption || "");
+      count.textContent = list.length > 1 ? `${at + 1} / ${list.length}` : "";
+      steps.forEach(b => { b.hidden = list.length < 2; });
+      if (list.length > 1) [at + 1, at - 1].forEach(k => { new Image().src = list[(k + list.length) % list.length].src; });
+    }
+    // Any link with data-gallery="name" data-i="n" opens that gallery at photo n.
+    document.addEventListener("click", e => {
+      const a = e.target.closest("a[data-gallery]");
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+      const g = galleries[a.dataset.gallery];
+      if (!g || !g.length) return;
+      e.preventDefault();
+      list = g;
+      show(+a.dataset.i || 0);
+      dlg.showModal();
+    });
+    dlg.addEventListener("click", e => {
+      const step = e.target.closest("[data-step]");
+      if (step) return show(at + +step.dataset.step);
+      if (e.target.closest("[data-close]") || e.target === dlg || e.target.classList.contains("viewer-stage")) dlg.close();
+    });
+    dlg.addEventListener("keydown", e => {
+      if (list.length < 2) return;
+      if (e.key === "ArrowRight") { e.preventDefault(); show(at + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(at - 1); }
+    });
+    let x0 = null;
+    dlg.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+    dlg.addEventListener("touchend", e => {
+      if (x0 === null || list.length < 2) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
+  })();
+
   /* ---------- off the clock ---------- */
   (function life() {
     const F = D.life || {};
-    const photos = F.photos || [];
-    const pol = (p, r) => p ? `
-      <figure class="polaroid" style="--r:${r}deg">
-        <img src="${esc(p.src)}" alt="${t(p.alt || p.caption)}" loading="lazy" decoding="async">
-        <figcaption>${t(p.caption)}</figcaption>
-      </figure>` : "";
-    const bike = `<svg viewBox="0 0 240 140" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="58" cy="94" r="38"/><circle cx="182" cy="94" r="38"/>
-        <circle cx="58" cy="94" r="5" fill="currentColor"/><circle cx="182" cy="94" r="5" fill="currentColor"/>
-        <path d="M58 94 104 98 92 50Z"/><path d="M92 50 160 44 104 98"/><path d="M160 44 182 94"/>
-        <path d="M156 30 160 44"/><path d="M146 26h22"/><path d="M84 40h22"/><path d="M92 50 95 40"/>
-        <circle cx="104" cy="98" r="7"/><path d="M104 98 113 112"/><path d="M108 113h10"/>
-        <path d="M14 136h30M196 136h30M62 136h12" stroke-width="3" opacity=".45"/>
-      </svg>`;
+    const mtb = F.mtb || {}, ph = F.philosophy || {}, fuel = F.fuel || {};
+
+    // Mountain biking: one big photo, one taped-on print.
+    const mp = (mtb.photos || []).filter(p => p.src);
+    galleries.mtb = mp;
+    const link = (p, i) => `<a href="${esc(p.src)}" data-gallery="mtb" data-i="${i}" aria-label="${t(p.caption || mtb.title)}, open larger">
+          <img src="${esc(p.src)}" alt="${t(p.alt || p.caption)}" loading="lazy" decoding="async"></a>`;
+    $("#mtb").innerHTML = `
+      ${mp[0] ? `<figure class="mtb-main">${link(mp[0], 0)}${mp[0].caption ? `<figcaption class="hand">${t(mp[0].caption)} <svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg></figcaption>` : ""}</figure>` : ""}
+      <div class="mtb-text">
+        <p class="tile-label">Off-road</p>
+        <h3 class="mtb-title">${t(mtb.title)}</h3>
+        <p class="mtb-copy">${t(mtb.text)}</p>
+      </div>
+      ${mp[1] ? `<figure class="polaroid mtb-print">${link(mp[1], 1)}${mp[1].caption ? `<figcaption>${t(mp[1].caption)}</figcaption>` : ""}</figure>` : ""}`;
+
     const gauge = (() => {
       const cx = 100, cy = 112, r = 78;            // hub and dial radius
       const A0 = 160, A1 = 20;                     // E end and F end of the dial (degrees)
@@ -247,14 +298,10 @@
         <circle cx="${cx}" cy="${cy}" r="8" fill="currentColor"/>
       </svg>`;
     })();
-    const mtb = F.mtb || {}, ph = F.philosophy || {}, fuel = F.fuel || {};
 
-    const mtbTile = `<div class="tile tile--mtb col-start"><p class="tile-label">Off-road</p>${bike}<h3 class="tile-title">${t(mtb.title)}</h3><p class="tile-text">${t(mtb.text)}</p></div>`;
-    const quoteTile = `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote><p class="tile-text">${t(ph.note)}</p></div>`;
-    const fuelTile = `<div class="tile tile--fuel col-start" id="fuel"><p class="tile-label">${t(fuel.title)}</p>${gauge}<p class="tile-text">${t(fuel.text)}</p>${kofi ? `<a class="btn btn-fuel" href="${esc(kofi)}" target="_blank" rel="noopener">${t(fuel.cta)}<span aria-hidden="true">&nbsp;↗</span></a>` : ""}</div>`;
-    $("#collage").innerHTML = [
-      pol(photos[0], -2.2),
-      quoteTile,
+    $("#lifeTiles").innerHTML = [
+      `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote><p class="tile-text">${t(ph.note)}</p></div>`,
+      `<div class="tile tile--fuel" id="fuel"><p class="tile-label">${t(fuel.title)}</p>${gauge}<p class="tile-text">${t(fuel.text)}</p>${kofi ? `<a class="btn btn-fuel" href="${esc(kofi)}" target="_blank" rel="noopener">${t(fuel.cta)}<span aria-hidden="true">&nbsp;↗</span></a>` : ""}</div>`,
       `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="term-body" aria-hidden="true">
@@ -264,11 +311,7 @@
         </div>
         <p class="term-cap" aria-hidden="true">LUKS + btrfs · Hyprland · Waybar · Quickshell</p>
       </div>`,
-      mtbTile,
-      pol(photos[1], 2.4),
-      fuelTile,
-      pol(photos[2], -1.4),
-    ].concat(photos.slice(3).map((p, k) => pol(p, k % 2 ? 2 : -2))).join("");
+    ].join("");
 
     // The needle starts full and drains to nearly empty when you scroll to it.
     const g = $("#fuel .gauge-needle");
@@ -284,59 +327,60 @@
     io.observe($("#fuel"));
   })();
 
+  /* ---------- scrapbook ---------- */
+  (function scrapbook() {
+    const CAM = '<svg class="scrap-cam" viewBox="0 0 64 48" aria-hidden="true"><path d="M6.4 15c-.2-2.7 1.8-4.6 4.4-4.6h8.4l3.5-5.4h19.6l3.3 5.5 8.5-.1c2.7 0 4.6 1.9 4.5 4.6l-.4 24.4c0 2.5-2 4.3-4.5 4.2H10.6c-2.5.1-4.4-1.8-4.3-4.3z"/><circle cx="32.2" cy="26.4" r="10.6"/><circle cx="32" cy="26.2" r="5"/><path d="M49.6 16.8h3.4"/></svg>';
+    const S = D.scrapbook || {};
+    const spots = S.photos || [];
+    $("#scrapNote").textContent = smart(S.note || "");
+    const filled = spots.filter(p => p.src);
+    galleries.scrapbook = filled;
+    const tilts = [-2.4, 1.8, -1.2, 2.8, -3, 1.3, 2.2, -1.8, 3.2, -.8, 1.6, -2.6];
+    const tapes = ["", "tape-l", "tape-r", "", "tape-r", "tape-l", "tape-2"];
+    let k = 0;
+    $("#scraps").innerHTML = spots.map((p, n) => {
+      const shape = /^(tall|wide|square)$/.test(p.shape) ? p.shape : "square";
+      const cls = `scrap scrap--${shape} ${tapes[n % tapes.length]}`;
+      const style = `--r:${tilts[n % tilts.length]}deg`;
+      if (!p.src) {
+        return `<li class="${cls} scrap--empty" style="${style}" aria-hidden="true">
+          <div class="scrap-pic">${CAM}<span class="hand">photo goes here</span><span class="scrap-n">#${pad(n + 1)}</span></div>
+        </li>`;
+      }
+      return `<li class="${cls}" style="${style}">
+          <a class="scrap-pic" href="${esc(p.src)}" data-gallery="scrapbook" data-i="${k++}" aria-label="${t(p.caption || "Photo")}, open larger">
+            <img src="${esc(p.src)}" alt="${t(p.alt || p.caption || "")}" loading="lazy" decoding="async">
+          </a>
+          ${p.caption ? `<p class="scrap-cap hand">${t(p.caption)}</p>` : ""}
+        </li>`;
+    }).join("");
+
+    // A photo that can't be found (a typo in data.js, say) turns back into an empty spot
+    // that names the missing file, instead of showing a broken image.
+    $$("#scraps img").forEach(img => img.addEventListener("error", () => {
+      const li = img.closest(".scrap"), src = img.getAttribute("src");
+      galleries.scrapbook = galleries.scrapbook.filter(x => x.src !== src);
+      li.classList.add("scrap--empty");
+      li.setAttribute("aria-hidden", "true");
+      li.innerHTML = `<div class="scrap-pic">${CAM}<span class="hand">can't find this one</span><span class="scrap-n">${esc(src.split("/").pop())}</span></div>`;
+      $$("#scraps a[data-gallery]").forEach((a, n) => { a.dataset.i = n; });
+    }, { once: true }));
+  })();
+
   /* ---------- photos ---------- */
   const PH = D.photography;
   const shots = PH.shots || [];
+  galleries.planes = shots;
   $("#photoIntro").textContent = smart(PH.intro);
   $("#gear").innerHTML = PH.gear.map(g => `<li>${t(g.name)}<span>${m(g.note)}</span></li>`).join("");
   $("#wall").innerHTML = shots.map((s, n) => `
     <figure class="snap${n === 0 ? " snap--lead" : ""}">
-      <a href="${esc(s.src)}" data-i="${n}" aria-label="${t(s.caption)}, open larger">
+      <a href="${esc(s.src)}" data-gallery="planes" data-i="${n}" aria-label="${t(s.caption)}, open larger">
         <img src="${esc(s.src)}" alt="${t(s.alt || s.caption)}" loading="lazy" decoding="async">
       </a>
       <figcaption><span class="n">${pad(n + 1)}</span>${t(s.caption)}</figcaption>
     </figure>`).join("") +
     (PH.note ? `<div class="postit"><p class="postit-label">Next up</p><p class="hand">${t(PH.note)}</p></div>` : "");
-
-  (function viewer() {
-    const dlg = $("#viewer");
-    if (!dlg || typeof dlg.showModal !== "function" || !shots.length) return;  // links still open the image
-    const img = $("#viewerImg"), cap = $("#viewerCap"), count = $("#viewerCount");
-    let at = 0;
-    function show(n) {
-      at = (n + shots.length) % shots.length;
-      const s = shots[at];
-      img.src = s.src;
-      img.alt = smart(s.alt || s.caption);
-      cap.textContent = smart(s.caption);
-      count.textContent = `${at + 1} / ${shots.length}`;
-      [at + 1, at - 1].forEach(k => { new Image().src = shots[(k + shots.length) % shots.length].src; });
-    }
-    $("#wall").addEventListener("click", e => {
-      const a = e.target.closest("a[data-i]");
-      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
-      e.preventDefault();
-      show(+a.dataset.i);
-      dlg.showModal();
-    });
-    dlg.addEventListener("click", e => {
-      const step = e.target.closest("[data-step]");
-      if (step) return show(at + +step.dataset.step);
-      if (e.target.closest("[data-close]") || e.target === dlg || e.target.classList.contains("viewer-stage")) dlg.close();
-    });
-    dlg.addEventListener("keydown", e => {
-      if (e.key === "ArrowRight") { e.preventDefault(); show(at + 1); }
-      if (e.key === "ArrowLeft") { e.preventDefault(); show(at - 1); }
-    });
-    let x0 = null;
-    dlg.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
-    dlg.addEventListener("touchend", e => {
-      if (x0 === null) return;
-      const dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
-      x0 = null;
-    });
-  })();
 
   /* ---------- contact ---------- */
   $("#socials").innerHTML = P.socials.filter(s => !/ko-?fi/i.test(s.label)).map(s =>

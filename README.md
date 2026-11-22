@@ -13,6 +13,7 @@ js/data.js            # ← EDIT THIS: projects, bio, photos, and all the person
 js/main.js            # builds the page from data.js and runs the interactive bits
 assets/fonts/         # Mona Sans, Source Serif 4 (italic), Gochi Hand, B612 Mono
 assets/img/           # photos (hero.webp + hero-cut.webp are the top of the page)
+assets/img/scrapbook/ # ← drop Scrapbook photos here
 assets/og.jpg         # the preview image shown when the link is shared
 tools/hero-cutout.py  # makes the "name behind me" effect at the top
 ```
@@ -38,8 +39,11 @@ The personal sections are also in `data.js`, below the projects:
 - `marquee`: the scrolling strip under the top section.
 - `learning`: the "How I learn" notebook. Each item has a `via` (the project it came from);
   add `still: true` for something you're still learning. `now` and `next` are the sticky notes.
-- `life`: "Off the clock": mountain biking, the philosophy quote, the Red Bull fuel gauge,
-  and the polaroid photos (add more to `life.photos` and they join the collage).
+- `life`: "Off the clock": the mountain biking photos (`life.mtb.photos`; the first is the
+  big one), the philosophy quote, and the Red Bull fuel gauge.
+- `scrapbook`: photos taped into a sketchbook. Put photos in `assets/img/scrapbook/` and fill
+  in an empty spot's `src` (the README in that folder walks through it). Spots without a
+  photo show as empty "photo goes here" frames.
 
 ## Adding photos
 
