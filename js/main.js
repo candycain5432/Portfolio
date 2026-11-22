@@ -217,12 +217,12 @@
     function show(n) {
       at = (n + list.length) % list.length;
       const s = list[at];
-      img.src = s.src;
+      img.src = s.full || s.src;
       img.alt = smart(s.alt || s.caption || "");
       cap.textContent = smart(s.caption || "");
       count.textContent = list.length > 1 ? `${at + 1} / ${list.length}` : "";
       steps.forEach(b => { b.hidden = list.length < 2; });
-      if (list.length > 1) [at + 1, at - 1].forEach(k => { new Image().src = list[(k + list.length) % list.length].src; });
+      if (list.length > 1) [at + 1, at - 1].forEach(k => { const n = list[(k + list.length) % list.length]; new Image().src = n.full || n.src; });
     }
     // Any link with data-gallery="name" data-i="n" opens that gallery at photo n.
     document.addEventListener("click", e => {
@@ -348,7 +348,7 @@
         </li>`;
       }
       return `<li class="${cls}" style="${style}">
-          <a class="scrap-pic" href="${esc(p.src)}" data-gallery="scrapbook" data-i="${k++}" aria-label="${t(p.caption || "Photo")}, open larger">
+          <a class="scrap-pic" href="${esc(p.full || p.src)}" data-gallery="scrapbook" data-i="${k++}" aria-label="${t(p.caption || "Photo")}, open larger">
             <img src="${esc(p.src)}" alt="${t(p.alt || p.caption || "")}" loading="lazy" decoding="async">
           </a>
           ${p.caption ? `<p class="scrap-cap hand">${t(p.caption)}</p>` : ""}

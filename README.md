@@ -16,6 +16,7 @@ assets/img/           # photos (hero.webp + hero-cut.webp are the top of the pag
 assets/img/scrapbook/ # ← drop Scrapbook photos here
 assets/og.jpg         # the preview image shown when the link is shared
 tools/hero-cutout.py  # makes the "name behind me" effect at the top
+tools/scrapbook-photo.py  # gets a phone photo ready for the scrapbook
 ```
 
 ## Editing content
@@ -41,9 +42,9 @@ The personal sections are also in `data.js`, below the projects:
   add `still: true` for something you're still learning. `now` and `next` are the sticky notes.
 - `life`: "Off the clock": the mountain biking photos (`life.mtb.photos`; the first is the
   big one), the philosophy quote, and the Red Bull fuel gauge.
-- `scrapbook`: photos taped into a sketchbook. Put photos in `assets/img/scrapbook/` and fill
-  in an empty spot's `src` (the README in that folder walks through it). Spots without a
-  photo show as empty "photo goes here" frames.
+- `scrapbook`: photos taped into a sketchbook. `tools/scrapbook-photo.py` gets a phone photo
+  ready (HEIC, colours, crop, and it strips the GPS location) and prints the line to paste in;
+  the README in `assets/img/scrapbook/` walks through it.
 
 ## Adding photos
 
