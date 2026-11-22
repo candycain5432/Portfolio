@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>William Cain</title>
-  <meta name="description" content="William Cain writes code, builds gadgets, and takes pictures of planes: web apps, games, Arduino hardware, home-lab security, and plane spotting at RDU.">
+  <meta name="description" content="William Cain writes code, builds gadgets, and takes pictures of planes. Also: mountain biking, philosophy, Arch Linux, and a lot of Red Bull.">
   <meta name="author" content="William Cain">
-  <meta name="theme-color" content="#426390">
+  <meta name="theme-color" content="#cde5fb">
   <link rel="canonical" href="https://williamcain.net/">
 
   <meta property="og:type" content="website">
@@ -19,188 +19,189 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="assets/fonts/source-serif-4.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/b612-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/img/profile-sky.jpg" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/fonts/gochi-hand.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/img/hero.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/img/hero-cut.webp" as="image" fetchpriority="high">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <a class="skip sign" href="#work">Skip to work</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="scribble" viewBox="0 0 40 24"><path d="M3 17.5c7.5-6 17-9.6 30.5-9.2" /><path d="M26.5 2.8c3.2 1.7 6 3.4 8.3 5.4-2.4 2-4.6 4.3-6.4 7" /></symbol>
+  </svg>
+  <a class="skip" href="#work">Skip to the projects</a>
 
-  <!-- Outside: the sky. The photo's edges are matched to this gradient (see tools/sky-plate.py). -->
-  <header class="hero sky" id="top">
-    <div class="wrap bar">
+  <header class="nav" id="nav">
+    <div class="wrap nav-in">
       <a class="brand" href="#top">
         <span class="sign" aria-hidden="true">WC</span>
         <span class="brand-name">William Cain</span>
       </a>
-      <nav class="nav" aria-label="Sections">
+      <nav class="nav-links" aria-label="Sections">
         <a href="#work">Work</a>
+        <a href="#learning">Learning</a>
+        <a href="#life">Life</a>
         <a href="#photos">Photos</a>
-        <a href="#about">About</a>
         <a href="#contact">Contact</a>
-        <a href="https://ko-fi.com/williamcain" data-kofi target="_blank" rel="noopener">Ko-fi<span aria-hidden="true">&nbsp;↗</span></a>
       </nav>
+      <a class="btn btn-fuel nav-fuel" data-kofi href="https://ko-fi.com/williamcain" target="_blank" rel="noopener">Buy me a Red Bull<span aria-hidden="true">&nbsp;↗</span></a>
     </div>
+  </header>
 
-    <div class="wrap hero-body">
-      <div class="hero-copy">
-        <h1 id="headline">I write code, build gadgets, and take pictures of planes.</h1>
-        <p class="hero-intro" id="intro">Some weeks that means a Catholic daily-faith app. Other weeks it’s a Python game engine, an Arduino radar, or the WireGuard setup on my home network. I like finishing things and writing down how they work.</p>
-        <p class="hero-note">Looking for internships and people to build things with.
-          <a href="#contact" data-email data-email-text>Email me</a></p>
+  <!-- A little plane that flies down the page as you scroll. Decoration only. -->
+  <div class="flight" aria-hidden="true">
+    <div class="flight-line"></div>
+    <ol class="flight-stops" id="flightStops"></ol>
+    <svg class="flight-plane" id="flightPlane" viewBox="0 0 24 24"><path d="M12 1.5c.9 0 1.4 1 1.4 2.2v5.5l7.6 4.5v2.2l-7.6-2.3v4.8l2.3 1.7v1.5L12 20.5l-3.7 1.1v-1.5l2.3-1.7v-4.8L3 15.9v-2.2l7.6-4.5V3.7c0-1.2.5-2.2 1.4-2.2z"/></svg>
+  </div>
+
+  <main>
+    <!-- HERO: the photo, the giant name, then a copy of the photo with the sky cut out on top -->
+    <section class="hero" id="top" aria-labelledby="name">
+      <div class="wrap hero-wrap">
+        <div class="hero-grid">
+          <p class="hand hello">hey! I'm</p>
+
+          <h1 class="name" id="name" aria-label="William Cain">
+            <span class="name-word">WILLIAM</span> <span class="name-word">CAIN</span>
+          </h1>
+
+          <figure class="poster">
+            <img class="poster-photo" src="assets/img/hero.webp" width="1152" height="1840" fetchpriority="high"
+                 alt="William in a dark suit, standing on the grass by the airport while a plane climbs out in the background">
+            <img class="poster-cut" src="assets/img/hero-cut.webp" width="1152" height="1840" alt="" aria-hidden="true">
+            <span class="hand note note-me" aria-hidden="true"><span>me</span><svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg></span>
+            <span class="hand note note-plane" aria-hidden="true"><svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg><span>planes,<br>obviously</span></span>
+          </figure>
+
+          <div class="hero-text">
+            <p class="statement" id="headline">I write code, build gadgets, and take pictures of planes.</p>
+            <p class="intro" id="intro"></p>
+            <div class="cta">
+              <a class="btn btn-ink" href="#work">See what I've built <span aria-hidden="true">↓</span></a>
+              <a class="btn btn-line" href="#contact" data-email>Email me</a>
+              <p class="hand looking"><svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg><span>looking for internships &amp; people to build things with!</span></p>
+            </div>
+          </div>
+          <ul class="stickers" id="stickers" aria-label="A few facts"></ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee-clip" aria-hidden="true">
+      <div class="marquee">
+        <div class="marquee-track" id="marquee"></div>
       </div>
     </div>
 
-    <figure class="hero-photo">
-      <img src="assets/img/profile-sky.jpg" width="597" height="597" fetchpriority="high"
-           alt="William Cain in a dark suit against a blue sky, with a plane flying behind him">
-    </figure>
-  </header>
-
-  <!-- Sticky bar; appears once the hero has scrolled away. -->
-  <div class="dock" id="dock" inert>
-    <div class="wrap dock-in">
-      <a class="brand" href="#top">
-        <span class="sign" aria-hidden="true">WC</span>
-        <span class="brand-name">William Cain</span>
-      </a>
-      <nav class="dock-nav" aria-label="Sections">
-        <a href="#work">Work</a>
-        <a href="#photos">Photos</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </div>
-
-  <!-- Inside: the flight deck. -->
-  <main>
-    <section class="deck-section" id="work" aria-labelledby="work-h">
+    <!-- WORK -->
+    <section class="section" id="work" aria-labelledby="work-h">
       <div class="wrap">
-        <div class="s-head">
-          <div>
-            <p class="sign">Work</p>
-            <h2 class="s-title" id="work-h">Selected work</h2>
-          </div>
-          <p class="s-desc">Six projects I’d start with. Open any of them for the details. Smaller builds and writeups are listed underneath.</p>
+        <div class="head">
+          <h2 class="title" id="work-h" data-stretch>Things I've made</h2>
+          <p class="hand head-note">six I'd start with <svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg></p>
         </div>
+        <div class="cards" id="cards"></div>
 
-        <div class="bento" id="bento"></div>
-
-        <div class="index">
-          <div class="index-head">
-            <h3 class="index-title">More projects <span id="indexCount"></span></h3>
+        <div class="more">
+          <div class="more-head">
+            <h3 class="subtitle">And a bunch more</h3>
+            <p class="hand head-note">smaller builds, writeups &amp; experiments</p>
+          </div>
+          <div class="more-tools">
+            <div class="chips" id="chips" role="group" aria-label="Filter projects by type"></div>
             <label class="search">
               <span class="sr-only">Search projects</span>
-              <input type="search" id="q" placeholder="Search projects" autocomplete="off" spellcheck="false">
+              <input type="search" id="q" placeholder="Search…" autocomplete="off" spellcheck="false">
               <kbd aria-hidden="true">/</kbd>
             </label>
           </div>
-          <div class="filters" id="filters" role="group" aria-label="Filter by type"></div>
-          <div class="items-head" aria-hidden="true">
-            <span>Project</span><span>What it is</span><span>Type</span><span>Status</span><span>Year</span><span></span>
-          </div>
-          <ul class="items" id="items"></ul>
+          <div class="minis" id="minis"></div>
           <p class="empty" id="empty" hidden></p>
+          <div class="more-all"><button class="btn btn-line" type="button" id="showAll" hidden></button></div>
         </div>
       </div>
     </section>
 
-    <section class="deck-section" id="photos" aria-labelledby="photos-h">
+    <!-- LEARNING -->
+    <section class="section" id="learning" aria-labelledby="learning-h">
       <div class="wrap">
-        <div class="s-head">
-          <div>
-            <div class="sign-array">
-              <span class="sign">Photos</span>
-              <span class="sign sign--dir">RDU</span>
-            </div>
-            <h2 class="s-title" id="photos-h">Photography</h2>
-          </div>
-          <p class="s-desc" id="photoIntro"></p>
+        <div class="head">
+          <h2 class="title" id="learning-h" data-stretch>How I learn</h2>
+          <p class="lede" id="learnIntro"></p>
         </div>
-        <dl class="gear" id="gear" aria-label="Camera gear"></dl>
-      </div>
-
-      <div class="strip" id="strip" tabindex="0" aria-label="Photos. Scroll sideways or use the arrow buttons."></div>
-
-      <div class="wrap strip-foot">
-        <p class="photo-note" id="photoNote"></p>
-        <div class="strip-ctrl">
-          <button class="icon-btn" type="button" data-dir="-1" aria-label="Previous photo">←</button>
-          <span class="strip-count" id="stripCount"></span>
-          <button class="icon-btn" type="button" data-dir="1" aria-label="Next photo">→</button>
+        <div class="learn-grid">
+          <div class="notebook">
+            <p class="hand notebook-title">stuff I've learned by building stuff</p>
+            <ol class="learned" id="learned"></ol>
+          </div>
+          <div class="postits">
+            <div class="postit postit--now"><p class="postit-label">Right now</p><p class="hand" id="learnNow"></p></div>
+            <div class="postit postit--next"><p class="postit-label">Up next</p><p class="hand" id="learnNext"></p></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="deck-section" id="about" aria-labelledby="about-h">
+    <!-- LIFE -->
+    <section class="section" id="life" aria-labelledby="life-h">
       <div class="wrap">
-        <div class="s-head">
-          <div>
-            <p class="sign">About</p>
-            <h2 class="s-title" id="about-h">Hi, I’m William.</h2>
-          </div>
+        <div class="head">
+          <h2 class="title" id="life-h" data-stretch>Off the clock</h2>
+          <p class="hand head-note">the stuff that isn't on GitHub</p>
         </div>
-        <div class="about-grid">
-          <div class="bio" id="bio"></div>
-          <dl class="readout" id="facts"></dl>
+        <div class="collage" id="collage"></div>
+      </div>
+    </section>
+
+    <!-- PHOTOS -->
+    <section class="section" id="photos" aria-labelledby="photos-h">
+      <div class="wrap">
+        <div class="head">
+          <h2 class="title" id="photos-h" data-stretch>Planes, mostly</h2>
+          <p class="lede" id="photoIntro"></p>
         </div>
-        <h3 class="tools-title">Tools I use</h3>
-        <div class="tools" id="tools"></div>
+        <ul class="gear" id="gear" aria-label="Camera gear"></ul>
+        <div class="wall" id="wall"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact" aria-labelledby="contact-h">
+      <div class="wrap">
+        <h2 class="title title--huge" id="contact-h" data-stretch>Say hi</h2>
+        <p class="lede">If you have an internship, a project idea, or just want to talk about planes or Linux, send me an email.</p>
+        <p class="mail"><a href="#contact" data-email data-email-text>Email me</a></p>
+        <div class="contact-row">
+          <ul class="socials" id="socials" aria-label="Elsewhere"></ul>
+          <a class="btn btn-fuel btn-big" data-kofi href="https://ko-fi.com/williamcain" target="_blank" rel="noopener">Buy me a Red Bull<span aria-hidden="true">&nbsp;↗</span></a>
+        </div>
+        <p class="hand signoff">thanks for scrolling all the way down <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.9 0 1.4 1 1.4 2.2v5.5l7.6 4.5v2.2l-7.6-2.3v4.8l2.3 1.7v1.5L12 20.5l-3.7 1.1v-1.5l2.3-1.7v-4.8L3 15.9v-2.2l7.6-4.5V3.7c0-1.2.5-2.2 1.4-2.2z"/></svg> — William</p>
       </div>
     </section>
   </main>
 
-  <!-- Outside again. -->
-  <div class="end sky">
-    <section class="wrap contact" id="contact" aria-labelledby="contact-h">
-      <h2 class="sign" id="contact-h">Contact</h2>
-      <p class="contact-lede">If you have an internship, a project idea, or just want to talk about planes or Linux, send me an email.</p>
-      <p class="contact-email"><a href="#contact" data-email data-email-text>Email me</a></p>
-      <div class="contact-more">
-        <ul class="socials" id="socials" aria-label="Elsewhere"></ul>
-        <a class="sign sign--dir kofi" href="https://ko-fi.com/williamcain" data-kofi target="_blank" rel="noopener">Support me on Ko-fi<span aria-hidden="true">&nbsp;↗</span></a>
-      </div>
-    </section>
-
-    <footer class="wrap foot">
-      <p>© <span id="year">2026</span> William Cain</p>
-      <p>Set in Mona Sans, Source Serif and B612 Mono, the typeface Airbus commissioned for its cockpit displays.</p>
-    </footer>
-  </div>
-
-  <!-- Project details -->
-  <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
-    <div class="sheet-bar">
-      <span class="sheet-crumb" id="sheetCrumb"></span>
-      <div class="sheet-actions">
-        <button class="icon-btn" type="button" data-move="-1" aria-label="Previous project">←</button>
-        <button class="icon-btn" type="button" data-move="1" aria-label="Next project">→</button>
-        <button class="icon-btn close" type="button" data-close autofocus>Close</button>
-      </div>
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <p>© <span id="year">2026</span> William Cain · fueled by Red Bull</p>
+      <p>Set in Mona Sans, Source Serif, Gochi Hand and B612 Mono (the typeface Airbus commissioned for its cockpit displays).</p>
     </div>
-    <div class="sheet-scroll" id="sheetBody"></div>
-  </dialog>
+  </footer>
 
   <!-- Photo viewer -->
   <dialog class="viewer" id="viewer" aria-label="Photo viewer">
-    <div class="viewer-stage">
-      <img id="viewerImg" alt="">
-    </div>
+    <div class="viewer-stage"><img id="viewerImg" alt=""></div>
     <div class="viewer-bar">
       <p class="viewer-cap"><span id="viewerCap"></span> <span class="viewer-count" id="viewerCount"></span></p>
       <div class="viewer-actions">
-        <button class="icon-btn" type="button" data-step="-1"><span aria-hidden="true">←</span>&nbsp;Prev</button>
-        <button class="icon-btn" type="button" data-step="1">Next&nbsp;<span aria-hidden="true">→</span></button>
-        <button class="icon-btn" type="button" data-close autofocus>Close</button>
+        <button class="btn btn-line btn-sm" type="button" data-step="-1"><span aria-hidden="true">←</span>&nbsp;Prev</button>
+        <button class="btn btn-line btn-sm" type="button" data-step="1">Next&nbsp;<span aria-hidden="true">→</span></button>
+        <button class="btn btn-ink btn-sm" type="button" data-close autofocus>Close</button>
       </div>
     </div>
   </dialog>
 
   <script src="js/data.js"></script>
-  <script src="js/figures.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

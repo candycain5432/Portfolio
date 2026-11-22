@@ -1,58 +1,37 @@
 /* ============================================================================
-   main.js: builds the page from data.js and runs the interactive parts:
-   the sticky bar, project grid + detail sheet, searchable project list,
-   the photo strip and the full-screen photo viewer.
+   main.js: builds the page from data.js and runs the fun bits: the hero name,
+   draggable stickers, project filters, the fuel gauge, the little plane that
+   flies down the page, and the photo viewer.
    ========================================================================== */
 (function () {
   "use strict";
 
   const D = window.PORTFOLIO;
-  const FIGS = window.FIGURES || {};
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const behavior = REDUCED ? "auto" : "smooth";
+  document.documentElement.classList.add("js");
 
   /* ---------- text helpers ---------- */
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-
-  // data.js is written with straight quotes; print typographer's quotes instead.
+  // data.js uses straight quotes; print typographer's quotes instead.
   const smart = s => String(s == null ? "" : s)
     .replace(/(^|[\s(\[{—–-])"(?=\S)/g, "$1“").replace(/"/g, "”")
     .replace(/(^|[\s(\[{—–-])'(?=\S)/g, "$1‘").replace(/'/g, "’")
     .replace(/\.\.\./g, "…");
   // B612 Mono's curly apostrophe looks like an accent, so mono text keeps straight quotes.
   const straight = s => String(s == null ? "" : s).replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
-
-  const t = s => esc(smart(s));     // regular text
-  const m = s => esc(straight(s));  // mono text
+  const t = s => esc(smart(s));
+  const m = s => esc(straight(s));
   const pad = n => String(n).padStart(2, "0");
 
   const P = D.profile;
   const byId = Object.fromEntries(D.projects.map(p => [p.id, p]));
-  const domainOf = id => (D.domains.find(d => d.id === id) || { label: id }).label;
-
-  // Avionics colours: green = live/running, amber = in progress, plain = done.
-  const tone = s => /live|running|ongoing|daily/i.test(s) ? "live"
-    : /progress|concept|explor|planned/i.test(s) ? "wip" : "done";
-  const status = s => `<span class="st st--${tone(s)}">${m(s)}</span>`;
-  const ticks = list => (list && list.length)
-    ? `<ul class="ticks">${list.map(h => `<li>${t(h)}</li>`).join("")}</ul>` : "";
-  const stackLine = p => (p.stack || []).map(m).join(" · ");
-
-  // Figure numbers follow the order the figures appear in.
-  const figNo = {};
-  D.projects.filter(p => p.featured).concat(D.projects.filter(p => !p.featured))
-    .forEach(p => { if (FIGS[p.id] && !figNo[p.id]) figNo[p.id] = Object.keys(figNo).length + 1; });
-
-  // suffix: marker ids inside an SVG must be unique when the same figure is shown twice.
-  const screen = (id, suffix) => {
-    const f = FIGS[id];
-    if (!f) return "";
-    const svg = suffix ? f.svg.replace(/\b(ahm?-[\w-]+)/g, "$1-" + suffix) : f.svg;
-    return `<div class="screen"><div class="screen-bar"><span>Fig ${figNo[id]}</span><b>${esc(f.page || "")}</b></div>${svg}</div>`;
-  };
+  const domain = id => D.domains.find(d => d.id === id) || { id, label: id };
+  const tone = s => /live|running|ongoing|daily/i.test(s) ? "live" : /progress|concept|explor|planned/i.test(s) ? "wip" : "done";
+  const plane = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.9 0 1.4 1 1.4 2.2v5.5l7.6 4.5v2.2l-7.6-2.3v4.8l2.3 1.7v1.5L12 20.5l-3.7 1.1v-1.5l2.3-1.7v-4.8L3 15.9v-2.2l7.6-4.5V3.7c0-1.2.5-2.2 1.4-2.2z"/></svg>';
+  const kofi = (P.socials.find(s => /ko-?fi/i.test(s.label)) || {}).href;
 
   /* ---------- hero ---------- */
   $("#headline").textContent = smart(P.headline);
@@ -61,260 +40,279 @@
     a.href = "mailto:" + P.email;
     if (a.hasAttribute("data-email-text")) a.textContent = P.email;
   });
+  if (kofi) $$("[data-kofi]").forEach(a => { a.href = kofi; });
 
-  /* ---------- sticky bar ---------- */
-  (function dock() {
-    const bar = $("#dock");
-    const heroBar = $(".hero .bar");
-    if (!bar || !heroBar || !("IntersectionObserver" in window)) return;
-    new IntersectionObserver(([e]) => {
-      const on = !e.isIntersecting;
-      bar.classList.toggle("on", on);
-      bar.inert = !on;
-    }).observe(heroBar);
+  // Split the name into letters so they can stretch in one after another.
+  let i = 0;
+  $$(".name-word").forEach(w => {
+    w.setAttribute("aria-hidden", "true");
+    w.innerHTML = [...w.textContent].map(ch => `<span class="ch" style="--i:${i++}">${esc(ch)}</span>`).join("");
+  });
 
-    const links = $$(".dock-nav a", bar);
-    const spy = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        links.forEach(a => {
-          if (a.hash === "#" + e.target.id) a.setAttribute("aria-current", "true");
-          else a.removeAttribute("aria-current");
-        });
-      });
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    links.forEach(a => { const s = document.querySelector(a.hash); if (s) spy.observe(s); });
-  })();
+  /* ---------- stickers (drag them around) ---------- */
+  $("#stickers").innerHTML = (D.stickers || []).map(s => `<li class="sticker">${t(s)}</li>`).join("");
+  $$(".sticker").forEach(el => {
+    let start = null, dx = 0, dy = 0;
+    el.addEventListener("pointerdown", e => {
+      start = { x: e.clientX - dx, y: e.clientY - dy };
+      el.setPointerCapture(e.pointerId);
+      el.classList.add("dragging");
+    });
+    el.addEventListener("pointermove", e => {
+      if (!start) return;
+      dx = e.clientX - start.x; dy = e.clientY - start.y;
+      el.style.setProperty("--dx", dx + "px");
+      el.style.setProperty("--dy", dy + "px");
+    });
+    const stop = () => { start = null; el.classList.remove("dragging"); };
+    el.addEventListener("pointerup", stop);
+    el.addEventListener("pointercancel", stop);
+  });
 
-  /* ---------- selected work ---------- */
-  // First tile is the big one, the next two are halves, the rest thirds. On tablets the
-  // grid is two-up, so a tile left alone at the end gets the side-by-side layout.
-  const feat = D.projects.filter(p => p.featured);
-  const size = i => i === 0 ? " tile--feature" : i < 3 ? " tile--half" : "";
-  const lone = i => i === feat.length - 1 && i > 0 && (feat.length - 1) % 2 === 1 ? " tile--lone" : "";
-  $("#bento").innerHTML = feat.map((p, i) => `
-    <article class="tile${size(i)}${lone(i)}" id="p-${esc(p.id)}">
-      ${screen(p.id)}
-      <div class="tile-body">
-        <p class="meta">${status(p.status)}<span>${m(domainOf(p.domain))}</span><span>${m(p.year)}</span></p>
-        <h3 class="tile-title"><a class="tile-link" href="#p-${esc(p.id)}">${t(p.title)}</a></h3>
-        <p class="tile-tag">${m(p.tagline)}</p>
-        <p class="tile-blurb">${t(p.blurb)}</p>
-        ${i === 0 ? ticks(p.highlights) : ""}
-        <p class="tile-stack"><span class="sr-only">Built with </span>${stackLine(p)}</p>
-      </div>
-      <span class="tile-go" aria-hidden="true">→</span>
-    </article>`).join("");
+  /* ---------- marquee ---------- */
+  const strip = (D.marquee || []).map(x => `<span>${t(x)}</span>${plane}`).join("");
+  $("#marquee").innerHTML = strip + strip;   // twice, so the loop is seamless
 
-  /* ---------- every project ---------- */
-  (function index() {
-    const all = D.projects.filter(p => !p.featured);   // the featured ones are in the grid above
-    const hay = p => [p.title, p.tagline, p.blurb, domainOf(p.domain), p.status, p.year]
-      .concat(p.stack || [], p.highlights || []).join(" ").toLowerCase();
+  /* ---------- section titles: letters that drop in ---------- */
+  $$("[data-stretch]").forEach(h => {
+    const text = h.textContent.trim();
+    h.setAttribute("aria-label", smart(text));
+    let k = 0;
+    h.innerHTML = smart(text).split(" ").map(word =>
+      `<span class="word" aria-hidden="true">${[...word].map(ch => `<span class="ch" style="--i:${k++}">${esc(ch)}</span>`).join("")}</span>`
+    ).join(" ");
+  });
+  if ("IntersectionObserver" in window && !REDUCED) {
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("in");
+      io.unobserve(e.target);
+    }), { threshold: .15, rootMargin: "0px 0px -8% 0px" });
+    $$("[data-stretch]").forEach(h => { h.classList.add("drop"); io.observe(h); });
+  }
 
-    $("#items").innerHTML = all.map(p => `
-      <li class="item" id="p-${esc(p.id)}" data-domain="${esc(p.domain)}" data-q="${esc(hay(p))}">
-        <a class="item-link" href="#p-${esc(p.id)}">
-          <span class="item-name">${t(p.title)}</span>
-          <span class="item-tag">${t(p.tagline)}</span>
-          <span class="item-type">${m(domainOf(p.domain))}</span>
-          <span class="item-status">${status(p.status)}</span>
-          <span class="item-year">${m(p.year)}</span>
-          <span class="item-go" aria-hidden="true">→</span>
-        </a>
-      </li>`).join("");
+  /* ---------- work: big cards ---------- */
+  const card = p => {
+    const d = domain(p.domain), s = tone(p.status);
+    const rel = (p.related || []).filter(r => byId[r]);
+    return `
+    <article class="card" id="p-${esc(p.id)}" style="--c: var(--c-${esc(p.domain)})">
+      <div class="card-top"><span class="type">${m(d.label)}</span><span class="type">${m(p.year)}</span></div>
+      <span class="stamp stamp--${s}">${m(p.status)}<small>${m(p.year)}</small></span>
+      <h3 class="card-title">${t(p.title)}</h3>
+      <p class="card-tag">${t(p.tagline)}</p>
+      <p class="card-blurb">${t(p.blurb)}</p>
+      ${(p.highlights || []).length ? `<ul class="ticks">${p.highlights.map(h => `<li>${t(h)}</li>`).join("")}</ul>` : ""}
+      <ul class="pills" aria-label="Built with">${(p.stack || []).map(x => `<li>${m(x)}</li>`).join("")}</ul>
+      ${rel.length ? `<p class="see">See also: ${rel.map(r => `<a href="#p-${esc(r)}">${m(byId[r].title)}</a>`).join(", ")}</p>` : ""}
+      ${(p.links || []).length ? `<p class="see">${p.links.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${m(l.label)} ↗</a>`).join(" · ")}</p>` : ""}
+    </article>`;
+  };
+  $("#cards").innerHTML = D.projects.filter(p => p.featured).map(card).join("");
 
-    const count = id => all.filter(p => p.domain === id).length;
-    $("#filters").innerHTML =
-      `<button type="button" data-f="all" aria-pressed="true">All<span>${all.length}</span></button>` +
+  /* ---------- work: the smaller stuff ---------- */
+  (function minis() {
+    const rest = D.projects.filter(p => !p.featured);
+    $("#minis").innerHTML = rest.map(p => {
+      const d = domain(p.domain), s = tone(p.status);
+      const hay = [p.title, p.tagline, p.blurb, d.label, p.status].concat(p.stack || [], p.highlights || []).join(" ").toLowerCase();
+      return `
+      <article class="mini" id="p-${esc(p.id)}" data-domain="${esc(p.domain)}" data-q="${esc(hay)}" style="--c: var(--c-${esc(p.domain)})">
+        <div class="mini-top"><span>${m(d.label)}</span><span class="dot dot--${s}">${m(p.status)}</span></div>
+        <h4 class="mini-title">${t(p.title)}</h4>
+        <p class="mini-tag">${t(p.tagline)}</p>
+        <p class="mini-blurb">${t(p.blurb)}</p>
+        <p class="mini-stack">${(p.stack || []).map(m).join(" · ")}</p>
+      </article>`;
+    }).join("");
+
+    const count = id => rest.filter(p => p.domain === id).length;
+    $("#chips").innerHTML =
+      `<button class="chip" type="button" data-f="all" aria-pressed="true">All<span class="n">${rest.length}</span></button>` +
       D.domains.filter(d => count(d.id)).map(d =>
-        `<button type="button" data-f="${esc(d.id)}" aria-pressed="false">${t(d.label)}<span>${count(d.id)}</span></button>`).join("");
+        `<button class="chip" type="button" data-f="${esc(d.id)}" aria-pressed="false" style="--c: var(--c-${esc(d.id)})">${t(d.label)}<span class="n">${count(d.id)}</span></button>`).join("");
 
-    const items = $$("#items .item");
-    const input = $("#q"), empty = $("#empty"), countEl = $("#indexCount");
-    let filter = "all";
-
+    const cards = $$("#minis .mini"), input = $("#q"), empty = $("#empty"), more = $("#showAll");
+    const FIRST = 6;                 // how many show before "Show all"
+    let filter = "all", expanded = false;
     function apply() {
       const q = input.value.trim().toLowerCase();
-      let shown = 0;
-      items.forEach(li => {
-        const ok = (filter === "all" || li.dataset.domain === filter) && (!q || li.dataset.q.includes(q));
-        li.hidden = !ok;
-        if (ok) shown += 1;
+      const narrowed = filter !== "all" || q;
+      let shown = 0, matches = 0;
+      cards.forEach(c => {
+        const ok = (filter === "all" || c.dataset.domain === filter) && (!q || c.dataset.q.includes(q));
+        if (ok) matches += 1;
+        const visible = ok && (expanded || narrowed || matches <= FIRST);
+        c.hidden = !visible;
+        if (visible) shown += 1;
       });
-      countEl.textContent = shown === items.length ? String(items.length) : `${shown} of ${items.length}`;
+      more.hidden = expanded || narrowed || matches <= FIRST;
+      more.textContent = `Show all ${matches} projects ↓`;
       empty.hidden = shown > 0;
-      if (!shown) {
-        const where = filter === "all" ? "" : ` in ${t(domainOf(filter))}`;
-        empty.innerHTML = `Nothing matches “${esc(input.value.trim())}”${where}. <button type="button" data-clear>Clear the search</button>`;
-      }
+      if (!shown) empty.innerHTML = `Nothing matches “${esc(input.value.trim())}”. <button type="button" data-clear>Show everything</button>`;
     }
-
-    $("#filters").addEventListener("click", e => {
-      const b = e.target.closest("button[data-f]");
+    function reset() {
+      input.value = ""; filter = "all";
+      $$("#chips .chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.f === "all")));
+      apply();
+    }
+    $("#chips").addEventListener("click", e => {
+      const b = e.target.closest(".chip");
       if (!b) return;
       filter = b.dataset.f;
-      $$("#filters button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      $$("#chips .chip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
       apply();
+    });
+    more.addEventListener("click", () => {
+      expanded = true;
+      apply();
+      const next = cards[FIRST];
+      if (next) next.querySelector("h4").setAttribute("tabindex", "-1"), next.querySelector("h4").focus({ preventScroll: true });
     });
     input.addEventListener("input", apply);
     input.addEventListener("keydown", e => { if (e.key === "Escape" && input.value) { e.preventDefault(); input.value = ""; apply(); } });
-    empty.addEventListener("click", e => {
-      if (!e.target.closest("[data-clear]")) return;
-      input.value = "";
-      filter = "all";
-      $$("#filters button").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.f === "all")));
-      apply();
-      input.focus();
-    });
+    empty.addEventListener("click", e => { if (e.target.closest("[data-clear]")) { reset(); input.focus(); } });
 
-    // "/" jumps to the search box, like on GitHub.
+    // "/" jumps to the search box.
     document.addEventListener("keydown", e => {
       if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
-      const tag = document.activeElement ? document.activeElement.tagName : "";
-      if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag) || document.querySelector("dialog[open]")) return;
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || "") || $("dialog[open]")) return;
       e.preventDefault();
-      input.scrollIntoView({ block: "center", behavior });
+      input.scrollIntoView({ block: "center", behavior: REDUCED ? "auto" : "smooth" });
       input.focus({ preventScroll: true });
     });
 
-    apply();
-  })();
-
-  /* ---------- project sheet ---------- */
-  (function sheet() {
-    const dlg = $("#sheet"), body = $("#sheetBody"), crumb = $("#sheetCrumb");
-    if (!dlg || typeof dlg.showModal !== "function") return; // links still jump to the tiles
-    const order = D.projects.map(p => p.id);
-    let current = null, pushed = false;
-
-    function render(id) {
-      const p = byId[id], f = FIGS[id];
-      current = id;
-      crumb.textContent = straight(domainOf(p.domain));
-      const rel = (p.related || []).filter(r => byId[r]);
-      body.innerHTML = `
-        <p class="meta">${status(p.status)}<span>${m(p.year)}</span>${p.featured ? "<span>Featured</span>" : ""}</p>
-        <h2 class="sheet-title" id="sheetTitle">${t(p.title)}</h2>
-        <p class="sheet-tag">${m(p.tagline)}</p>
-        ${f ? screen(id, "s") + `<p class="fig-cap">${m(f.caption)}</p>` : ""}
-        <p class="sheet-lead">${t(p.blurb)}</p>
-        ${(p.highlights && p.highlights.length) ? `<h3>Highlights</h3>${ticks(p.highlights)}` : ""}
-        ${(p.stack && p.stack.length) ? `<h3>Built with</h3><ul class="tags">${p.stack.map(s => `<li>${m(s)}</li>`).join("")}</ul>` : ""}
-        ${rel.length ? `<h3>See also</h3><div class="related">${rel.map(r => `<a href="#p-${esc(r)}">${t(byId[r].title)}</a>`).join("")}</div>` : ""}
-        ${(p.links && p.links.length) ? `<h3>Links</h3><p class="ext-links">${p.links.map(l =>
-          `<a href="${esc(l.href)}" target="_blank" rel="noopener">${m(l.label)}<span aria-hidden="true">&nbsp;↗</span></a>`).join("")}</p>` : ""}`;
-      body.scrollTop = 0;
-    }
-
-    // how: "push" (new history entry), "replace" (moving between projects), or "none".
-    function open(id, how) {
-      if (!byId[id]) return;
-      render(id);
-      if (!dlg.open) dlg.showModal();
-      const url = "#p-" + id;
-      if (how === "push") { history.pushState({ sheet: true }, "", url); pushed = true; }
-      else if (how === "replace") history.replaceState(history.state, "", url);
-    }
-    const hashId = () => (/^#p-([\w-]+)$/.exec(location.hash) || [])[1];
-
+    // Links to a project (#p-...) un-hide it if a filter is hiding it, then flash it.
     document.addEventListener("click", e => {
       const a = e.target.closest('a[href^="#p-"]');
-      if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
-      const id = a.getAttribute("href").slice(3);
-      if (!byId[id]) return;
-      e.preventDefault();
-      open(id, dlg.open ? "replace" : "push");
+      if (!a) return;
+      const el = document.getElementById(a.getAttribute("href").slice(1));
+      if (!el) return;
+      if (el.hidden) { expanded = true; reset(); }
+      el.classList.remove("flash");
+      setTimeout(() => el.classList.add("flash"), REDUCED ? 0 : 450);
     });
 
-    dlg.addEventListener("click", e => {
-      const move = e.target.closest("[data-move]");
-      if (move) {
-        const i = (order.indexOf(current) + +move.dataset.move + order.length) % order.length;
-        return open(order[i], "replace");
-      }
-      if (e.target.closest("[data-close]") || e.target === dlg) dlg.close();
-    });
-    dlg.addEventListener("keydown", e => {
-      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        const i = (order.indexOf(current) + (e.key === "ArrowRight" ? 1 : -1) + order.length) % order.length;
-        open(order[i], "replace");
-      }
-    });
-    dlg.addEventListener("close", () => {
-      current = null;
-      if (!hashId()) return;
-      if (pushed) { pushed = false; history.back(); }
-      else history.replaceState(null, "", location.pathname + location.search);
-    });
-    window.addEventListener("popstate", () => {
-      const id = hashId();
-      if (id && byId[id]) open(id, "none");
-      else if (dlg.open) { pushed = false; dlg.close(); }
-    });
+    apply();
+    const target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target && target.hidden) { expanded = true; apply(); requestAnimationFrame(() => target.scrollIntoView()); }
+  })();
 
-    if (hashId()) open(hashId(), "none");
+  /* ---------- learning ---------- */
+  const L = D.learning || { items: [] };
+  $("#learnIntro").textContent = smart(L.intro);
+  $("#learned").innerHTML = L.items.map(x => `
+    <li class="${x.still ? "still" : ""}">${t(x.what)}${x.still ? '<span class="still-note">still on it</span>' : ""}${byId[x.via] ? `<a class="via" href="#p-${esc(x.via)}">via ${m(byId[x.via].title)}</a>` : ""}</li>`).join("");
+  $("#learnNow").textContent = smart(L.now);
+  $("#learnNext").textContent = smart(L.next);
+
+  /* ---------- off the clock ---------- */
+  (function life() {
+    const F = D.life || {};
+    const photos = F.photos || [];
+    const pol = (p, r) => p ? `
+      <figure class="polaroid" style="--r:${r}deg">
+        <img src="${esc(p.src)}" alt="${t(p.alt || p.caption)}" loading="lazy" decoding="async">
+        <figcaption>${t(p.caption)}</figcaption>
+      </figure>` : "";
+    const bike = `<svg viewBox="0 0 240 140" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="58" cy="94" r="38"/><circle cx="182" cy="94" r="38"/>
+        <circle cx="58" cy="94" r="5" fill="currentColor"/><circle cx="182" cy="94" r="5" fill="currentColor"/>
+        <path d="M58 94 104 98 92 50Z"/><path d="M92 50 160 44 104 98"/><path d="M160 44 182 94"/>
+        <path d="M156 30 160 44"/><path d="M146 26h22"/><path d="M84 40h22"/><path d="M92 50 95 40"/>
+        <circle cx="104" cy="98" r="7"/><path d="M104 98 113 112"/><path d="M108 113h10"/>
+        <path d="M14 136h30M196 136h30M62 136h12" stroke-width="3" opacity=".45"/>
+      </svg>`;
+    const gauge = (() => {
+      const cx = 100, cy = 112, r = 78;            // hub and dial radius
+      const A0 = 160, A1 = 20;                     // E end and F end of the dial (degrees)
+      const pt = (deg, rad) => [cx + rad * Math.cos(deg * Math.PI / 180), cy - rad * Math.sin(deg * Math.PI / 180)].map(n => +n.toFixed(1));
+      let ticks = "";
+      for (let k = 0; k <= 8; k++) {
+        const a = A0 - (A0 - A1) * k / 8, major = k % 4 === 0;
+        const [x1, y1] = pt(a, r), [x2, y2] = pt(a, major ? r - 15 : r - 9);
+        ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${major ? 4 : 2.5}"/>`;
+      }
+      const [s0x, s0y] = pt(A0, r), [s1x, s1y] = pt(A1, r);
+      const [rx0, ry0] = pt(A0, r + 7), [rx1, ry1] = pt(A0 - 22, r + 7);   // the red "reserve" zone near E
+      const [ex, ey] = pt(A0 + 10, r - 4), [fx, fy] = pt(A1 - 10, r - 4);
+      return `<svg viewBox="0 0 200 150" role="img" aria-label="A fuel gauge for Red Bull, with the needle almost on empty">
+        <path d="M${s0x} ${s0y}A${r} ${r} 0 0 1 ${s1x} ${s1y}" fill="none" stroke="currentColor" stroke-width="3"/>
+        <path d="M${rx0} ${ry0}A${r + 7} ${r + 7} 0 0 1 ${rx1} ${ry1}" fill="none" stroke="var(--orange)" stroke-width="7" stroke-linecap="round"/>
+        <g stroke="currentColor" stroke-linecap="round">${ticks}</g>
+        <text x="${ex}" y="${ey}" text-anchor="middle" dominant-baseline="middle" font-family="var(--mona)" font-weight="850" font-size="18" fill="currentColor">E</text>
+        <text x="${fx}" y="${fy}" text-anchor="middle" dominant-baseline="middle" font-family="var(--mona)" font-weight="850" font-size="18" fill="currentColor">F</text>
+        <text x="100" y="141" text-anchor="middle" font-family="var(--mono)" font-weight="700" font-size="9.5" letter-spacing="2" fill="currentColor">RED BULL</text>
+        <g class="gauge-needle"><line x1="${cx}" y1="${cy + 6}" x2="${cx}" y2="${cy - r + 16}" stroke="var(--orange)" stroke-width="4" stroke-linecap="round"/></g>
+        <circle cx="${cx}" cy="${cy}" r="8" fill="currentColor"/>
+      </svg>`;
+    })();
+    const mtb = F.mtb || {}, ph = F.philosophy || {}, fuel = F.fuel || {};
+
+    const mtbTile = `<div class="tile tile--mtb col-start"><p class="tile-label">Off-road</p>${bike}<h3 class="tile-title">${t(mtb.title)}</h3><p class="tile-text">${t(mtb.text)}</p></div>`;
+    const quoteTile = `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote><p class="tile-text">${t(ph.note)}</p></div>`;
+    const fuelTile = `<div class="tile tile--fuel col-start" id="fuel"><p class="tile-label">${t(fuel.title)}</p>${gauge}<p class="tile-text">${t(fuel.text)}</p>${kofi ? `<a class="btn btn-fuel" href="${esc(kofi)}" target="_blank" rel="noopener">${t(fuel.cta)}<span aria-hidden="true">&nbsp;↗</span></a>` : ""}</div>`;
+    $("#collage").innerHTML = [
+      pol(photos[0], -2.2),
+      quoteTile,
+      `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux">
+        <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="term-body" aria-hidden="true">
+          <p><span class="p">$</span> cat /etc/os-release | head -1</p>
+          <p>NAME="Arch Linux"</p>
+          <p><span class="p">$</span> <span class="c"># btw</span><span class="cursor"></span></p>
+        </div>
+        <p class="term-cap" aria-hidden="true">LUKS + btrfs · Hyprland · Waybar · Quickshell</p>
+      </div>`,
+      mtbTile,
+      pol(photos[1], 2.4),
+      fuelTile,
+      pol(photos[2], -1.4),
+    ].concat(photos.slice(3).map((p, k) => pol(p, k % 2 ? 2 : -2))).join("");
+
+    // The needle starts full and drains to nearly empty when you scroll to it.
+    const g = $("#fuel .gauge-needle");
+    if (!g) return;
+    const level = l => -70 + 140 * l;
+    if (REDUCED || !("IntersectionObserver" in window)) { g.style.setProperty("--needle", level(.06) + "deg"); return; }
+    g.style.setProperty("--needle", level(1) + "deg");
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      g.style.setProperty("--needle", level(.06) + "deg");
+      io.disconnect();
+    }, { threshold: .6 });
+    io.observe($("#fuel"));
   })();
 
   /* ---------- photos ---------- */
   const PH = D.photography;
   const shots = PH.shots || [];
   $("#photoIntro").textContent = smart(PH.intro);
-  $("#photoNote").textContent = smart(PH.note);
-  $("#gear").innerHTML = PH.gear.map(g => `<div><dt>${t(g.name)}</dt><dd>${t(g.note)}</dd></div>`).join("");
-
-  $("#strip").innerHTML = shots.map((s, i) => `
-    <figure class="frame">
-      <a href="${esc(s.src)}" data-i="${i}" aria-label="${t(s.caption)}, open larger">
-        <img src="${esc(s.src)}" alt="${t(s.alt || s.caption)}" width="1100" height="733" ${i > 2 ? 'loading="lazy"' : ""} decoding="async">
+  $("#gear").innerHTML = PH.gear.map(g => `<li>${t(g.name)}<span>${m(g.note)}</span></li>`).join("");
+  $("#wall").innerHTML = shots.map((s, n) => `
+    <figure class="snap${n === 0 ? " snap--lead" : ""}">
+      <a href="${esc(s.src)}" data-i="${n}" aria-label="${t(s.caption)}, open larger">
+        <img src="${esc(s.src)}" alt="${t(s.alt || s.caption)}" loading="lazy" decoding="async">
       </a>
-      <figcaption><span class="n">${pad(i + 1)}</span>${m(s.caption)}</figcaption>
-    </figure>`).join("");
-
-  (function strip() {
-    const el = $("#strip");
-    const frames = $$(".frame", el);
-    const prev = $('.strip-ctrl [data-dir="-1"]'), next = $('.strip-ctrl [data-dir="1"]'), count = $("#stripCount");
-    if (!frames.length) return;
-    const step = () => frames.length > 1 ? frames[1].offsetLeft - frames[0].offsetLeft : el.clientWidth;
-
-    function update() {
-      const max = el.scrollWidth - el.clientWidth;
-      const i = Math.min(frames.length - 1, Math.round(el.scrollLeft / step()));
-      count.textContent = `${pad(i + 1)} / ${pad(frames.length)}`;
-      prev.disabled = el.scrollLeft <= 2;
-      next.disabled = el.scrollLeft >= max - 2;
-    }
-    let ticking = false;
-    el.addEventListener("scroll", () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => { ticking = false; update(); });
-    }, { passive: true });
-    window.addEventListener("resize", update);
-    [prev, next].forEach(b => b.addEventListener("click", () =>
-      el.scrollBy({ left: +b.dataset.dir * step(), behavior })));
-    update();
-  })();
+      <figcaption><span class="n">${pad(n + 1)}</span>${t(s.caption)}</figcaption>
+    </figure>`).join("") +
+    (PH.note ? `<div class="postit"><p class="postit-label">Next up</p><p class="hand">${t(PH.note)}</p></div>` : "");
 
   (function viewer() {
     const dlg = $("#viewer");
-    if (!dlg || typeof dlg.showModal !== "function" || !shots.length) return; // links still open the image
+    if (!dlg || typeof dlg.showModal !== "function" || !shots.length) return;  // links still open the image
     const img = $("#viewerImg"), cap = $("#viewerCap"), count = $("#viewerCount");
-    let i = 0;
-
+    let at = 0;
     function show(n) {
-      i = (n + shots.length) % shots.length;
-      const s = shots[i];
+      at = (n + shots.length) % shots.length;
+      const s = shots[at];
       img.src = s.src;
       img.alt = smart(s.alt || s.caption);
-      cap.textContent = straight(s.caption);
-      count.textContent = `${i + 1} / ${shots.length}`;
-      [i + 1, i - 1].forEach(k => { new Image().src = shots[(k + shots.length) % shots.length].src; });
+      cap.textContent = smart(s.caption);
+      count.textContent = `${at + 1} / ${shots.length}`;
+      [at + 1, at - 1].forEach(k => { new Image().src = shots[(k + shots.length) % shots.length].src; });
     }
-
-    $("#strip").addEventListener("click", e => {
+    $("#wall").addEventListener("click", e => {
       const a = e.target.closest("a[data-i]");
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
       e.preventDefault();
@@ -323,38 +321,71 @@
     });
     dlg.addEventListener("click", e => {
       const step = e.target.closest("[data-step]");
-      if (step) return show(i + +step.dataset.step);
+      if (step) return show(at + +step.dataset.step);
       if (e.target.closest("[data-close]") || e.target === dlg || e.target.classList.contains("viewer-stage")) dlg.close();
     });
     dlg.addEventListener("keydown", e => {
-      if (e.key === "ArrowRight") { e.preventDefault(); show(i + 1); }
-      if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); show(at + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(at - 1); }
     });
-
-    // Swipe on touch screens.
     let x0 = null;
     dlg.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
     dlg.addEventListener("touchend", e => {
       if (x0 === null) return;
       const dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
       x0 = null;
     });
   })();
 
-  /* ---------- about ---------- */
-  $("#bio").innerHTML = P.bio.map(b => `<p>${t(b)}</p>`).join("");
-  $("#facts").innerHTML = P.facts.map(f => `<div><dt>${m(f.k)}</dt><dd>${t(f.v)}</dd></div>`).join("");
-  $("#tools").innerHTML = D.skills.map(g => `
-    <div class="tool">
-      <h4>${m(g.group)}</h4>
-      <ul>${g.items.map(x => `<li>${t(x)}</li>`).join("")}</ul>
-    </div>`).join("");
-
   /* ---------- contact ---------- */
-  const kofi = P.socials.find(s => /ko-?fi/i.test(s.label));
-  if (kofi) $$("[data-kofi]").forEach(a => { a.href = kofi.href; });
-  $("#socials").innerHTML = P.socials.filter(s => s !== kofi).map(s =>
-    `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${m(s.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("");
+  $("#socials").innerHTML = P.socials.filter(s => !/ko-?fi/i.test(s.label)).map(s =>
+    `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${t(s.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("");
   $("#year").textContent = new Date().getFullYear();
+
+  /* ---------- nav: which section am I in ---------- */
+  const navLinks = $$(".nav-links a");
+  const sections = navLinks.map(a => document.querySelector(a.hash)).filter(Boolean);
+  if ("IntersectionObserver" in window) {
+    const spy = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      navLinks.forEach(a => {
+        if (a.hash === "#" + e.target.id) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+    }), { rootMargin: "-45% 0px -50% 0px" });
+    sections.forEach(s => spy.observe(s));
+  }
+
+  /* ---------- the little plane flying down the right side ---------- */
+  (function flight() {
+    const box = $(".flight"), planeEl = $("#flightPlane"), stops = $("#flightStops");
+    if (!box || !planeEl) return;
+    const labels = { work: "Work", learning: "Learn", life: "Life", photos: "Photos", contact: "Say hi" };
+    stops.innerHTML = sections.map(s => `<li data-for="${esc(s.id)}">${esc(labels[s.id] || s.id)}</li>`).join("");
+    const items = $$("li", stops);
+    let marks = [];
+    function layout() {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      marks = sections.map(s => Math.min(1, Math.max(0, (s.offsetTop - innerHeight * .45) / max)));
+      const h = box.clientHeight;
+      items.forEach((li, k) => { li.style.top = (marks[k] * (h - 24) + 12) + "px"; });
+      update();
+    }
+    function update() {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+      planeEl.style.setProperty("--y", (p * (box.clientHeight - 24)) + "px");
+      items.forEach((li, k) => li.classList.toggle("passed", p >= marks[k] - .002));
+    }
+    let ticking = false;
+    addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { ticking = false; update(); });
+    }, { passive: true });
+    addEventListener("resize", layout);
+    addEventListener("load", layout);
+    layout();
+  })();
 })();
