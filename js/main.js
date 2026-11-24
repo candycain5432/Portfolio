@@ -370,7 +370,7 @@
     })();
 
     $("#lifeTiles").innerHTML = [
-      `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote><p class="tile-text">${t(ph.note)}</p></div>`,
+      `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote>${ph.note ? `<p class="tile-text">${t(ph.note)}</p>` : ""}</div>`,
       `<div class="tile tile--fuel" id="fuel"><p class="tile-label">${t(fuel.title)}</p>${gauge}<p class="tile-text">${t(fuel.text)}</p>${kofi ? `<a class="btn btn-fuel" href="${esc(kofi)}" target="_blank" rel="noopener">${t(fuel.cta)}<span aria-hidden="true">&nbsp;↗</span></a>` : ""}</div>`,
       `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux${quiet ? `, and the saying: ${t(quiet)}` : ""}">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -459,6 +459,75 @@
     `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${t(s.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("");
   $("#year").textContent = new Date().getFullYear();
   if ((D.sayings || {}).signoff) $("#signoff").textContent = smart(D.sayings.signoff);
+
+  /* ---------- philosophy: the bookshelf ---------- */
+  (function shelf() {
+    const PH = D.philosophy;
+    const shelfEl = $("#shelf"), leaf = $("#leaf");
+    if (!PH || !shelfEl || !leaf) return;
+    const books = PH.books || [];
+    $("#philoNote").textContent = smart(PH.note || "");
+    const main = books.find(b => b.main);
+    const ARR = '<svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg>';
+    if (main) $("#shelfNote").innerHTML = `main interest ${ARR}`;
+
+    // Each book gets a different cover design, in this order (a `look` in data.js overrides it).
+    const LOOKS = ["bands", "label", "block", "mono", "stamp"];
+    const PLANT = `<span class="shelf-plant" aria-hidden="true"><svg viewBox="0 0 60 92" fill="none" stroke="#15202b" stroke-width="2" stroke-linejoin="round">
+        <path d="M30 60C25 44 23 24 28 5c5 18 6 38 4 55z" fill="#7fb98a"/><path d="M28.5 50c-1-10-1-20 .5-30" stroke-width="1.2"/>
+        <path d="M24 61c-7-10-10-24-7-38 7 11 10 24 9 38z" fill="#6aa877"/>
+        <path d="M35 61c4-10 9-20 15-28-1 12-6 22-12 29z" fill="#8cc596"/>
+        <path d="M11 64h38l-4 26H15z" fill="#d9774b"/><rect x="8" y="58" width="44" height="9" rx="2" fill="#e58a5e"/>
+      </svg></span>`;
+
+    shelfEl.innerHTML = books.map((b, i) => {
+      const look = b.kind === "journal" ? "journal" : (b.look || LOOKS[i % LOOKS.length]);
+      return `
+      <button class="spine look-${look}" type="button" role="tab"
+        id="spine-${esc(b.id)}" aria-controls="leaf" aria-selected="false"
+        style="--c:${esc(b.color)}; --h:${+b.height || 220}px; --w:${+b.width || 72}px">
+        <span class="spine-t">${t(b.spine)}</span>${look === "journal" ? "" : '<span class="spine-mark" aria-hidden="true"></span>'}
+      </button>`;
+    }).join("") + PLANT;
+    const spines = $$(".spine", shelfEl);
+
+    function open(i, focusLeaf) {
+      const b = books[i];
+      spines.forEach((s, k) => {
+        s.setAttribute("aria-selected", String(k === i));
+        s.tabIndex = k === i ? 0 : -1;
+      });
+      leaf.setAttribute("aria-labelledby", "spine-" + b.id);
+      leaf.style.setProperty("--c", b.color);
+      leaf.innerHTML = `
+        <span class="ribbon" aria-hidden="true"></span>
+        <p class="leaf-head"><span>${b.main ? "Main interest" : "Contents"}</span><span>${b.topics.length} topics</span></p>
+        <h3 class="leaf-title">${t(b.title)}</h3>
+        <ol class="toc">${b.topics.map(x => `
+          <li><details>
+            <summary><span class="toc-t">${t(x.t)}</span>${x.tag ? `<span class="toc-tag">${m(x.tag)}</span>` : ""}<span class="toc-dots" aria-hidden="true"></span><span class="toc-plus" aria-hidden="true">+</span></summary>
+            <p>${t(x.d)}</p>
+          </details></li>`).join("")}
+        </ol>
+        <p class="leaf-folio" aria-hidden="true">${i + 1}</p>`;
+      if (focusLeaf) leaf.focus({ preventScroll: true });
+    }
+    shelfEl.addEventListener("click", e => {
+      const s = e.target.closest(".spine");
+      if (s) open(spines.indexOf(s));
+    });
+    // Arrow keys move along the shelf, like tabs.
+    shelfEl.addEventListener("keydown", e => {
+      const i = spines.indexOf(document.activeElement);
+      if (i < 0) return;
+      const k = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+      if (!k) return;
+      e.preventDefault();
+      const n = (i + k + spines.length) % spines.length;
+      open(n); spines[n].focus();
+    });
+    open(Math.max(0, books.indexOf(main)));
+  })();
 
   /* ---------- quiet: dim the page and decode the quote ---------- */
   (function quiet() {

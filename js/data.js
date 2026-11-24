@@ -479,6 +479,101 @@ window.PORTFOLIO = {
     next: "FAA Part 107, so I can do more with the drone.",
   },
 
+  /* "Philosophy": a shelf of books. Click a spine to open it, click a topic to read it.
+     `tag` is the little label after a topic. `main: true` puts the "main interest" note
+     over that book. The last book is drawn as a notebook (kind: "journal"). */
+  philosophy: {
+    note: "my favorite rabbit hole",
+    books: [
+      {
+        id: "free-will", spine: "Free Will", title: "Free will and determinism", main: true,
+        color: "var(--orange)", height: 262, width: 94,
+        topics: [
+          { t: "Compatibilism", tag: "my position",
+            d: "Being free doesn't mean escaping cause and effect. It means acting on your own reasons without being forced or manipulated. On that view you can be fully determined and still free, which is where I land." },
+          { t: "The case for determinism",
+            d: "If every physical event has a physical cause (causal closure), then Laplace's demon, knowing where every particle is and every law of physics, could predict everything you'll ever do. The usual escape is quantum randomness, but random isn't the same as free. A coin flip isn't a choice." },
+          { t: "Hard determinism and moral responsibility",
+            d: "Galen Strawson's Basic Argument: to be truly responsible for what you do, you'd have to be responsible for who you are, which would mean making yourself from scratch. Nobody can. Pereboom's manipulation argument: we wouldn't blame someone whose every thought was programmed by scientists, and he asks what really separates that from ordinary determinism." },
+          { t: "Frankfurt cases",
+            d: "Someone would have been forced to make a choice if they'd hesitated, but they make it on their own anyway. They couldn't have done otherwise, yet they still seem responsible. Frankfurt also splits wanting something (first-order) from wanting to want it (second-order). You act freely when the two line up." },
+          { t: "Love, gratitude and the reactive attitudes",
+            d: "If nobody could have done otherwise, does it still make sense to thank someone, resent them, or love them for who they are? P.F. Strawson argued these attitudes are too deep in how people live to be dropped because of a theory." },
+          { t: "The replay argument",
+            d: "Rewind the universe to the moment you picked an apple over a banana and play it again. If you might pick the banana this time, the choice looks like luck. If you'd always pick the apple, it looks fixed. Either way it's hard to point to where the freedom is." },
+        ],
+      },
+      {
+        id: "ethics", spine: "Ethics", title: "Ethics and metaethics",
+        color: "var(--c-games)", height: 214, width: 70,
+        topics: [
+          { t: "The trolley problem",
+            d: "Pull a lever to send a runaway trolley toward one person instead of five? Most people say yes. It raises whether killing is worse than letting die (act vs. omission), and the doctrine of double effect: harm you foresee as a side effect can be allowed when harm you intend as the means can't." },
+          { t: "Lever vs. footbridge",
+            d: "Pushing a man off a bridge to stop the trolley is the same five-for-one trade, but almost everyone says no. In the footbridge case he's used as a tool, and you do it with your own hands. Joshua Greene's brain scans suggest the up-close version sets off an emotional alarm the lever doesn't." },
+          { t: "Utilitarianism and \"where does it end?\"",
+            d: "If the right thing is always whatever does the most good, it's hard to find a stopping point: give away nearly everything you own, or take one patient's organs to save five. Every limit you add starts to look like a rule borrowed from somewhere else." },
+          { t: "Moral realism vs. relativism",
+            d: "Are there moral facts that hold no matter what anyone thinks, or is morality relative to a person or a culture? If it's cultural, it's hard to say a past society was wrong about something like slavery, and most people are sure it was." },
+          { t: "Hume's is-ought gap",
+            d: "You can't get an \"ought\" from facts alone. Somewhere you need a value going in. That raises the burden of proof question: does the person saying moral facts exist have to prove it, or the person denying them?" },
+        ],
+      },
+      {
+        id: "belief", spine: "God & Belief", title: "Philosophy of religion and the ethics of belief",
+        color: "var(--c-creative)", height: 236, width: 78,
+        topics: [
+          { t: "Pascal's Wager",
+            d: "Believe in God: if you're right you gain everything, and if you're wrong you lose little. The many-gods objection is that there are endless possible gods, and the wager can't tell you which one to bet on." },
+          { t: "Clifford vs. James",
+            d: "Clifford: it's wrong, always and everywhere, to believe anything on insufficient evidence. William James: some questions are live, forced and momentous, and you can't wait for evidence that may never come, so it's reasonable to let more than logic decide." },
+          { t: "Bayesian credence",
+            d: "Instead of believe or don't believe, hold beliefs as degrees of confidence, like 70%, and update them as evidence comes in. It takes a lot of the all-or-nothing out of arguments about belief." },
+          { t: "The hiddenness of God",
+            d: "J.L. Schellenberg's argument: a perfectly loving God would make sure anyone open to a relationship with him could believe he exists. Some people search sincerely and still can't. What does that tell you?" },
+        ],
+      },
+      {
+        id: "mind", spine: "Mind & Metaphysics", title: "Metaphysics and mind",
+        color: "var(--c-ai)", height: 248, width: 76,
+        topics: [
+          { t: "Why is there something rather than nothing?",
+            d: "Leibniz's question. Cosmological arguments say everything needs an explanation, so there has to be a first cause or a being that exists necessarily. The regress problem pushes back: what explains that, and why couldn't the chain go back forever?" },
+          { t: "Descartes' cogito",
+            d: "Descartes doubted everything he possibly could and found one thing left over: the fact that he was doubting. I think, therefore I am. The hard part is how much you can rebuild from there." },
+          { t: "Mary's Room",
+            d: "Mary knows every physical fact about color but has spent her life in a black-and-white room. The day she sees red, does she learn something new? If so, maybe physical facts aren't all the facts. Others say she gains knowledge by acquaintance, or just a new ability (recognizing and imagining red), not a new fact." },
+          { t: "Can reality go past what we can understand?",
+            d: "Plato's Forms, Kant's noumena (things as they are, not as they appear to us), apophatic theology (describing God only by what God isn't), and Wittgenstein: \"Whereof one cannot speak, thereof one must be silent.\"" },
+        ],
+      },
+      {
+        id: "experiments", spine: "Thought Experiments", title: "Thought experiments and paradoxes",
+        color: "var(--c-web)", height: 254, width: 84,
+        topics: [
+          { t: "Newcomb's Problem",
+            d: "A predictor that's almost never wrong puts $1,000,000 in a closed box only if it predicted you'd take that box alone. A clear box always holds $1,000. Evidential decision theory says take one box. Causal decision theory says take both, since the money is already there or it isn't." },
+          { t: "The Experience Machine",
+            d: "Nozick's machine gives you any experiences you want for the rest of your life, and you'd never know you were in it. Most people wouldn't plug in, which suggests we care about more than how things feel. And the twist: if you found out you were already in one, would you unplug?" },
+          { t: "The Liar Paradox",
+            d: "\"This sentence is false.\" If it's true, it's false, and if it's false, it's true. Tarski answered with levels of language, Russell with his theory of types, and Gödel used a similar trick to show some true statements can't be proven. In Portal 2, GLaDOS tries it on Wheatley. He just answers \"true,\" and the turrets around them blow up instead." },
+          { t: "Is truth worth it?",
+            d: "Is truth valuable for its own sake, or only because it's useful? Nietzsche questioned the \"will to truth\" itself, asking why we want it so badly. And sometimes there's a case for a right not to know, like a genetic test result you'd rather not see." },
+        ],
+      },
+      {
+        id: "journal", spine: "60-Day Journal", title: "My 60-day philosophy journal", kind: "journal",
+        color: "#1b2129", height: 206, width: 64,
+        topics: [
+          { t: "One philosophy a day",
+            d: "Sixty days, one idea a day, in weekly themes: Ancient, Metaethics, Free Will, Philosophy of Religion, Epistemology, Political Philosophy, Mind and Metaphysics, and Existentialism." },
+          { t: "Marcus Aurelius",
+            d: "I picked up Meditations, which is Marcus Aurelius' private notebook. He was the emperor of Rome and wrote it to himself, never meaning anyone else to read it. It felt like the right model for keeping a journal of my own." },
+        ],
+      },
+    ],
+  },
+
   // Sayings. `terminal` runs in the terminal card in "Off the clock"; `signoff` is the
   // sign-off at the very bottom of the page.
   sayings: {
@@ -531,8 +626,8 @@ window.PORTFOLIO = {
       ],
     },
     philosophy: {
-      quote: "If you replace every part on a mountain bike, one at a time, is it still the same bike?",
-      note: "The ship of Theseus, but make it MTB.",
+      quote: "I think, therefore I am.",
+      note: "",
     },
     fuel: { title: "Fuel", text: "Runs on Red Bull. Currently running low.", cta: "Refuel me on Ko-fi" },
   },
