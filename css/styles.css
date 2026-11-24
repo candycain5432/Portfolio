@@ -760,6 +760,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   .look-journal { height: calc(var(--h) * .9); padding: 12px 0; }
   .look-journal::after { right: 5px; width: 3px; }
   .leaf { padding: 24px 18px 18px; }
+  .ribbon { top: 0; right: 22px; height: 50px; border-top: 2px solid var(--ink); }
   .toc p { margin-left: 0; }
   .toc-dots { visibility: hidden; }
   .toc-plus { align-self: center; }
