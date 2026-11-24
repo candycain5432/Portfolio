@@ -370,7 +370,7 @@
     })();
 
     $("#lifeTiles").innerHTML = [
-      `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote><p class="tile-text">${t(ph.note)}</p></div>`,
+      `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote>${ph.note ? `<p class="tile-text">${t(ph.note)}</p>` : ""}</div>`,
       `<div class="tile tile--fuel" id="fuel"><p class="tile-label">${t(fuel.title)}</p>${gauge}<p class="tile-text">${t(fuel.text)}</p>${kofi ? `<a class="btn btn-fuel" href="${esc(kofi)}" target="_blank" rel="noopener">${t(fuel.cta)}<span aria-hidden="true">&nbsp;↗</span></a>` : ""}</div>`,
       `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux${quiet ? `, and the saying: ${t(quiet)}` : ""}">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
