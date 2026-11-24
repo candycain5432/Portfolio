@@ -544,6 +544,32 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 .postit-label { margin: 0 0 8px; font: 700 .6875rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
 .postit .hand { margin: 0; font-size: 1.5rem; line-height: 1.2; }
 
+/* ---------- favorite quote ---------- */
+.motto-band {
+  margin-top: clamp(104px, 12vw, 184px);
+  padding: clamp(72px, 10vw, 140px) 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+.motto { margin-block: 0; text-align: center; }
+.motto-note {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin: 0 0 clamp(18px, 2.5vw, 30px);
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem); color: var(--yellow);
+  rotate: -3deg;
+}
+.motto-note .arr { --a: 70deg; }
+.motto blockquote {
+  margin: 0 auto; max-width: 13em;
+  font: italic 500 clamp(2.4rem, 6.4vw, 5.75rem)/1.06 var(--serif);
+  letter-spacing: -.015em;
+}
+.motto blockquote p { margin: 0; }
+/* "quieter" literally gets quieter; "hear" is the loud bit */
+.motto-quiet { font-size: .72em; letter-spacing: .14em; opacity: .5; }
+.motto-hear { color: var(--yellow); }
+.motto figcaption { margin-top: clamp(22px, 3vw, 36px); font: 700 .8125rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+
 /* ---------- life: mountain biking + tiles ---------- */
 .polaroid {
   position: relative;
