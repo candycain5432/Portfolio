@@ -627,7 +627,7 @@ window.PORTFOLIO = {
     },
     philosophy: {
       quote: "If you replace every part on a mountain bike, one at a time, is it still the same bike?",
-      note: "The ship of Theseus, but make it MTB.",
+      note: "I think, therefore I am.",
     },
     fuel: { title: "Fuel", text: "Runs on Red Bull. Currently running low.", cta: "Refuel me on Ko-fi" },
   },
