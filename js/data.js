@@ -29,7 +29,7 @@ window.PORTFOLIO = {
     facts: [
       { k: "Focus", v: "Web, hardware, security" },
       { k: "Currently", v: "Daily Python challenge and AI Buddy" },
-      { k: "Cert", v: "FAA Part 107 (planned)" },
+      { k: "Cert", v: "FAA Part 61 pilot certificate (planned)" },
     ],
     email: "contact@williamcain.net",
     socials: [
@@ -397,12 +397,12 @@ window.PORTFOLIO = {
       blurb:
         "I spot planes at RDU with a Canon Rebel T3i and a 75–300mm lens. Some favorites " +
         "so far are an Air France 777, a Breeze A220, a NetJets Challenger 350, and an " +
-        "American 737-800 in anniversary livery. Drone work is next, and I'm planning " +
-        "on getting my FAA Part 107.",
+        "American 737-800 in anniversary livery. Next up is getting my FAA Part 61 " +
+        "pilot certificate, so I can fly them instead of just photographing them.",
       highlights: [
         "Plane spotting at RDU",
         "Canon T3i and T100, Panasonic FZ1000, DJI Mini 3 Pro",
-        "FAA Part 107 planned",
+        "FAA Part 61 pilot certificate planned",
       ],
       stack: ["Canon T3i", "Panasonic FZ1000", "DJI Mini 3 Pro"],
       related: ["exposure", "family-photos"], links: [],
@@ -434,7 +434,7 @@ window.PORTFOLIO = {
       { src: "assets/img/delta-crj.jpg", caption: "Delta CRJ" },
       { src: "assets/img/delta-a319.jpg", caption: "Delta A319" },
     ],
-    note: "I'm planning on getting my FAA Part 107 so I can do more with the drone.",
+    note: "I'm working toward my FAA Part 61 pilot certificate, so one day I'll be on the other side of the lens.",
   },
 
   /* ======================================================================
@@ -476,7 +476,7 @@ window.PORTFOLIO = {
       { what: "3D printing parts for a Raspberry Pi robot", via: "ai-buddy", still: true },
     ],
     now: "A small Python build every day (since October 2026), and AI Buddy.",
-    next: "FAA Part 107, so I can do more with the drone.",
+    next: "My FAA Part 61 pilot certificate, so I can fly the planes I photograph."
   },
 
   /* "Philosophy": a shelf of books. Click a spine to open it, click a topic to read it.
