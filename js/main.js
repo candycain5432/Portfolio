@@ -460,6 +460,62 @@
   $("#year").textContent = new Date().getFullYear();
   if ((D.sayings || {}).signoff) $("#signoff").textContent = smart(D.sayings.signoff);
 
+  /* ---------- philosophy: the bookshelf ---------- */
+  (function shelf() {
+    const PH = D.philosophy;
+    const shelfEl = $("#shelf"), leaf = $("#leaf");
+    if (!PH || !shelfEl || !leaf) return;
+    const books = PH.books || [];
+    $("#philoNote").textContent = smart(PH.note || "");
+    const main = books.find(b => b.main);
+    const ARR = '<svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg>';
+    if (main) $("#shelfNote").innerHTML = `main interest ${ARR}`;
+
+    shelfEl.innerHTML = books.map(b => `
+      <button class="spine${b.kind === "journal" ? " spine--journal" : ""}" type="button" role="tab"
+        id="spine-${esc(b.id)}" aria-controls="leaf" aria-selected="false"
+        style="--c:${esc(b.color)}; --h:${+b.height || 220}px; --w:${+b.width || 72}px">
+        <span>${t(b.spine)}</span>
+      </button>`).join("");
+    const spines = $$(".spine", shelfEl);
+
+    function open(i, focusLeaf) {
+      const b = books[i];
+      spines.forEach((s, k) => {
+        s.setAttribute("aria-selected", String(k === i));
+        s.tabIndex = k === i ? 0 : -1;
+      });
+      leaf.setAttribute("aria-labelledby", "spine-" + b.id);
+      leaf.style.setProperty("--c", b.color);
+      leaf.innerHTML = `
+        <span class="ribbon" aria-hidden="true"></span>
+        <p class="leaf-kicker">${b.main ? "Main interest · " : ""}${b.topics.length} topics</p>
+        <h3 class="leaf-title">${t(b.title)}</h3>
+        <ol class="toc">${b.topics.map(x => `
+          <li><details>
+            <summary><span class="toc-t">${t(x.t)}</span>${x.tag ? `<span class="toc-tag">${m(x.tag)}</span>` : ""}<span class="toc-plus" aria-hidden="true">+</span></summary>
+            <p>${t(x.d)}</p>
+          </details></li>`).join("")}
+        </ol>`;
+      if (focusLeaf) leaf.focus({ preventScroll: true });
+    }
+    shelfEl.addEventListener("click", e => {
+      const s = e.target.closest(".spine");
+      if (s) open(spines.indexOf(s));
+    });
+    // Arrow keys move along the shelf, like tabs.
+    shelfEl.addEventListener("keydown", e => {
+      const i = spines.indexOf(document.activeElement);
+      if (i < 0) return;
+      const k = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+      if (!k) return;
+      e.preventDefault();
+      const n = (i + k + spines.length) % spines.length;
+      open(n); spines[n].focus();
+    });
+    open(Math.max(0, books.indexOf(main)));
+  })();
+
   /* ---------- quiet: dim the page and decode the quote ---------- */
   (function quiet() {
     const sec = $("#quiet"), q = $("#quietQ"), hush = $("#hush");
