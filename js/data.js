@@ -392,7 +392,7 @@ window.PORTFOLIO = {
 
     /* ---------------- PHOTOGRAPHY ---------------- */
     {
-      id: "photo", title: "Photography & Aerial", tagline: "Planes and drones",
+      id: "photo", title: "Photography & Aerial", tagline: "Plane spotting at RDU",
       domain: "photo", status: "Ongoing", year: "2026",
       blurb:
         "I spot planes at RDU with a Canon Rebel T3i and a 75–300mm lens. Some favorites " +
