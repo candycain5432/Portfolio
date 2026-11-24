@@ -51,7 +51,7 @@
 
   /* ---------- stickers (drag them around) ---------- */
   $("#stickers").innerHTML = (D.stickers || []).map(s => `<li class="sticker">${t(s)}</li>`).join("");
-  $$(".sticker").forEach(el => {
+  $$(".sticker, .quote-note").forEach(el => {
     let start = null, dx = 0, dy = 0;
     el.addEventListener("pointerdown", e => {
       start = { x: e.clientX - dx, y: e.clientY - dy };
