@@ -471,12 +471,24 @@
     const ARR = '<svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg>';
     if (main) $("#shelfNote").innerHTML = `main interest ${ARR}`;
 
-    shelfEl.innerHTML = books.map(b => `
-      <button class="spine${b.kind === "journal" ? " spine--journal" : ""}" type="button" role="tab"
+    // Each book gets a different cover design, in this order (a `look` in data.js overrides it).
+    const LOOKS = ["bands", "label", "block", "mono", "stamp"];
+    const PLANT = `<span class="shelf-plant" aria-hidden="true"><svg viewBox="0 0 60 92" fill="none" stroke="#15202b" stroke-width="2" stroke-linejoin="round">
+        <path d="M30 60C25 44 23 24 28 5c5 18 6 38 4 55z" fill="#7fb98a"/><path d="M28.5 50c-1-10-1-20 .5-30" stroke-width="1.2"/>
+        <path d="M24 61c-7-10-10-24-7-38 7 11 10 24 9 38z" fill="#6aa877"/>
+        <path d="M35 61c4-10 9-20 15-28-1 12-6 22-12 29z" fill="#8cc596"/>
+        <path d="M11 64h38l-4 26H15z" fill="#d9774b"/><rect x="8" y="58" width="44" height="9" rx="2" fill="#e58a5e"/>
+      </svg></span>`;
+
+    shelfEl.innerHTML = books.map((b, i) => {
+      const look = b.kind === "journal" ? "journal" : (b.look || LOOKS[i % LOOKS.length]);
+      return `
+      <button class="spine look-${look}" type="button" role="tab"
         id="spine-${esc(b.id)}" aria-controls="leaf" aria-selected="false"
         style="--c:${esc(b.color)}; --h:${+b.height || 220}px; --w:${+b.width || 72}px">
-        <span>${t(b.spine)}</span>
-      </button>`).join("");
+        <span class="spine-t">${t(b.spine)}</span>${look === "journal" ? "" : '<span class="spine-mark" aria-hidden="true"></span>'}
+      </button>`;
+    }).join("") + PLANT;
     const spines = $$(".spine", shelfEl);
 
     function open(i, focusLeaf) {
@@ -489,14 +501,15 @@
       leaf.style.setProperty("--c", b.color);
       leaf.innerHTML = `
         <span class="ribbon" aria-hidden="true"></span>
-        <p class="leaf-kicker">${b.main ? "Main interest · " : ""}${b.topics.length} topics</p>
+        <p class="leaf-head"><span>${b.main ? "Main interest" : "Contents"}</span><span>${b.topics.length} topics</span></p>
         <h3 class="leaf-title">${t(b.title)}</h3>
         <ol class="toc">${b.topics.map(x => `
           <li><details>
-            <summary><span class="toc-t">${t(x.t)}</span>${x.tag ? `<span class="toc-tag">${m(x.tag)}</span>` : ""}<span class="toc-plus" aria-hidden="true">+</span></summary>
+            <summary><span class="toc-t">${t(x.t)}</span>${x.tag ? `<span class="toc-tag">${m(x.tag)}</span>` : ""}<span class="toc-dots" aria-hidden="true"></span><span class="toc-plus" aria-hidden="true">+</span></summary>
             <p>${t(x.d)}</p>
           </details></li>`).join("")}
-        </ol>`;
+        </ol>
+        <p class="leaf-folio" aria-hidden="true">${i + 1}</p>`;
       if (focusLeaf) leaf.focus({ preventScroll: true });
     }
     shelfEl.addEventListener("click", e => {

@@ -582,59 +582,120 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 }
 
 /* ---------- philosophy: a shelf of books ---------- */
-.library { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
-.shelf-wrap { position: relative; padding-top: 64px; }
+.library { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(28px, 4.5vw, 72px); align-items: center; }
+.shelf-wrap { position: relative; padding-top: 64px; padding-bottom: 30px; }
 .shelf {
-  display: flex; align-items: flex-end; gap: 5px;
-  padding: 0 18px;
+  position: relative;
+  display: flex; align-items: flex-end; gap: 4px;
+  padding: 0 22px;
   border-bottom: 12px solid var(--ink);
   border-radius: 0 0 3px 3px;
-  box-shadow: 0 22px 18px -16px rgb(21 32 43 / .35);
+  box-shadow: 0 24px 20px -18px rgb(21 32 43 / .3);
 }
+/* brackets holding the shelf to the wall */
+.shelf::before, .shelf::after {
+  content: ""; position: absolute; top: calc(100% + 12px);
+  width: 18px; height: 26px; background: var(--ink);
+  clip-path: polygon(0 0, 100% 0, 22% 100%, 0 100%);
+}
+.shelf::before { left: 16%; }
+.shelf::after { right: 16%; scale: -1 1; }
 .shelf-note {
   position: absolute; top: 0; left: 0;
   display: flex; align-items: flex-end; gap: 4px;
   margin: 0; font-size: 1.35rem; color: var(--orange-deep); rotate: -4deg;
 }
 .shelf-note .arr { --a: 80deg; margin-bottom: -10px; }
+
 .spine {
+  --shade: linear-gradient(90deg, rgb(21 32 43 / .2), rgb(255 255 255 / .3) 15%, rgb(255 255 255 / 0) 40%, rgb(21 32 43 / .04) 70%, rgb(21 32 43 / .22));
+  --band: linear-gradient(var(--ink), var(--ink));
   position: relative;
   flex: none;
   width: var(--w); height: var(--h);
-  margin: 0; padding: 18px 0;
-  border: 2px solid var(--ink); border-bottom: 0; border-radius: 5px 5px 1px 1px;
-  background: var(--c);
-  color: var(--ink);
-  font: 820 1.0625rem/1 var(--mona); font-stretch: 112%; letter-spacing: .01em;
-  writing-mode: vertical-rl;
-  text-align: start;
-  cursor: pointer;
-  /* two printed bands near the top and bottom of every spine */
-  background-image:
-    linear-gradient(rgb(21 32 43 / .85), rgb(21 32 43 / .85)),
-    linear-gradient(rgb(21 32 43 / .85), rgb(21 32 43 / .85));
-  background-size: 100% 3px, 100% 3px;
-  background-position: 0 10px, 0 calc(100% - 10px);
+  margin: 0; padding: 24px 0 36px;
+  border: 2px solid var(--ink); border-bottom: 0; border-radius: 7px 7px 1px 1px;
+  background-color: var(--c);
+  background-image: var(--shade);
   background-repeat: no-repeat;
-  transition: translate .25s var(--pop), box-shadow .25s;
+  color: var(--ink);
+  font-size: 1rem;
+  writing-mode: vertical-rl;
+  cursor: pointer;
+  transition: translate .3s var(--pop), rotate .3s var(--pop);
 }
 .spine:hover { translate: 0 -8px; }
-.spine[aria-selected="true"] { translate: 0 -22px; }
+.spine[aria-selected="true"] { translate: 0 -24px; }
 .spine:focus-visible { outline-offset: 4px; }
-.spine span { display: block; padding: 6px 0; }
-.spine--journal { color: var(--paper); font: 1.3rem/1 var(--hand); letter-spacing: .02em; border-radius: 8px 8px 1px 1px; }
-.spine--journal::after {   /* the elastic band */
+.spine-t { display: inline-block; }
+/* a little publisher's mark at the foot of the spine */
+.spine-mark {
+  position: absolute; bottom: 12px; left: 50%;
+  width: 13px; height: 13px; margin-left: -6.5px;
+  border: 2px solid currentColor; border-radius: 50%;
+  background: radial-gradient(currentColor 0 2px, transparent 2.5px);
+}
+
+/* each book gets its own cover design */
+.look-bands {
+  background-image: var(--shade), var(--band), var(--band), var(--band);
+  background-size: 100% 100%, 100% 3px, 100% 1.5px, 100% 3px;
+  background-position: 0 0, 0 10px, 0 16px, 0 calc(100% - 34px);
+}
+.look-bands .spine-t { font: 860 1.25em/1 var(--mona); font-stretch: 118%; letter-spacing: .01em; }
+
+.look-label {
+  background-image: var(--shade), var(--band), var(--band);
+  background-size: 100% 100%, 100% 1.5px, 100% 1.5px;
+  background-position: 0 0, 0 9px, 0 calc(100% - 32px);
+}
+.look-label .spine-t {
+  padding: 12px 5px;
+  background: var(--paper);
+  border: 1.5px solid var(--ink); border-radius: 3px;
+  font: italic 600 1.3em/1 var(--serif);
+}
+
+.look-block { padding-top: 46px; background-image: var(--shade), var(--band); background-size: 100% 100%, 100% 30px; background-position: 0 0, 0 0; }
+.look-block .spine-t { font: 750 .85em/1 var(--mona); letter-spacing: .16em; text-transform: uppercase; }
+
+.look-mono {
+  background-image: var(--shade), var(--band), var(--band), var(--band);
+  background-size: 100% 100%, 100% 1.5px, 100% 1.5px, 100% 1.5px;
+  background-position: 0 0, 0 10px, 0 15px, 0 20px;
+  padding-top: 32px;
+}
+.look-mono .spine-t { font: 700 .74em/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+
+.look-stamp {
+  padding-top: 44px;
+  background-image: var(--shade), repeating-linear-gradient(-45deg, var(--ink) 0 3px, transparent 3px 8px);
+  background-size: 100% 100%, 100% 22px;
+  background-position: 0 0, 0 10px;
+}
+.look-stamp .spine-t { font: 900 1.02em/1 var(--mona); font-stretch: 75%; letter-spacing: .04em; text-transform: uppercase; }
+
+/* the journal: a black notebook with an elastic band, leaning on the end */
+.look-journal {
+  padding-bottom: 20px;
+  color: var(--paper);
+  border-radius: 9px 9px 1px 1px;
+  rotate: 4deg; transform-origin: bottom left; margin-left: 6px;
+}
+.look-journal .spine-t { font: 1.3em/1 var(--hand); letter-spacing: .02em; }
+.look-journal::after {
   content: ""; position: absolute; top: 0; bottom: 0; right: 9px; width: 4px;
   background: #c9372c; border-radius: 2px;
 }
-.spine:last-child { rotate: 4deg; transform-origin: bottom left; margin-left: 6px; }
-.spine:last-child[aria-selected="true"] { rotate: 0deg; }
+.look-journal[aria-selected="true"] { rotate: 0deg; }
 
-/* the open book: a page with a ribbon, sitting beside the shelf */
+.shelf-plant { flex: none; align-self: flex-end; width: 58px; margin-left: 16px; }
+.shelf-plant svg { display: block; width: 100%; height: auto; }
+
+/* the open book: a contents page with a ribbon, sitting beside the shelf */
 .leaf {
   position: relative;
-  min-height: 100%;
-  padding: 30px clamp(22px, 3vw, 40px) 26px;
+  padding: 26px clamp(22px, 3vw, 40px) 20px;
   background: var(--paper);
   border-radius: 2px 14px 14px 2px;
   box-shadow:
@@ -642,7 +703,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
     0 34px 50px -34px rgb(21 32 43 / .55);
 }
 .leaf:focus { outline: none; }
-.leaf::before {    /* gutter shadow on the left, like the page curves into the binding */
+.leaf::before {    /* the page curving into the binding */
   content: ""; position: absolute; inset: 0 auto 0 0; width: 26px;
   background: linear-gradient(90deg, rgb(21 32 43 / .1), transparent);
   border-radius: 2px 0 0 2px; pointer-events: none;
@@ -654,39 +715,54 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   border: 2px solid var(--ink); border-top: 0;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
 }
-.leaf-kicker { margin: 0; font: 700 .6875rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
-.leaf-title { margin: 10px 60px 0 0; font: italic 500 clamp(1.6rem, 2.6vw, 2.1rem)/1.12 var(--serif); }
-.toc { margin: 18px 0 0; padding: 0; list-style: none; counter-reset: toc; }
-.toc li { border-top: 1px dashed rgb(21 32 43 / .22); }
-.toc li:first-child { border-top: 0; }
+.leaf-head {
+  display: flex; justify-content: space-between; gap: 12px;
+  margin: 0 64px 0 0; padding-bottom: 10px;
+  border-bottom: 1px solid rgb(21 32 43 / .15);
+  font: 700 .6875rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
+}
+.leaf-title { margin: 16px 40px 0 0; font: italic 500 clamp(1.6rem, 2.6vw, 2.15rem)/1.12 var(--serif); }
+.toc { margin: 14px 0 0; padding: 0; list-style: none; counter-reset: toc; }
 .toc summary {
-  display: flex; align-items: baseline; gap: 12px;
-  padding: 11px 0;
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 9px 0;
   list-style: none; cursor: pointer;
 }
 .toc summary::-webkit-details-marker { display: none; }
 .toc summary::before {
   counter-increment: toc; content: counter(toc, decimal-leading-zero);
-  flex: none; font: .75rem/1 var(--mono); color: var(--ink-3);
+  flex: none; width: 20px; font: .75rem/1 var(--mono); color: var(--ink-3);
 }
-.toc-t { font-weight: 650; line-height: 1.3; }
+.toc-t { min-width: 0; font-weight: 650; line-height: 1.3; }
 .toc summary:hover .toc-t { text-decoration: underline wavy var(--orange); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
 .toc-tag { flex: none; padding: 3px 8px 2px; border-radius: 999px; background: var(--orange); font: 700 .625rem/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
-.toc-plus { flex: none; margin-left: auto; font: 1.5rem/.6 var(--hand); color: var(--ink-3); transition: rotate .2s var(--ease); }
-.toc details[open] .toc-plus { rotate: 45deg; }
-.toc p { margin: -2px 0 14px 32px; max-width: 60ch; font: 1rem/1.55 var(--serif); font-style: italic; color: var(--ink-2); }
+.toc-dots { flex: 1 1 0; min-width: 0; align-self: flex-end; margin-bottom: .5em; border-bottom: 2px dotted rgb(21 32 43 / .3); }
+.toc-plus { flex: none; font: 1.5rem/.6 var(--hand); color: var(--ink-3); transition: rotate .2s var(--ease); }
+.toc details[open] .toc-plus { rotate: 45deg; color: var(--ink); }
+.toc p {
+  margin: 0 0 12px 30px; padding: 2px 0 2px 14px;
+  max-width: 60ch;
+  border-left: 3px solid var(--c);
+  font: italic 1rem/1.55 var(--serif); color: var(--ink-2);
+}
+.leaf-folio { margin: 14px 0 0; text-align: center; font: italic 500 .95rem/1 var(--serif); color: var(--ink-3); }
 
 @media (max-width: 1000px) {
   .library { grid-template-columns: minmax(0, 1fr); }
   .shelf-wrap { justify-self: start; }
 }
 @media (max-width: 520px) {
+  .shelf-wrap { padding-top: 70px; }
   .shelf { gap: 3px; padding: 0 8px; }
-  .spine { width: calc(var(--w) * .6); height: calc(var(--h) * .78); font-size: .875rem; padding: 14px 0; }
-  .spine--journal { height: calc(var(--h) * .92); font-size: .95rem; padding: 10px 0; }
-  .spine--journal::after { right: 5px; width: 3px; }
-  .leaf { padding: 26px 18px 20px; }
+  .shelf-plant { display: none; }
+  .spine { width: calc(var(--w) * .6); height: calc(var(--h) * .78); font-size: .78rem; padding-bottom: 30px; }
+  .spine-mark { width: 10px; height: 10px; margin-left: -5px; bottom: 10px; }
+  .look-journal { height: calc(var(--h) * .9); padding: 12px 0; }
+  .look-journal::after { right: 5px; width: 3px; }
+  .leaf { padding: 24px 18px 18px; }
   .toc p { margin-left: 0; }
+  .toc-dots { visibility: hidden; }
+  .toc-plus { align-self: center; }
 }
 
 /* ---------- life: mountain biking + tiles ---------- */
@@ -1090,6 +1166,6 @@ a.scrap-pic { cursor: zoom-in; }
 
 /* the smallest phones: slimmer books so the shelf fits */
 @media (max-width: 350px) {
-  .spine { width: calc(var(--w) * .52); font-size: .8125rem; }
-  .spine:last-child { margin-left: 3px; }
+  .spine { width: calc(var(--w) * .52); font-size: .7rem; }
+  .look-journal { margin-left: 3px; }
 }
