@@ -357,7 +357,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 
 /* ---------- section shells ---------- */
 .section { position: relative; padding-top: clamp(104px, 12vw, 184px); }
-.head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 32px; margin-bottom: clamp(32px, 4.5vw, 64px); }
+.head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 22px 32px; margin-bottom: clamp(32px, 4.5vw, 64px); }
 .title {
   margin: 0;
   font: 850 clamp(3.1rem, 8.6vw, 7.75rem)/.86 var(--mona);
@@ -443,7 +443,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 
 /* ---------- work: the smaller stuff ---------- */
 .more { margin-top: clamp(88px, 10vw, 140px); }
-.more-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 28px; }
+.more-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 28px; }
 .subtitle { margin: 0; font: 850 clamp(2.1rem, 4.6vw, 3.75rem)/.92 var(--mona); font-stretch: 115%; letter-spacing: -.04em; }
 .more-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin: 26px 0 30px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -999,7 +999,7 @@ a.scrap-pic { cursor: zoom-in; }
 /* ---------- contact ---------- */
 .contact { padding-bottom: clamp(88px, 10vw, 150px); }
 .title--huge { font-size: clamp(4.5rem, 16vw, 14rem); line-height: .82; }
-.contact .lede { margin-top: 28px; }
+.contact .lede { margin-top: clamp(40px, 4vw, 56px); }
 .mail { margin: 26px 0 0; font: 850 clamp(1.7rem, 5.6vw, 4.9rem)/1.05 var(--mona); font-stretch: 110%; letter-spacing: -.035em; }
 .mail a {
   text-decoration: underline wavy var(--orange);
@@ -1077,7 +1077,7 @@ a.scrap-pic { cursor: zoom-in; }
   .spread--flip .spread-print { justify-self: start; margin: -84px 0 0 4%; }
   .build { --gap: 58px; }
   .step-cap { font-size: 1.15rem; }
-  .spread-text { padding-top: 8px; }
+  .spread-text { padding-top: 30px; }
   .life-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .life-tiles > :nth-child(3) { grid-column: 1 / -1; margin-top: 0; }
   .cards { grid-template-columns: minmax(0, 1fr); padding-bottom: 0; }
