@@ -332,7 +332,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 .sticker:nth-child(2) { --r: 7deg; top: calc(var(--ph) * .9); right: -14px; background: var(--orange); }
 .sticker:nth-child(3) { --r: -4deg; top: calc(var(--ph) * .64); right: calc(var(--pw) - 48px); background: var(--c-ai); }
 .sticker:nth-child(4) { --r: 9deg; top: calc(var(--ph) * -.015); right: -22px; background: var(--yellow); }
-.sticker:nth-child(n + 5) { --r: -3deg; top: calc(var(--ph) * .4); right: -30px; background: var(--c-web); }
+.sticker:nth-child(n + 5) { --r: -5deg; top: calc(var(--ph) * .42); right: -34px; background: var(--c-games); }
 
 /* ---------- marquee ---------- */
 .marquee-clip { overflow: hidden; padding: 28px 0; margin: -28px 0; }
@@ -357,7 +357,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 
 /* ---------- section shells ---------- */
 .section { position: relative; padding-top: clamp(104px, 12vw, 184px); }
-.head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 32px; margin-bottom: clamp(32px, 4.5vw, 64px); }
+.head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 22px 32px; margin-bottom: clamp(32px, 4.5vw, 64px); }
 .title {
   margin: 0;
   font: 850 clamp(3.1rem, 8.6vw, 7.75rem)/.86 var(--mona);
@@ -443,7 +443,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 
 /* ---------- work: the smaller stuff ---------- */
 .more { margin-top: clamp(88px, 10vw, 140px); }
-.more-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 28px; }
+.more-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 28px; }
 .subtitle { margin: 0; font: 850 clamp(2.1rem, 4.6vw, 3.75rem)/.92 var(--mona); font-stretch: 115%; letter-spacing: -.04em; }
 .more-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin: 26px 0 30px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -873,7 +873,9 @@ a.step-pic { cursor: zoom-in; }
 .tile-label { margin: 0; font: 700 .6875rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
 .tile-text { margin: 10px 0 0; color: var(--ink-2); }
 .tile--quote { --c: var(--c-games); }
-.tile--quote blockquote { margin: 14px 0 0; font: italic 500 clamp(1.5rem, 2.2vw, 1.85rem)/1.25 var(--serif); }
+.tile--quote { padding: 30px 30px 28px; }
+.tile--quote blockquote { text-wrap: balance; margin: 22px 0 0; font: italic 500 clamp(2rem, 3vw, 2.6rem)/1.15 var(--serif); }
+.tile--quote .quote-by { margin: 18px 0 0; font: 700 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
 .tile--quote .tile-text { font: 1.4rem/1.15 var(--hand); color: var(--ink); rotate: -1.5deg; }
 .tile--fuel { --c: var(--paper); text-align: center; }
 .tile--fuel svg { display: block; width: min(100%, 280px); height: auto; margin: 10px auto 0; }
@@ -999,7 +1001,7 @@ a.scrap-pic { cursor: zoom-in; }
 /* ---------- contact ---------- */
 .contact { padding-bottom: clamp(88px, 10vw, 150px); }
 .title--huge { font-size: clamp(4.5rem, 16vw, 14rem); line-height: .82; }
-.contact .lede { margin-top: 28px; }
+.contact .lede { margin-top: clamp(40px, 4vw, 56px); }
 .mail { margin: 26px 0 0; font: 850 clamp(1.7rem, 5.6vw, 4.9rem)/1.05 var(--mona); font-stretch: 110%; letter-spacing: -.035em; }
 .mail a {
   text-decoration: underline wavy var(--orange);
@@ -1077,7 +1079,7 @@ a.scrap-pic { cursor: zoom-in; }
   .spread--flip .spread-print { justify-self: start; margin: -84px 0 0 4%; }
   .build { --gap: 58px; }
   .step-cap { font-size: 1.15rem; }
-  .spread-text { padding-top: 8px; }
+  .spread-text { padding-top: 30px; }
   .life-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .life-tiles > :nth-child(3) { grid-column: 1 / -1; margin-top: 0; }
   .cards { grid-template-columns: minmax(0, 1fr); padding-bottom: 0; }
@@ -1101,6 +1103,7 @@ a.scrap-pic { cursor: zoom-in; }
   .sticker:nth-child(2) { top: calc(var(--ph) * .9); right: -6px; }
   .sticker:nth-child(3) { top: calc(var(--ph) * .76); right: auto; left: 4%; }
   .sticker:nth-child(4) { top: calc(var(--ph) * .015); right: -6px; }
+  .sticker:nth-child(5) { top: calc(var(--ph) * .47); right: -6px; }
 }
 
 @media (max-width: 720px) {
