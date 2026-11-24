@@ -614,7 +614,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   flex: none;
   width: var(--w); height: var(--h);
   margin: 0; padding: 24px 0 36px;
-  border: 2px solid var(--ink); border-bottom: 0; border-radius: 7px 7px 1px 1px;
+  border: 2px solid var(--ink); border-radius: 7px 7px 5px 5px;
   background-color: var(--c);
   background-image: var(--shade);
   background-repeat: no-repeat;
@@ -679,7 +679,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 .look-journal {
   padding-bottom: 20px;
   color: var(--paper);
-  border-radius: 9px 9px 1px 1px;
+  border-radius: 9px 9px 7px 7px;
   rotate: 4deg; transform-origin: bottom left; margin-left: 6px;
 }
 .look-journal .spine-t { font: 1.3em/1 var(--hand); letter-spacing: .02em; }
