@@ -1128,6 +1128,7 @@ a.scrap-pic { cursor: zoom-in; }
   .life-tiles { grid-template-columns: minmax(0, 1fr); gap: 44px; }
   /* philosophy: only "main interest" points at the shelf */
   #philosophy .head-note .arr { display: none; }
+  #philosophy .head-note { rotate: 0deg; font: italic 500 1.375rem/1.3 var(--serif); color: var(--ink-2); }
   /* off the clock: smaller prints that overlap less, and more air between the pieces */
   .spread { margin-bottom: 96px; }
   .spread-print, .spread--flip .spread-print { width: min(50%, 210px); margin-top: -56px; }
