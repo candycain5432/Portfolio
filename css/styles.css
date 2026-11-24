@@ -709,10 +709,10 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   border-radius: 2px 0 0 2px; pointer-events: none;
 }
 .ribbon {
-  position: absolute; top: -8px; right: 34px;
-  width: 16px; height: 58px;
+  position: absolute; top: 0; right: 34px;
+  width: 16px; height: 56px;
   background: var(--c);
-  border: 2px solid var(--ink); border-top: 0;
+  border: 2px solid var(--ink);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
 }
 .leaf-head {
@@ -760,6 +760,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
   .look-journal { height: calc(var(--h) * .9); padding: 12px 0; }
   .look-journal::after { right: 5px; width: 3px; }
   .leaf { padding: 24px 18px 18px; }
+  .ribbon { right: 22px; height: 50px; }
   .toc p { margin-left: 0; }
   .toc-dots { visibility: hidden; }
   .toc-plus { align-self: center; }
