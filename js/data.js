@@ -442,7 +442,7 @@ window.PORTFOLIO = {
      ====================================================================== */
 
   // Stickers stuck around the top of the page (visitors can drag them around).
-  stickers: ["Arch btw", "Red Bull powered", "RDU plane spotter", "Part 107 soon"],
+  stickers: ["Arch btw", "Red Bull powered", "RDU plane spotter", "Part 61 soon", "Philosophy nerd"],
 
   // The scrolling strip under the top section.
   marquee: [
@@ -627,6 +627,7 @@ window.PORTFOLIO = {
     },
     philosophy: {
       quote: "I think, therefore I am.",
+      by: "René Descartes",
       note: "",
     },
     fuel: { title: "Fuel", text: "Runs on Red Bull. Currently running low.", cta: "Refuel me on Ko-fi" },

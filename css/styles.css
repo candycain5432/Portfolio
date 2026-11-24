@@ -332,7 +332,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 .sticker:nth-child(2) { --r: 7deg; top: calc(var(--ph) * .9); right: -14px; background: var(--orange); }
 .sticker:nth-child(3) { --r: -4deg; top: calc(var(--ph) * .64); right: calc(var(--pw) - 48px); background: var(--c-ai); }
 .sticker:nth-child(4) { --r: 9deg; top: calc(var(--ph) * -.015); right: -22px; background: var(--yellow); }
-.sticker:nth-child(n + 5) { --r: -3deg; top: calc(var(--ph) * .4); right: -30px; background: var(--c-web); }
+.sticker:nth-child(n + 5) { --r: -5deg; top: calc(var(--ph) * .42); right: -34px; background: var(--c-games); }
 
 /* ---------- marquee ---------- */
 .marquee-clip { overflow: hidden; padding: 28px 0; margin: -28px 0; }
@@ -873,7 +873,9 @@ a.step-pic { cursor: zoom-in; }
 .tile-label { margin: 0; font: 700 .6875rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
 .tile-text { margin: 10px 0 0; color: var(--ink-2); }
 .tile--quote { --c: var(--c-games); }
-.tile--quote blockquote { margin: 14px 0 0; font: italic 500 clamp(1.5rem, 2.2vw, 1.85rem)/1.25 var(--serif); }
+.tile--quote { padding: 30px 30px 28px; }
+.tile--quote blockquote { text-wrap: balance; margin: 22px 0 0; font: italic 500 clamp(2rem, 3vw, 2.6rem)/1.15 var(--serif); }
+.tile--quote .quote-by { margin: 18px 0 0; font: 700 .75rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
 .tile--quote .tile-text { font: 1.4rem/1.15 var(--hand); color: var(--ink); rotate: -1.5deg; }
 .tile--fuel { --c: var(--paper); text-align: center; }
 .tile--fuel svg { display: block; width: min(100%, 280px); height: auto; margin: 10px auto 0; }
@@ -1101,6 +1103,7 @@ a.scrap-pic { cursor: zoom-in; }
   .sticker:nth-child(2) { top: calc(var(--ph) * .9); right: -6px; }
   .sticker:nth-child(3) { top: calc(var(--ph) * .76); right: auto; left: 4%; }
   .sticker:nth-child(4) { top: calc(var(--ph) * .015); right: -6px; }
+  .sticker:nth-child(5) { top: calc(var(--ph) * .47); right: -6px; }
 }
 
 @media (max-width: 720px) {
