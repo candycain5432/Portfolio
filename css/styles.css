@@ -332,31 +332,6 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 .sticker:nth-child(2) { --r: 7deg; top: calc(var(--ph) * .9); right: -14px; background: var(--orange); }
 .sticker:nth-child(3) { --r: -4deg; top: calc(var(--ph) * .64); right: calc(var(--pw) - 48px); background: var(--c-ai); }
 .sticker:nth-child(4) { --r: 9deg; top: calc(var(--ph) * -.015); right: -22px; background: var(--yellow); }
-/* favorite quote: a taped paper note by the photo (draggable, like the stickers) */
-.quote-note {
-  position: absolute; z-index: 5;   /* the stickers sit on top of it */
-  top: calc(var(--ph) * .72); right: calc(var(--pw) - 64px);
-  width: 236px;
-  margin: 0;
-  padding: 22px 18px 14px;
-  background: var(--paper);
-  box-shadow: 0 18px 30px -18px rgb(21 32 43 / .55), 0 0 0 1px rgb(21 32 43 / .06);
-  rotate: var(--r, -4deg);
-  translate: var(--dx, 0px) var(--dy, 0px);
-  cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none;
-  transition: scale .15s var(--pop), box-shadow .15s;
-}
-.quote-note::before {
-  content: ""; position: absolute; top: 0; left: 50%;
-  width: 84px; height: 22px; translate: -50% -50%; rotate: 3deg;
-  background: rgb(255 238 160 / .8); box-shadow: 0 1px 2px rgb(21 32 43 / .12);
-}
-.quote-note:hover { scale: 1.04; }
-.quote-note.dragging { cursor: grabbing; scale: 1.08; z-index: 7; }
-.quote-note blockquote { margin: 0; font-size: 1.4rem; line-height: 1.15; color: var(--ink); }
-.quote-note em { font-style: normal; color: var(--orange-deep); text-decoration: underline wavy var(--orange); text-underline-offset: .18em; text-decoration-thickness: 1.5px; }
-.quote-note figcaption { margin-top: 10px; font: 700 .625rem/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
-
 .sticker:nth-child(n + 5) { --r: -3deg; top: calc(var(--ph) * .4); right: -30px; background: var(--c-web); }
 
 /* ---------- marquee ---------- */
@@ -568,6 +543,43 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 .postit--next { background: #ffc8dd; rotate: -3deg; }
 .postit-label { margin: 0 0 8px; font: 700 .6875rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
 .postit .hand { margin: 0; font-size: 1.5rem; line-height: 1.2; }
+
+/* ---------- quiet: the favorite quote ----------
+   --hush (0 to 1) is set on the root by main.js from how close this section is to the
+   middle of the screen. The overlay dims and greys out everything else; the quote sits
+   above it and its scrambled hex decodes into words as --hush rises. */
+.hush {
+  position: fixed; inset: 0; z-index: 45;
+  pointer-events: none;
+  background: rgb(9 13 19 / calc(var(--hush, 0) * .9));
+  -webkit-backdrop-filter: grayscale(var(--hush, 0));
+  backdrop-filter: grayscale(var(--hush, 0));
+}
+.quiet {
+  position: relative; z-index: 46;
+  display: grid; place-items: center;
+  min-height: 100vh; min-height: 100svh;
+  margin-top: clamp(40px, 6vw, 80px);
+  padding: 0 var(--gutter);
+  text-align: center;
+}
+.quiet-in { margin: 0; }
+.quiet-q {
+  margin: 0 auto;
+  max-width: 21ch;
+  font: 700 clamp(1.65rem, 4.4vw, 3.75rem)/1.28 var(--mono);
+  letter-spacing: -.01em;
+  color: color-mix(in srgb, var(--paper) calc(var(--hush, 0) * 100%), var(--ink));
+}
+.quiet-q .w { display: inline-block; white-space: nowrap; }
+.quiet-q .n { color: color-mix(in srgb, #7ee2a8 calc(var(--hush, 0) * 100%), #4b8f69); opacity: .7; }
+.quiet-q .hear { color: color-mix(in srgb, var(--yellow) calc(var(--hush, 0) * 100%), var(--orange-deep)); }
+.quiet-cap {
+  margin-top: clamp(18px, 2.4vw, 30px);
+  font: 700 .8125rem/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--paper) calc(var(--hush, 0) * 100%), var(--ink-3));
+  opacity: calc(.4 + var(--hush, 0) * .6);
+}
 
 /* ---------- life: mountain biking + tiles ---------- */
 .polaroid {
@@ -870,8 +882,6 @@ a.scrap-pic { cursor: zoom-in; }
   .postits { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 0; }
   .wall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .sticker:nth-child(3) { right: calc(var(--pw) - 160px); }
-  .quote-note { width: 204px; top: calc(var(--ph) * .69); right: calc(var(--pw) - 222px); padding: 20px 16px 12px; }
-  .quote-note blockquote { font-size: 1.2rem; }
   .spread-print { margin-left: -64px; width: min(100%, 250px); }
   .spread--flip .spread-print { margin: 30px -64px 0 0; }
 }
@@ -901,8 +911,7 @@ a.scrap-pic { cursor: zoom-in; }
   .note-me { flex-direction: row-reverse; left: 63%; top: 40.5%; rotate: -4deg; }
   .note-me .arr { --a: 195deg; margin: 0 2px 0 0; }
   .note-plane { top: 50.5%; }
-  .hero-text { grid-row: 4; padding: 124px 0 0; }
-  .quote-note { top: calc(var(--ph) * .935); right: auto; left: 2%; width: min(250px, 72%); --r: -3deg; }
+  .hero-text { grid-row: 4; padding: 34px 0 0; }
   .sticker { font-size: .6875rem; padding: 8px 12px 7px; }
   .sticker:nth-child(1) { --r: -6deg; top: calc(var(--ph) * .6); right: auto; left: 59%; }
   .sticker:nth-child(2) { top: calc(var(--ph) * .9); right: -6px; }
@@ -970,7 +979,3 @@ a.scrap-pic { cursor: zoom-in; }
   .nav-links a { padding: 8px 5px; }
 }
 
-/* small tablets: keep "Red Bull powered" off the quote note's caption */
-@media (min-width: 761px) and (max-width: 900px) {
-  .sticker:nth-child(2) { top: calc(var(--ph) * .955); }
-}

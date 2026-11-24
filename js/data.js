@@ -479,9 +479,12 @@ window.PORTFOLIO = {
     next: "FAA Part 107, so I can do more with the drone.",
   },
 
-  // Two sayings: the first runs in the terminal card in "Off the clock", the second is
-  // the sign-off at the very bottom of the page.
+  // Sayings. `terminal` runs in the terminal card in "Off the clock"; `signoff` is the
+  // sign-off at the very bottom of the page.
   sayings: {
+    // My favorite quote. It gets its own moment between "How I learn" and "Off the clock".
+    favorite: "The quieter you become, the more you are able to hear.",
+    favoriteSource: "Kali Linux motto",
     terminal: "The quieter you become, the more you are able to hear.",
     signoff: "Blue skies and tailwinds",
   },
