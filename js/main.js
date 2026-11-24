@@ -259,6 +259,7 @@
   (function life() {
     const F = D.life || {};
     const ph = F.philosophy || {}, fuel = F.fuel || {};
+    const quiet = (D.sayings || {}).terminal;
     const ARR = '<svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg>';
 
     // A spread: one big photo, one taped-on print, and a bit of text.
@@ -371,12 +372,14 @@
     $("#lifeTiles").innerHTML = [
       `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote><p class="tile-text">${t(ph.note)}</p></div>`,
       `<div class="tile tile--fuel" id="fuel"><p class="tile-label">${t(fuel.title)}</p>${gauge}<p class="tile-text">${t(fuel.text)}</p>${kofi ? `<a class="btn btn-fuel" href="${esc(kofi)}" target="_blank" rel="noopener">${t(fuel.cta)}<span aria-hidden="true">&nbsp;↗</span></a>` : ""}</div>`,
-      `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux">
+      `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux${quiet ? `, and the saying: ${t(quiet)}` : ""}">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="term-body" aria-hidden="true">
           <p><span class="p">$</span> cat /etc/os-release | head -1</p>
           <p>NAME="Arch Linux"</p>
-          <p><span class="p">$</span> <span class="c"># btw</span><span class="cursor"></span></p>
+          <p><span class="p">$</span> <span class="c"># btw</span></p>
+          ${quiet ? `<p><span class="p">$</span> fortune</p><p class="q">${m(quiet)}</p>` : ""}
+          <p><span class="p">$</span> <span class="cursor"></span></p>
         </div>
         <p class="term-cap" aria-hidden="true">LUKS + btrfs · Hyprland · Waybar · Quickshell</p>
       </div>`,
@@ -455,6 +458,72 @@
   $("#socials").innerHTML = P.socials.filter(s => !/ko-?fi/i.test(s.label)).map(s =>
     `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${t(s.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("");
   $("#year").textContent = new Date().getFullYear();
+  if ((D.sayings || {}).signoff) $("#signoff").textContent = smart(D.sayings.signoff);
+
+  /* ---------- quiet: dim the page and decode the quote ---------- */
+  (function quiet() {
+    const sec = $("#quiet"), q = $("#quietQ"), hush = $("#hush");
+    if (!sec || !q || !hush) return;
+    const S = D.sayings || {};
+    const text = S.favorite || q.textContent.trim();
+    if (S.favoriteSource) $("#quietCap").textContent = straight(S.favoriteSource);
+    q.setAttribute("aria-label", smart(text));
+
+    // One span per character, grouped into words so lines only break between words.
+    let n = 0;
+    const words = straight(text).split(" ");
+    q.innerHTML = words.map((w, wi) =>
+      `<span class="w${wi === words.length - 1 ? " hear" : ""}" aria-hidden="true">${[...w].map(ch => `<span class="c" data-i="${n++}">${esc(ch)}</span>`).join("")}</span>`
+    ).join(" ");
+    const cells = $$(".c", q);
+    const real = cells.map(c => c.textContent);
+    // Letters settle in a scrambled (but fixed) order.
+    const order = cells.map((_, i) => i);
+    let seed = 7;
+    for (let i = order.length - 1; i > 0; i--) {
+      seed = (seed * 9301 + 49297) % 233280;
+      const j = Math.floor(seed / 233280 * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    const rank = new Array(order.length);
+    order.forEach((cellIndex, r) => { rank[cellIndex] = r; });
+    const HEX = "0123456789abcdef";
+    const noise = () => HEX[Math.floor(Math.random() * 16)];
+
+    let level = 0, shown = REDUCED ? cells.length : -1, timer = null;
+    function paint(reroll) {
+      const target = REDUCED ? cells.length : Math.round(Math.min(1, Math.max(0, (level - .12) / .7)) * cells.length);
+      if (target === shown && !reroll) return;
+      shown = target;
+      cells.forEach((c, i) => {
+        if (rank[i] < target) { if (c.classList.contains("n") || c.textContent !== real[i]) { c.textContent = real[i]; c.classList.remove("n"); } }
+        else { c.textContent = noise(); c.classList.add("n"); }
+      });
+    }
+    function flicker(on) {
+      if (on && !timer && !REDUCED) timer = setInterval(() => paint(true), 90);
+      if (!on && timer) { clearInterval(timer); timer = null; }
+    }
+    function update() {
+      const r = sec.getBoundingClientRect(), vh = innerHeight;
+      const d = Math.abs(r.top + r.height / 2 - vh / 2);
+      let h = Math.min(1, Math.max(0, (1 - d / (vh * .62)) * 1.7));
+      h = h * h * (3 - 2 * h);                         // ease in and out
+      level = h;
+      document.documentElement.style.setProperty("--hush", h.toFixed(3));
+      hush.hidden = h < .005;
+      paint(false);
+      flicker(r.bottom > 0 && r.top < vh && shown < cells.length);
+    }
+    let ticking = false;
+    addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { ticking = false; update(); });
+    }, { passive: true });
+    addEventListener("resize", update);
+    update();
+  })();
 
   /* ---------- nav: which section am I in ---------- */
   const navLinks = $$(".nav-links a");
