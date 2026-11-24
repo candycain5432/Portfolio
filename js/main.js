@@ -259,6 +259,7 @@
   (function life() {
     const F = D.life || {};
     const ph = F.philosophy || {}, fuel = F.fuel || {};
+    const quiet = (D.sayings || {}).terminal;
     const ARR = '<svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg>';
 
     // A spread: one big photo, one taped-on print, and a bit of text.
@@ -371,12 +372,14 @@
     $("#lifeTiles").innerHTML = [
       `<div class="tile tile--quote"><p class="tile-label">Philosophy</p><blockquote>${t(ph.quote)}</blockquote><p class="tile-text">${t(ph.note)}</p></div>`,
       `<div class="tile tile--fuel" id="fuel"><p class="tile-label">${t(fuel.title)}</p>${gauge}<p class="tile-text">${t(fuel.text)}</p>${kofi ? `<a class="btn btn-fuel" href="${esc(kofi)}" target="_blank" rel="noopener">${t(fuel.cta)}<span aria-hidden="true">&nbsp;↗</span></a>` : ""}</div>`,
-      `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux">
+      `<div class="tile tile--term" role="img" aria-label="A terminal showing that this computer runs Arch Linux${quiet ? `, and the saying: ${t(quiet)}` : ""}">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="term-body" aria-hidden="true">
           <p><span class="p">$</span> cat /etc/os-release | head -1</p>
           <p>NAME="Arch Linux"</p>
-          <p><span class="p">$</span> <span class="c"># btw</span><span class="cursor"></span></p>
+          <p><span class="p">$</span> <span class="c"># btw</span></p>
+          ${quiet ? `<p><span class="p">$</span> fortune</p><p class="q">${m(quiet)}</p>` : ""}
+          <p><span class="p">$</span> <span class="cursor"></span></p>
         </div>
         <p class="term-cap" aria-hidden="true">LUKS + btrfs · Hyprland · Waybar · Quickshell</p>
       </div>`,
@@ -455,6 +458,7 @@
   $("#socials").innerHTML = P.socials.filter(s => !/ko-?fi/i.test(s.label)).map(s =>
     `<li><a href="${esc(s.href)}" target="_blank" rel="noopener">${t(s.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("");
   $("#year").textContent = new Date().getFullYear();
+  if ((D.sayings || {}).signoff) $("#signoff").textContent = smart(D.sayings.signoff);
 
   /* ---------- nav: which section am I in ---------- */
   const navLinks = $$(".nav-links a");

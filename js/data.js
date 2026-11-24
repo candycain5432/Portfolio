@@ -479,6 +479,13 @@ window.PORTFOLIO = {
     next: "FAA Part 107, so I can do more with the drone.",
   },
 
+  // Two sayings: the first runs in the terminal card in "Off the clock", the second is
+  // the sign-off at the very bottom of the page.
+  sayings: {
+    terminal: "The quieter you become, the more you are able to hear.",
+    signoff: "Blue skies and tailwinds",
+  },
+
   // "Off the clock".
   life: {
     mtb: {
