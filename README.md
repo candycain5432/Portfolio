@@ -44,6 +44,9 @@ The personal sections are also in `data.js`, below the projects:
   one, the second the taped-on print), the head unit swap (`life.car.steps`: before / during /
   after, where "before" is a pencil sketch until it gets a `src`), the philosophy quote, and
   the Red Bull fuel gauge.
+- `animation`: the 3D animation section. Each video is a YouTube id, a still and a label; the
+  first is the big one. Clicking a still plays the video on the page (nothing loads from
+  YouTube until then).
 - `scrapbook`: photos taped into a sketchbook. `tools/scrapbook-photo.py` gets a phone photo
   ready (HEIC, colours, crop, and it strips the GPS location) and prints the line to paste in;
   the README in `assets/img/scrapbook/` walks through it.

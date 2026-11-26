@@ -633,6 +633,22 @@ window.PORTFOLIO = {
     fuel: { title: "Fuel", text: "Runs on Red Bull. Currently running low.", cta: "Refuel me on Ko-fi" },
   },
 
+  /* "3D animation". Each video: a YouTube id, a still from it, and a label. The first is
+     the big one; clicking a still plays the video right on the page. */
+  animation: {
+    note: "frame by frame",
+    title: "Lap one",
+    text:
+      "A short 3D animation: an anime character climbs into a Ferrari F1 car, number 44, " +
+      "and gets ready to go. The behind-the-scenes video shows how it came together.",
+    videos: [
+      { id: "bQb5prJPHbs", label: "Main animation", still: "assets/img/anim-cockpit.webp",
+        alt: "A 3D-rendered anime character with orange eyes and brown hair sitting in the cockpit of a white and red F1 car, under the halo" },
+      { id: "2WS8rFkJavA", label: "Behind the scenes", still: "assets/img/anim-car-sm.webp",
+        alt: "A 3D render of the anime character in the white and red number 44 Ferrari F1 car, seen from the side" },
+    ],
+  },
+
   /* "Scrapbook": photos from life, taped into a sketchbook.
      To add one, run it through tools/scrapbook-photo.py (it makes both files below,
      handles iPhone HEIC photos and strips the GPS location), then paste the line it
