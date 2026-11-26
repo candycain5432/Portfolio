@@ -442,7 +442,7 @@ window.PORTFOLIO = {
      ====================================================================== */
 
   // Stickers stuck around the top of the page (visitors can drag them around).
-  stickers: ["Arch btw", "Red Bull powered", "RDU plane spotter", "Part 61 soon", "Philosophy nerd"],
+  stickers: ["Arch btw", "Red Bull powered", "RDU plane spotter", "Part 61 soon", "Philosophy nerd", "3D animation"],
 
   // The scrolling strip under the top section.
   marquee: [
