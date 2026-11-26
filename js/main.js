@@ -399,6 +399,58 @@
     io.observe($("#fuel"));
   })();
 
+  /* ---------- 3D animation ---------- */
+  (function animation() {
+    const A = D.animation, el = $("#anim");
+    if (!A || !el) return;
+    const vids = A.videos || [];
+    $("#animNote").textContent = smart(A.note || "");
+    const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg>';
+    const YT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9L15.5 12z"/></svg>';
+    const watch = v => "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id);
+    const still = (v, label) => `
+      <div class="vid" data-yt="${esc(v.id)}" data-title="${t(v.label)}">
+        <img src="${esc(v.still)}" alt="${t(v.alt || v.label)}" loading="lazy" decoding="async">
+        <button class="play" type="button" aria-label="Play ${t(v.label)}">
+          <span class="play-btn">${PLAY}</span>${label ? `<span class="play-label">${t(label)}</span>` : ""}
+        </button>
+      </div>`;
+    const main = vids[0], bts = vids[1];
+    el.innerHTML = `
+      ${main ? `<div class="viewport">
+        <div class="vp-bar" aria-hidden="true"><span class="vp-rec">Render</span><span class="grow">${m(main.label)}</span><span class="dim">1920 × 1080</span></div>
+        ${still(main, "hit play")}
+        <div class="timeline" aria-hidden="true">
+          <span class="key" style="left:6%"></span><span class="key" style="left:23%"></span><span class="key" style="left:41%"></span>
+          <span class="key" style="left:58%"></span><span class="key" style="left:77%"></span><span class="key" style="left:94%"></span>
+          <span class="playhead"></span>
+        </div>
+      </div>` : ""}
+      <div class="anim-side">
+        <div>
+          <p class="tile-label">${main ? m(main.label) : ""}</p>
+          <h3 class="anim-title">${t(A.title)}</h3>
+          <p class="anim-text">${t(A.text)}</p>
+          <ul class="yt-links">${vids.map(v => `<li><a href="${watch(v)}" target="_blank" rel="noopener">${YT}${t(v.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("")}</ul>
+        </div>
+        ${bts ? `<figure class="filmstrip">${still(bts)}<figcaption><span>${m(bts.label)}</span><span aria-hidden="true">▸ BTS</span></figcaption></figure>` : ""}
+      </div>`;
+
+    // Click a still to load the YouTube player in its place (nothing loads from YouTube until then).
+    el.addEventListener("click", e => {
+      const btn = e.target.closest(".play");
+      if (!btn) return;
+      const box = btn.closest(".vid");
+      const f = document.createElement("iframe");
+      f.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(box.dataset.yt)}?autoplay=1&rel=0`;
+      f.title = box.dataset.title;
+      f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      f.allowFullscreen = true;
+      box.replaceChildren(f);
+      f.focus();
+    });
+  })();
+
   /* ---------- scrapbook ---------- */
   (function scrapbook() {
     const CAM = '<svg class="scrap-cam" viewBox="0 0 64 48" aria-hidden="true"><path d="M6.4 15c-.2-2.7 1.8-4.6 4.4-4.6h8.4l3.5-5.4h19.6l3.3 5.5 8.5-.1c2.7 0 4.6 1.9 4.5 4.6l-.4 24.4c0 2.5-2 4.3-4.5 4.2H10.6c-2.5.1-4.4-1.8-4.3-4.3z"/><circle cx="32.2" cy="26.4" r="10.6"/><circle cx="32" cy="26.2" r="5"/><path d="M49.6 16.8h3.4"/></svg>';
