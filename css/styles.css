@@ -333,6 +333,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 .sticker:nth-child(3) { --r: -4deg; top: calc(var(--ph) * .64); right: calc(var(--pw) - 48px); background: var(--c-ai); }
 .sticker:nth-child(4) { --r: 9deg; top: calc(var(--ph) * -.015); right: -22px; background: var(--yellow); }
 .sticker:nth-child(n + 5) { --r: -5deg; top: calc(var(--ph) * .42); right: -34px; background: var(--c-games); }
+.sticker:nth-child(6) { --r: 5deg; top: calc(var(--ph) * .79); right: calc(var(--pw) - 70px); background: var(--c-web); }
 
 /* ---------- marquee ---------- */
 .marquee-clip { overflow: hidden; padding: 28px 0; margin: -28px 0; }
@@ -1211,6 +1212,7 @@ a.scrap-pic { cursor: zoom-in; }
   .sticker:nth-child(3) { top: calc(var(--ph) * .76); right: auto; left: 4%; }
   .sticker:nth-child(4) { top: calc(var(--ph) * .015); right: -6px; }
   .sticker:nth-child(5) { top: calc(var(--ph) * .47); right: -6px; }
+  .sticker:nth-child(6) { --r: 4deg; top: calc(var(--ph) * .63); right: auto; left: -6px; }
 }
 
 @media (max-width: 720px) {
