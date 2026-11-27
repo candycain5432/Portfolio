@@ -405,7 +405,8 @@ window.PORTFOLIO = {
         "FAA Part 61 pilot certificate planned",
       ],
       stack: ["Canon T3i", "Panasonic FZ1000", "DJI Mini 3 Pro"],
-      related: ["exposure", "family-photos"], links: [],
+      related: ["exposure", "family-photos"],
+      links: [{ label: "williamcainphotos.com", href: "https://williamcainphotos.com" }],
     },
   ],
 
@@ -435,6 +436,12 @@ window.PORTFOLIO = {
       { src: "assets/img/delta-a319.jpg", caption: "Delta A319" },
     ],
     note: "I'm working toward my FAA Part 61 pilot certificate, so one day I'll be on the other side of the lens.",
+    // The button under the photos that goes to the full photo site.
+    more: {
+      href: "https://williamcainphotos.com",
+      label: "See every frame",
+      note: "These are just a few. The whole camera roll lives on my photo site.",
+    },
   },
 
   /* ======================================================================

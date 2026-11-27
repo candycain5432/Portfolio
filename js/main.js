@@ -123,6 +123,7 @@
         <p class="mini-tag">${t(p.tagline)}</p>
         <p class="mini-blurb">${t(p.blurb)}</p>
         <p class="mini-stack">${(p.stack || []).map(m).join(" · ")}</p>
+        ${(p.links || []).length ? `<p class="mini-links">${p.links.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${m(l.label)}<span aria-hidden="true">&nbsp;↗</span></a>`).join(" · ")}</p>` : ""}
       </article>`;
     }).join("");
 
@@ -505,6 +506,13 @@
       <figcaption><span class="n">${pad(n + 1)}</span>${t(s.caption)}</figcaption>
     </figure>`).join("") +
     (PH.note ? `<div class="postit"><p class="postit-label">Next up</p><p class="hand">${t(PH.note)}</p></div>` : "");
+  if (PH.more?.href) {
+    const more = $("#photoMore");
+    more.hidden = false;
+    more.innerHTML = `${PH.more.note ? `<p class="hand">${t(PH.more.note)}</p>` : ""}
+      <a class="btn btn-fuel btn-big" href="${esc(PH.more.href)}" target="_blank" rel="noopener">${t(PH.more.label || "See more photos")}<span aria-hidden="true">&nbsp;↗</span></a>
+      <span class="photo-more-url">${esc(PH.more.href.replace(/^https?:\/\//, "").replace(/\/$/, ""))}</span>`;
+  }
 
   /* ---------- contact ---------- */
   $("#socials").innerHTML = P.socials.filter(s => !/ko-?fi/i.test(s.label)).map(s =>
