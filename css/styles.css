@@ -1146,7 +1146,8 @@ a.scrap-pic { cursor: zoom-in; }
 /* a soft shadow so the dial lifts off the blurred page */
 .gauge-face { filter: drop-shadow(0 24px 30px rgb(21 32 43 / .28)); }
 .dial-x {
-  position: fixed; top: 14px; right: 16px;
+  position: fixed; top: 14px; right: 16px; margin: 0; padding: 0; box-sizing: border-box;
+  display: grid; place-items: center;
   width: 44px; height: 44px;
   border: 2px solid var(--ink); border-radius: 50%;
   background: var(--paper); color: var(--ink);
