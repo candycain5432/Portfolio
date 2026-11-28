@@ -1113,6 +1113,36 @@ a.scrap-pic { cursor: zoom-in; }
 .photo-more .hand { flex-basis: 100%; margin: 0; font-size: clamp(1.4rem, 2.2vw, 1.75rem); color: var(--ink-2, var(--ink)); rotate: -1.5deg; }
 .photo-more-url { font: .75rem/1 var(--mono); letter-spacing: .08em; color: var(--ink-3); }
 
+/* ---------- open for commissions ---------- */
+.live-dot { flex: none; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #1fa34f; box-shadow: 0 0 0 3px rgb(31 163 79 / .22); }
+@media (prefers-reduced-motion: no-preference) { .live-dot { animation: pulse 2s ease-in-out infinite; } }
+@keyframes pulse { 50% { box-shadow: 0 0 0 6px rgb(31 163 79 / 0); } }
+.nav-open {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-left: 6px; padding: 7px 12px;
+  border: 1.5px solid rgb(31 163 79 / .45); border-radius: 999px;
+  background: rgb(31 163 79 / .08);
+  font: 700 .75rem/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #136b35;
+  text-decoration: none; white-space: nowrap;
+}
+.nav-open:hover { background: rgb(31 163 79 / .16); }
+@media (max-width: 1240px) { .nav-open { display: none; } }
+
+.anim-commish { margin: 18px 0 0; font-size: 1.35rem; color: var(--orange-deep); rotate: -1.5deg; transform-origin: left; }
+.anim-commish a { text-decoration: underline wavy var(--orange); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+
+.commish {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px 24px;
+  max-width: 980px; margin: 30px 0 0; padding: 18px 22px;
+  border: 2px dashed rgb(21 32 43 / .35); border-radius: 18px;
+  background: rgb(255 253 248 / .6);
+}
+.commish-badge { display: inline-flex; align-items: center; gap: 9px; margin: 0; font: 800 .8125rem/1 var(--mona); font-stretch: 115%; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.commish-text { margin: 0; color: var(--ink-2); font-size: .9688rem; }
+@media (max-width: 860px) {
+  .commish { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+}
+
 /* ---------- contact ---------- */
 .contact { padding-bottom: clamp(88px, 10vw, 150px); }
 .title--huge { font-size: clamp(4.5rem, 16vw, 14rem); line-height: .82; }

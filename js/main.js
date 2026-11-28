@@ -37,7 +37,7 @@
   $("#headline").textContent = smart(P.headline);
   $("#intro").textContent = smart(P.blurb);
   $$("[data-email]").forEach(a => {
-    a.href = "mailto:" + P.email;
+    a.href = "mailto:" + P.email + (a.dataset.subject ? "?subject=" + encodeURIComponent(a.dataset.subject) : "");
     if (a.hasAttribute("data-email-text")) a.textContent = P.email;
   });
   if (kofi) $$("[data-kofi]").forEach(a => { a.href = kofi; });
@@ -433,6 +433,7 @@
           <h3 class="anim-title">${t(A.title)}</h3>
           <p class="anim-text">${t(A.text)}</p>
           <ul class="yt-links">${vids.map(v => `<li><a href="${watch(v)}" target="_blank" rel="noopener">${YT}${t(v.label)}<span aria-hidden="true">&nbsp;↗</span></a></li>`).join("")}</ul>
+          <p class="hand anim-commish">want something animated? <a href="#contact">commissions are open</a></p>
         </div>
         ${bts ? `<figure class="filmstrip">${still(bts)}<figcaption><span>${m(bts.label)}</span><span aria-hidden="true">▸ BTS</span></figcaption></figure>` : ""}
       </div>`;
