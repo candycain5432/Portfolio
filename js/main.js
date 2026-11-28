@@ -662,7 +662,7 @@
     if (!dlg || !btn || !gauge || !items.length || typeof dlg.showModal !== "function") return;
     const N = items.length, STEP = 360 / N;
     const needle = $("#dialNeedle"), name = $("#dialName"), labels = $("#dialLabels");
-    const mini = $(".mini-needle", btn);
+    const mini = $(".mini-needle", btn), closeX = $(".dial-x", dlg);
 
     // tick marks: a long one at every section, short ones between
     const ticks = (n, r, long, short) => Array.from({ length: n }, (_, k) => {
@@ -708,6 +708,8 @@
       const b = btn.getBoundingClientRect(), g = gauge.getBoundingClientRect();
       gauge.style.setProperty("--fx", (b.left + b.width / 2 - (g.left + g.width / 2)) + "px");
       gauge.style.setProperty("--fy", (b.top + b.height / 2 - (g.top + g.height / 2)) + "px");
+      // the ✕ sits exactly where the little gauge was, so the button seems to turn into it
+      Object.assign(closeX.style, { left: b.left + "px", top: b.top + "px", right: "auto", width: b.width + "px", height: b.height + "px" });
       gauge.focus({ preventScroll: true });
     }
     function shut(then) {
