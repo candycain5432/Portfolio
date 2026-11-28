@@ -92,7 +92,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 84px;
 }
-html:has(dialog[open]) { overflow: hidden; }
+html:has(.viewer[open]) { overflow: hidden; }
 
 body {
   margin: 0;
@@ -561,6 +561,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: .2em;
 }
 .quiet {
   position: relative; z-index: 46;
+  pointer-events: none;
   display: grid; place-items: center;
   min-height: 100vh; min-height: 100svh;
   margin-top: clamp(40px, 6vw, 80px);
@@ -1123,7 +1124,8 @@ a.scrap-pic { cursor: zoom-in; }
     border: 0; background: none; cursor: pointer;
     transition: rotate .3s var(--pop);
   }
-  .dial-btn:hover { rotate: -10deg; }
+  .dial-btn { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  @media (hover: hover) { .dial-btn:hover { rotate: -10deg; } }
 }
 .dial-btn svg { display: block; width: 100%; height: 100%; }
 .mini-face { fill: var(--paper); stroke: var(--ink); stroke-width: 2.2; }
@@ -1139,6 +1141,7 @@ a.scrap-pic { cursor: zoom-in; }
   background: transparent;
 }
 .dial[open] { display: grid; }
+.dial { touch-action: none; overscroll-behavior: contain; }
 .dial::backdrop { background: rgb(255 253 248 / .28); -webkit-backdrop-filter: blur(14px) saturate(120%); backdrop-filter: blur(14px) saturate(120%); }
 /* a soft shadow so the dial lifts off the blurred page */
 .gauge-face { filter: drop-shadow(0 24px 30px rgb(21 32 43 / .28)); }
@@ -1149,7 +1152,7 @@ a.scrap-pic { cursor: zoom-in; }
   background: var(--paper); color: var(--ink);
   font: 700 1rem/1 var(--mona); cursor: pointer;
 }
-.dial-x:hover { background: var(--ink); color: var(--paper); }
+@media (hover: hover) { .dial-x:hover { background: var(--ink); color: var(--paper); } }
 
 .gauge {
   --s: min(86vw, 58vh, 440px);
@@ -1186,7 +1189,8 @@ a.scrap-pic { cursor: zoom-in; }
   transition: color .2s, background-color .2s;
 }
 .dial-label small { font: 700 2.6cqi/1 var(--mono); color: var(--ink-3); letter-spacing: .08em; }
-.dial-label:hover, .dial-label.on { color: var(--orange-deep); }
+.dial-label.on { color: var(--orange-deep); }
+@media (hover: hover) { .dial-label:hover { color: var(--orange-deep); } }
 .dial-label.on small { color: var(--orange-deep); }
 .dial-label[aria-current]::after {
   content: ""; justify-self: center; width: 5px; height: 5px; margin-top: 3px; border-radius: 50%; background: var(--ink);
