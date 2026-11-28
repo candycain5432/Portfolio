@@ -726,7 +726,7 @@
       }), REDUCED ? 0 : 480);
     }
 
-    btn.addEventListener("click", open);
+    btn.addEventListener("click", () => { if (!dlg.open) open(); });
     labels.addEventListener("click", e => {
       const a = e.target.closest(".dial-label");
       if (!a) return;
