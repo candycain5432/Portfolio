@@ -42,9 +42,14 @@
         <a href="#work">Work</a>
         <a href="#learning">Learning</a>
         <a href="#life">Life</a>
+        <a href="#animation">3D</a>
         <a href="#photos">Photos</a>
         <a href="#contact">Contact</a>
       </nav>
+      <button class="fan-trigger" type="button" id="fanOpen" aria-haspopup="dialog" aria-controls="fan">
+        <span class="fan-stack" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="fan-word hand">menu</span>
+      </button>
       <a class="btn btn-fuel nav-fuel" data-kofi href="https://ko-fi.com/williamcain" target="_blank" rel="noopener">Buy me a Red Bull<span aria-hidden="true">&nbsp;↗</span></a>
     </div>
   </header>
@@ -250,6 +255,11 @@
       <p>Set in Mona Sans, Source Serif, Gochi Hand and B612 Mono (the typeface Airbus commissioned for its cockpit displays).</p>
     </div>
   </footer>
+
+  <!-- Small-screen menu: a hand of polaroids, one per section -->
+  <dialog class="fan" id="fan" aria-label="Sections">
+    <div class="fan-hand" id="fanHand"></div>
+  </dialog>
 
   <!-- Photo viewer -->
   <dialog class="viewer" id="viewer" aria-label="Photo viewer">

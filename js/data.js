@@ -583,6 +583,18 @@ window.PORTFOLIO = {
 
   // Sayings. `terminal` runs in the terminal card in "Off the clock"; `signoff` is the
   // sign-off at the very bottom of the page.
+  // The menu on small screens: a hand of polaroids. `id` is the section it jumps to.
+  menu: [
+    { id: "work", label: "Work", photo: "assets/img/scrapbook/pysino.webp" },
+    { id: "learning", label: "How I learn", photo: "assets/img/scrapbook/kali-cat.webp" },
+    { id: "philosophy", label: "Philosophy", photo: "assets/img/scrapbook/arches-raw.webp" },
+    { id: "life", label: "Off the clock", photo: "assets/img/mtb-jump.webp" },
+    { id: "animation", label: "3D animation", photo: "assets/img/anim-cockpit-sm.webp" },
+    { id: "scrapbook", label: "Scrapbook", photo: "assets/img/scrapbook/friends.webp" },
+    { id: "photos", label: "Planes", photo: "assets/img/breeze-a220.jpg" },
+    { id: "contact", label: "Say hi", photo: "assets/img/scrapbook/winglet.webp" },
+  ],
+
   sayings: {
     // My favorite quote. It gets its own moment between "How I learn" and "Off the clock".
     favorite: "The quieter you become, the more you are able to hear.",

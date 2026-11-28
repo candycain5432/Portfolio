@@ -1113,6 +1113,122 @@ a.scrap-pic { cursor: zoom-in; }
 .photo-more .hand { flex-basis: 100%; margin: 0; font-size: clamp(1.4rem, 2.2vw, 1.75rem); color: var(--ink-2, var(--ink)); rotate: -1.5deg; }
 .photo-more-url { font: .75rem/1 var(--mono); letter-spacing: .08em; color: var(--ink-3); }
 
+/* ---------- small-screen menu: a hand of polaroids ---------- */
+.fan-trigger { display: none; }
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .fan-trigger {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-left: auto; padding: 6px 4px 6px 8px;
+    border: 0; background: none; cursor: pointer;
+  }
+}
+.fan-stack { position: relative; width: 34px; height: 36px; }
+.fan-stack i {
+  position: absolute; inset: 2px 4px;
+  background: #fff; border: 1.5px solid var(--ink); border-radius: 2px;
+  box-shadow: inset 0 -9px 0 #fff, inset 0 0 0 3px #fff, inset 0 0 0 40px var(--c-ai);
+  transition: rotate .25s var(--pop), translate .25s var(--pop);
+}
+.fan-stack i:nth-child(1) { rotate: -16deg; box-shadow: inset 0 -9px 0 #fff, inset 0 0 0 3px #fff, inset 0 0 0 40px var(--c-web); }
+.fan-stack i:nth-child(2) { rotate: 8deg; box-shadow: inset 0 -9px 0 #fff, inset 0 0 0 3px #fff, inset 0 0 0 40px var(--orange); }
+.fan-trigger:hover .fan-stack i:nth-child(1) { rotate: -28deg; translate: -4px 0; }
+.fan-trigger:hover .fan-stack i:nth-child(2) { rotate: 18deg; translate: 4px 0; }
+.fan-word { font-size: 1.3rem; color: var(--ink); rotate: -4deg; }
+
+.fan {
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; padding: 0; border: 0;
+  background: transparent; overflow: hidden;
+}
+.fan::backdrop { background: rgb(21 32 43 / .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+@media (prefers-reduced-motion: no-preference) {
+  .fan[open]::backdrop { animation: fade-in .3s ease; }
+  .fan.closing::backdrop { opacity: 0; transition: opacity .3s; }
+}
+@keyframes fade-in { from { opacity: 0; } }
+
+/* two rows of four, each row an arc of overlapping cards, then the "never mind" card */
+.fan-hand {
+  --w: min(24.5vw, 168px);
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, var(--w));
+  justify-content: center; align-content: center;
+  column-gap: calc(var(--w) * -.12); row-gap: 26px;
+  padding: 70px 10px 30px;
+}
+.fan-card {
+  position: relative;
+  display: block;
+  width: var(--w);
+  margin: 0; padding: 7px 7px 0;
+  border: 0; border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 18px 30px -16px rgb(0 0 0 / .55), 0 0 0 1px rgb(21 32 43 / .08);
+  color: var(--ink); text-decoration: none; font: inherit; cursor: pointer;
+  rotate: var(--r, 0deg);
+  translate: 0 var(--y, 0px);
+  z-index: var(--z, 1);
+  transition: rotate .25s var(--pop), translate .25s var(--pop), scale .25s var(--pop);
+}
+/* the arc: outer cards tilt out and drop a little, like a hand of cards */
+.fan-card:nth-child(4n + 1) { --r: -14deg; --y: 22px; --z: 1; }
+.fan-card:nth-child(4n + 2) { --r: -5deg; --y: 4px; --z: 2; }
+.fan-card:nth-child(4n + 3) { --r: 5deg; --y: 4px; --z: 3; }
+.fan-card:nth-child(4n + 4) { --r: 14deg; --y: 22px; --z: 4; }
+.fan-card::before {
+  content: ""; position: absolute; top: 0; left: 50%; z-index: 1;
+  width: 46%; height: 16px; translate: -50% -55%; rotate: -4deg;
+  background: rgb(255 238 160 / .85);
+}
+.fan-card:nth-child(even)::before { background: rgb(255 200 221 / .85); rotate: 5deg; }
+.fan-pic { display: block; aspect-ratio: 1; overflow: hidden; background: #efe9dc; }
+.fan-pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fan-label { display: block; padding: 6px 1px 9px; font: clamp(.9rem, 3.5vw, 1.2rem)/1.05 var(--hand); overflow-wrap: anywhere; }
+.fan-label .n { display: block; margin-bottom: 3px; font: .5625rem/1 var(--mono); color: var(--ink-3); }
+.fan-card:hover, .fan-card:focus-visible { rotate: 0deg; translate: 0 -12px; scale: 1.08; z-index: 10; }
+.fan-card:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+/* the section you're in: raised, with a pen circle round its label */
+.fan-card.here { translate: 0 calc(var(--y) - 14px); z-index: 9; }
+.fan-card.here .fan-label { position: relative; }
+.fan-card.here .fan-label::after {
+  content: ""; position: absolute; inset: 9px -5px 2px -5px;
+  border: 2px solid #d6332a; border-radius: 50% 46% 52% 44% / 60% 50% 56% 48%;
+  rotate: -3deg;
+}
+/* the "never mind" card sits on its own row, smaller, a blank print */
+.fan-close { grid-column: 2 / span 2; justify-self: center; width: max(118px, calc(var(--w) * .9)); --r: 3deg; --y: 6px; }
+.fan-close .fan-pic { aspect-ratio: 4 / 3; background: repeating-linear-gradient(-45deg, #f4efe4 0 8px, #ebe4d5 8px 9px); }
+.fan-close .fan-label { text-align: center; white-space: nowrap; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* dealt out of the menu button, one after another */
+  .fan.dealt .fan-card { animation: deal .55s var(--pop) both; animation-delay: calc(var(--i) * 40ms); }
+  @keyframes deal { from { transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(.15) rotate(30deg); opacity: 0; } }
+  /* gathered back into the button */
+  .fan.closing .fan-card { animation: gather .32s ease-in both; animation-delay: calc((8 - var(--i)) * 18ms); }
+  @keyframes gather { to { transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(.15) rotate(-20deg); opacity: 0; } }
+  /* the one you picked flies to the middle, the rest fall away */
+  .fan.picking .fan-card:not(.picked) { animation: drop .45s ease-in both; animation-delay: calc(var(--i) * 20ms); }
+  @keyframes drop { to { transform: translateY(70vh) rotate(25deg); opacity: 0; } }
+  .fan.picking .fan-card.picked { animation: pick .5s var(--ease) both; z-index: 20; }
+  @keyframes pick { to { transform: translate(var(--cx, 0px), var(--cy, 0px)) scale(1.6); } }
+}
+
+@media (max-width: 480px) {
+  .fan-hand { --w: 23vw; column-gap: -.6vw; }
+  .fan-label { font-size: 3.4vw; }
+  .fan-card:nth-child(4n + 1) { --r: -10deg; --y: 18px; }
+  .fan-card:nth-child(4n + 4) { --r: 10deg; --y: 18px; }
+}
+
+/* landscape phones: one row of eight */
+@media (max-height: 520px) and (min-width: 560px) {
+  .fan-hand { --w: min(13vw, 120px); grid-template-columns: repeat(8, var(--w)); padding-top: 40px; }
+  .fan-close { grid-column: 4 / span 2; }
+}
+
 /* ---------- open for commissions ---------- */
 .nav-open {
   display: inline-block;
@@ -1256,9 +1372,6 @@ a.scrap-pic { cursor: zoom-in; }
 @media (max-width: 720px) {
   .nav-in { height: 60px; gap: 12px; }
   .brand-name { display: none; }
-  .nav-links { gap: 0; overflow-x: auto; scrollbar-width: none; }
-  .nav-links::-webkit-scrollbar { display: none; }
-  .nav-links a { padding: 8px 9px; font-size: .875rem; }
   .card-top { padding-right: 96px; }
   .stamp { top: 20px; right: 16px; font-size: .75rem; }
   .notebook {
@@ -1305,7 +1418,6 @@ a.scrap-pic { cursor: zoom-in; }
 }
 
 @media (max-width: 420px) {
-  .nav-links a { padding: 8px 7px; font-size: .8125rem; }
   .btn { padding: 13px 18px; }
 }
 
@@ -1315,11 +1427,10 @@ a.scrap-pic { cursor: zoom-in; }
   .marquee-track, .term-body .cursor { animation: none; }
 }
 
-/* very narrow phones: keep all five nav links in view */
+/* very narrow phones: a smaller logo */
 @media (max-width: 380px) {
   .nav-in { gap: 8px; }
   .logo { width: 36px; height: 36px; }
-  .nav-links a { padding: 8px 5px; }
 }
 
 

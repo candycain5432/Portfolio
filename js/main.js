@@ -655,6 +655,81 @@
     update();
   })();
 
+  /* ---------- small-screen menu: a hand of polaroids ---------- */
+  (function fanMenu() {
+    const dlg = $("#fan"), hand = $("#fanHand"), trigger = $("#fanOpen");
+    const items = (D.menu || []).filter(x => document.getElementById(x.id));
+    if (!dlg || !hand || !trigger || !items.length || typeof dlg.showModal !== "function") return;
+
+    hand.innerHTML = items.map((x, i) => `
+      <a class="fan-card" href="#${esc(x.id)}" data-id="${esc(x.id)}" style="--i:${i}">
+        <span class="fan-pic"><img src="${esc(x.photo)}" alt="" loading="lazy" decoding="async"></span>
+        <span class="fan-label"><span class="n">${pad(i + 1)}</span>${t(x.label)}</span>
+      </a>`).join("") +
+      `<button class="fan-card fan-close" type="button" style="--i:${items.length}"><span class="fan-pic"></span><span class="fan-label">✕ never mind</span></button>`;
+    const cards = $$(".fan-card", hand);
+
+    // Where's the trigger relative to each card? The cards fly out from (and back to) there.
+    function aim() {
+      const tr = trigger.getBoundingClientRect();
+      const tx = tr.left + tr.width / 2, ty = tr.top + tr.height / 2;
+      cards.forEach(c => {
+        const r = c.getBoundingClientRect();
+        c.style.setProperty("--fx", (tx - (r.left + r.width / 2)) + "px");
+        c.style.setProperty("--fy", (ty - (r.top + r.height / 2)) + "px");
+        c.style.setProperty("--cx", (innerWidth / 2 - (r.left + r.width / 2)) + "px");
+        c.style.setProperty("--cy", (innerHeight / 2 - (r.top + r.height / 2)) + "px");
+      });
+    }
+    function current() {
+      // the last section whose top has scrolled past 40% of the screen
+      let id = items[0].id;
+      items.forEach(x => { const s = document.getElementById(x.id); if (s.getBoundingClientRect().top < innerHeight * .4) id = x.id; });
+      return id;
+    }
+    function open() {
+      const here = current();
+      cards.forEach(c => c.classList.toggle("here", c.dataset.id === here));
+      dlg.classList.remove("closing", "picking");
+      cards.forEach(c => c.classList.remove("picked"));
+      dlg.showModal();
+      aim();
+      dlg.classList.add("dealt");
+      (cards.find(c => c.dataset.id === here) || cards[0]).focus({ preventScroll: true });
+    }
+    function shut(then) {
+      if (!dlg.open) return;
+      if (REDUCED) { dlg.close(); if (then) then(); return; }
+      dlg.classList.add("closing");
+      setTimeout(() => { dlg.close(); dlg.classList.remove("closing", "dealt", "picking"); if (then) then(); }, 340);
+    }
+    trigger.addEventListener("click", open);
+    hand.addEventListener("click", e => {
+      if (e.target.closest(".fan-close")) return shut(() => trigger.focus());
+      const c = e.target.closest("a.fan-card");
+      if (!c) return;
+      e.preventDefault();
+      const target = document.getElementById(c.dataset.id);
+      const go = () => { target.scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" }); history.replaceState(null, "", "#" + c.dataset.id); };
+      if (REDUCED) { dlg.close(); return go(); }
+      c.classList.add("picked");
+      dlg.classList.add("picking");
+      setTimeout(() => { dlg.close(); dlg.classList.remove("dealt", "picking"); c.classList.remove("picked"); go(); }, 520);
+    });
+    // a tap on the empty backdrop closes it; Esc gathers the cards back too
+    dlg.addEventListener("click", e => { if (e.target === dlg || e.target === hand) shut(() => trigger.focus()); });
+    dlg.addEventListener("cancel", e => { e.preventDefault(); shut(() => trigger.focus()); });
+    // arrow keys move along the fan
+    dlg.addEventListener("keydown", e => {
+      const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (!k) return;
+      e.preventDefault();
+      const i = cards.indexOf(document.activeElement);
+      cards[(i + k + cards.length) % cards.length].focus();
+    });
+    addEventListener("resize", () => { if (dlg.open) aim(); });
+  })();
+
   /* ---------- nav: which section am I in ---------- */
   const navLinks = $$(".nav-links a");
   const sections = navLinks.map(a => document.querySelector(a.hash)).filter(Boolean);
@@ -673,7 +748,7 @@
   (function flight() {
     const box = $(".flight"), planeEl = $("#flightPlane"), stops = $("#flightStops");
     if (!box || !planeEl) return;
-    const labels = { work: "Work", learning: "Learn", life: "Life", photos: "Photos", contact: "Say hi" };
+    const labels = { work: "Work", learning: "Learn", life: "Life", animation: "3D", photos: "Photos", contact: "Say hi" };
     stops.innerHTML = sections.map(s => `<li data-for="${esc(s.id)}">${esc(labels[s.id] || s.id)}</li>`).join("");
     const items = $$("li", stops);
     let marks = [];
