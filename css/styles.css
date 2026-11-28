@@ -1114,18 +1114,19 @@ a.scrap-pic { cursor: zoom-in; }
 .photo-more-url { font: .75rem/1 var(--mono); letter-spacing: .08em; color: var(--ink-3); }
 
 /* ---------- open for commissions ---------- */
-.live-dot { flex: none; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #1fa34f; box-shadow: 0 0 0 3px rgb(31 163 79 / .22); }
-@media (prefers-reduced-motion: no-preference) { .live-dot { animation: pulse 2s ease-in-out infinite; } }
-@keyframes pulse { 50% { box-shadow: 0 0 0 6px rgb(31 163 79 / 0); } }
 .nav-open {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-left: 6px; padding: 7px 12px;
-  border: 1.5px solid rgb(31 163 79 / .45); border-radius: 999px;
-  background: rgb(31 163 79 / .08);
-  font: 700 .75rem/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #136b35;
-  text-decoration: none; white-space: nowrap;
+  display: inline-block;
+  margin-left: 8px; padding: 7px 12px 6px;
+  border: 2px solid var(--ink); border-radius: 999px;
+  background: var(--yellow);
+  box-shadow: 2px 2px 0 var(--ink);
+  font: 800 .6875rem/1 var(--mona); font-stretch: 115%; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  rotate: -3deg;
+  transition: rotate .15s var(--pop), scale .15s var(--pop);
 }
-.nav-open:hover { background: rgb(31 163 79 / .16); }
+.nav-open:hover { rotate: 0deg; scale: 1.06; }
+.commish-plane { flex: none; width: 18px; height: 18px; fill: var(--orange); rotate: 45deg; }
 @media (max-width: 1240px) { .nav-open { display: none; } }
 
 .anim-commish { margin: 18px 0 0; font-size: 1.35rem; color: var(--orange-deep); rotate: -1.5deg; transform-origin: left; }
