@@ -714,8 +714,14 @@
       if (!dlg.open) return;
       const done = () => { dlg.close(); dlg.classList.remove("closing"); if (then) then(); };
       if (REDUCED) return done();
+      if (dlg.classList.contains("closing")) return;
       dlg.classList.add("closing");
-      setTimeout(done, 260);
+      // close on the last frame of the shrink, not on a timer that can land a frame early or late
+      let finished = false;
+      const end = () => { if (!finished) { finished = true; gauge.removeEventListener("animationend", onEnd); done(); } };
+      const onEnd = e => { if (e.target === gauge) end(); };
+      gauge.addEventListener("animationend", onEnd);
+      setTimeout(end, 400);
     }
     function go(i) {
       point(i);
@@ -752,6 +758,9 @@
     // labels included); a press that doesn't is an ordinary tap.
     let drag = null, justDragged = false;
     gauge.addEventListener("dragstart", e => e.preventDefault());
+    // the page behind shouldn't scroll while the dial is up
+    dlg.addEventListener("wheel", e => e.preventDefault(), { passive: false });
+    dlg.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
     gauge.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY, on: false, id: e.pointerId }; });
     gauge.addEventListener("pointermove", e => {
       if (!drag) return;

@@ -92,7 +92,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 84px;
 }
-html:has(dialog[open]) { overflow: hidden; }
+html:has(.viewer[open]) { overflow: hidden; }
 
 body {
   margin: 0;
@@ -1141,6 +1141,7 @@ a.scrap-pic { cursor: zoom-in; }
   background: transparent;
 }
 .dial[open] { display: grid; }
+.dial { touch-action: none; overscroll-behavior: contain; }
 .dial::backdrop { background: rgb(255 253 248 / .28); -webkit-backdrop-filter: blur(14px) saturate(120%); backdrop-filter: blur(14px) saturate(120%); }
 /* a soft shadow so the dial lifts off the blurred page */
 .gauge-face { filter: drop-shadow(0 24px 30px rgb(21 32 43 / .28)); }
