@@ -655,79 +655,131 @@
     update();
   })();
 
-  /* ---------- small-screen menu: a hand of polaroids ---------- */
-  (function fanMenu() {
-    const dlg = $("#fan"), hand = $("#fanHand"), trigger = $("#fanOpen");
+  /* ---------- small-screen menu: an altimeter dial ---------- */
+  (function dialMenu() {
+    const dlg = $("#dial"), btn = $("#dialOpen"), gauge = $("#gauge");
     const items = (D.menu || []).filter(x => document.getElementById(x.id));
-    if (!dlg || !hand || !trigger || !items.length || typeof dlg.showModal !== "function") return;
+    if (!dlg || !btn || !gauge || !items.length || typeof dlg.showModal !== "function") return;
+    const N = items.length, STEP = 360 / N;
+    const needle = $("#dialNeedle"), name = $("#dialName"), labels = $("#dialLabels");
+    const mini = $(".mini-needle", btn);
 
-    hand.innerHTML = items.map((x, i) => `
-      <a class="fan-card" href="#${esc(x.id)}" data-id="${esc(x.id)}" style="--i:${i}">
-        <span class="fan-pic"><img src="${esc(x.photo)}" alt="" loading="lazy" decoding="async"></span>
-        <span class="fan-label"><span class="n">${pad(i + 1)}</span>${t(x.label)}</span>
-      </a>`).join("") +
-      `<button class="fan-card fan-close" type="button" style="--i:${items.length}"><span class="fan-pic"></span><span class="fan-label">✕ never mind</span></button>`;
-    const cards = $$(".fan-card", hand);
+    // tick marks: a long one at every section, short ones between
+    const ticks = (n, r, long, short) => Array.from({ length: n }, (_, k) => {
+      const a = k * 360 / n * Math.PI / 180, major = k % (n / N) === 0;
+      const r2 = r - (major ? long : short);
+      return `<line x1="${(100 + r * Math.sin(a)).toFixed(2)}" y1="${(100 - r * Math.cos(a)).toFixed(2)}" x2="${(100 + r2 * Math.sin(a)).toFixed(2)}" y2="${(100 - r2 * Math.cos(a)).toFixed(2)}" class="${major ? "major" : ""}"/>`;
+    }).join("");
+    $("#dialTicks").innerHTML = ticks(N * 5, 88, 10, 5);
+    $(".mini-ticks", btn).innerHTML = Array.from({ length: N }, (_, k) => {
+      const a = k * STEP * Math.PI / 180;
+      return `<line x1="${(20 + 15 * Math.sin(a)).toFixed(2)}" y1="${(20 - 15 * Math.cos(a)).toFixed(2)}" x2="${(20 + 12 * Math.sin(a)).toFixed(2)}" y2="${(20 - 12 * Math.cos(a)).toFixed(2)}"/>`;
+    }).join("");
 
-    // Where's the trigger relative to each card? The cards fly out from (and back to) there.
-    function aim() {
-      const tr = trigger.getBoundingClientRect();
-      const tx = tr.left + tr.width / 2, ty = tr.top + tr.height / 2;
-      cards.forEach(c => {
-        const r = c.getBoundingClientRect();
-        c.style.setProperty("--fx", (tx - (r.left + r.width / 2)) + "px");
-        c.style.setProperty("--fy", (ty - (r.top + r.height / 2)) + "px");
-        c.style.setProperty("--cx", (innerWidth / 2 - (r.left + r.width / 2)) + "px");
-        c.style.setProperty("--cy", (innerHeight / 2 - (r.top + r.height / 2)) + "px");
-      });
-    }
+    labels.innerHTML = items.map((x, i) =>
+      `<a class="dial-label" href="#${esc(x.id)}" draggable="false" data-i="${i}" style="--a:${i * STEP}deg"><small>${pad(i + 1)}</small>${t(x.dial || x.label)}</a>`).join("");
+    const links = $$(".dial-label", labels);
+
     function current() {
-      // the last section whose top has scrolled past 40% of the screen
-      let id = items[0].id;
-      items.forEach(x => { const s = document.getElementById(x.id); if (s.getBoundingClientRect().top < innerHeight * .4) id = x.id; });
-      return id;
+      let i = 0;
+      items.forEach((x, k) => { if (document.getElementById(x.id).getBoundingClientRect().top < innerHeight * .4) i = k; });
+      return i;
+    }
+    // keep a running angle so the needle always takes the short way round
+    let angle = 0, sel = 0, miniAngle = 0;
+    const nearest = (from, to) => from + ((((to - from) % 360) + 540) % 360) - 180;
+    function point(i, focus) {
+      sel = (i + N) % N;
+      angle = nearest(angle, sel * STEP);
+      needle.style.setProperty("--r", angle + "deg");
+      name.textContent = smart(items[sel].label);
+      links.forEach((a, k) => a.classList.toggle("on", k === sel));
+      if (focus) links[sel].focus({ preventScroll: true });
     }
     function open() {
       const here = current();
-      cards.forEach(c => c.classList.toggle("here", c.dataset.id === here));
-      dlg.classList.remove("closing", "picking");
-      cards.forEach(c => c.classList.remove("picked"));
+      links.forEach((a, k) => { if (k === here) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+      angle = here * STEP;
+      needle.classList.add("instant");
+      point(here);
+      requestAnimationFrame(() => needle.classList.remove("instant"));
+      dlg.classList.remove("closing");
       dlg.showModal();
-      aim();
-      dlg.classList.add("dealt");
-      (cards.find(c => c.dataset.id === here) || cards[0]).focus({ preventScroll: true });
+      const b = btn.getBoundingClientRect(), g = gauge.getBoundingClientRect();
+      gauge.style.setProperty("--fx", (b.left + b.width / 2 - (g.left + g.width / 2)) + "px");
+      gauge.style.setProperty("--fy", (b.top + b.height / 2 - (g.top + g.height / 2)) + "px");
+      gauge.focus({ preventScroll: true });
     }
     function shut(then) {
       if (!dlg.open) return;
-      if (REDUCED) { dlg.close(); if (then) then(); return; }
+      const done = () => { dlg.close(); dlg.classList.remove("closing"); if (then) then(); };
+      if (REDUCED) return done();
       dlg.classList.add("closing");
-      setTimeout(() => { dlg.close(); dlg.classList.remove("closing", "dealt", "picking"); if (then) then(); }, 340);
+      setTimeout(done, 260);
     }
-    trigger.addEventListener("click", open);
-    hand.addEventListener("click", e => {
-      if (e.target.closest(".fan-close")) return shut(() => trigger.focus());
-      const c = e.target.closest("a.fan-card");
-      if (!c) return;
+    function go(i) {
+      point(i);
+      const id = items[sel].id;
+      setTimeout(() => shut(() => {
+        document.getElementById(id).scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" });
+        history.replaceState(null, "", "#" + id);
+      }), REDUCED ? 0 : 480);
+    }
+
+    btn.addEventListener("click", open);
+    labels.addEventListener("click", e => {
+      const a = e.target.closest(".dial-label");
+      if (!a) return;
       e.preventDefault();
-      const target = document.getElementById(c.dataset.id);
-      const go = () => { target.scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" }); history.replaceState(null, "", "#" + c.dataset.id); };
-      if (REDUCED) { dlg.close(); return go(); }
-      c.classList.add("picked");
-      dlg.classList.add("picking");
-      setTimeout(() => { dlg.close(); dlg.classList.remove("dealt", "picking"); c.classList.remove("picked"); go(); }, 520);
+      go(+a.dataset.i);
     });
-    // a tap on the empty backdrop closes it; Esc gathers the cards back too
-    dlg.addEventListener("click", e => { if (e.target === dlg || e.target === hand) shut(() => trigger.focus()); });
-    dlg.addEventListener("cancel", e => { e.preventDefault(); shut(() => trigger.focus()); });
-    // arrow keys move along the fan
+    dlg.addEventListener("click", e => {
+      if (e.target.closest("[data-close]") || e.target === dlg) shut(() => btn.focus());
+    });
+    dlg.addEventListener("cancel", e => { e.preventDefault(); shut(() => btn.focus()); });
     dlg.addEventListener("keydown", e => {
       const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-      if (!k) return;
-      e.preventDefault();
-      const i = cards.indexOf(document.activeElement);
-      cards[(i + k + cards.length) % cards.length].focus();
+      if (k) { e.preventDefault(); point(sel + k, true); }
     });
-    addEventListener("resize", () => { if (dlg.open) aim(); });
+
+    // turn the dial: drag on the face, the needle snaps to the nearest section, let go to fly there
+    const angleAt = e => {
+      const r = gauge.getBoundingClientRect();
+      const deg = Math.atan2(e.clientX - (r.left + r.width / 2), -(e.clientY - (r.top + r.height / 2))) * 180 / Math.PI;
+      return (Math.round(((deg + 360) % 360) / STEP)) % N;
+    };
+    // A press that moves more than a few pixels becomes a drag (works from anywhere on the dial,
+    // labels included); a press that doesn't is an ordinary tap.
+    let drag = null, justDragged = false;
+    gauge.addEventListener("dragstart", e => e.preventDefault());
+    gauge.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY, on: false, id: e.pointerId }; });
+    gauge.addEventListener("pointermove", e => {
+      if (!drag) return;
+      if (!drag.on && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 8) { drag.on = true; gauge.setPointerCapture(drag.id); gauge.classList.add("turning"); }
+      if (drag.on) { const i = angleAt(e); if (i !== sel) point(i); }
+    });
+    const release = () => {
+      if (drag && drag.on) { justDragged = true; setTimeout(() => { justDragged = false; }, 0); go(sel); }
+      drag = null; gauge.classList.remove("turning");
+    };
+    gauge.addEventListener("pointerup", release);
+    gauge.addEventListener("pointercancel", () => { drag = null; gauge.classList.remove("turning"); });
+    gauge.addEventListener("click", e => { if (justDragged) { e.preventDefault(); e.stopPropagation(); } }, true);
+    // a tap on the face (not a label) points the needle there
+    $(".gauge-face", gauge).addEventListener("click", e => go(angleAt(e)));
+
+    // the little gauge in the top bar follows the page
+    let ticking = false;
+    function track() {
+      miniAngle = nearest(miniAngle, current() * STEP);
+      mini.style.setProperty("--r", miniAngle + "deg");
+    }
+    addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { ticking = false; track(); });
+    }, { passive: true });
+    track();
   })();
 
   /* ---------- nav: which section am I in ---------- */

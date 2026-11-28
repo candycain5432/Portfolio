@@ -46,9 +46,13 @@
         <a href="#photos">Photos</a>
         <a href="#contact">Contact</a>
       </nav>
-      <button class="fan-trigger" type="button" id="fanOpen" aria-haspopup="dialog" aria-controls="fan">
-        <span class="fan-stack" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="fan-word hand">menu</span>
+      <button class="dial-btn" type="button" id="dialOpen" aria-haspopup="dialog" aria-controls="dial" aria-label="Sections menu">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="17.5" class="mini-face"/>
+          <g class="mini-ticks"></g>
+          <g class="mini-needle"><path d="M20 21.5V7"/></g>
+          <circle cx="20" cy="20" r="2.6" class="mini-hub"/>
+        </svg>
       </button>
       <a class="btn btn-fuel nav-fuel" data-kofi href="https://ko-fi.com/williamcain" target="_blank" rel="noopener">Buy me a Red Bull<span aria-hidden="true">&nbsp;↗</span></a>
     </div>
@@ -257,8 +261,23 @@
   </footer>
 
   <!-- Small-screen menu: a hand of polaroids, one per section -->
-  <dialog class="fan" id="fan" aria-label="Sections">
-    <div class="fan-hand" id="fanHand"></div>
+  <dialog class="dial" id="dial" aria-label="Sections">
+    <button class="dial-x" type="button" data-close aria-label="Close menu">✕</button>
+    <div class="gauge" id="gauge" tabindex="-1">
+      <svg class="gauge-face" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="97" class="bezel"/>
+        <circle cx="100" cy="100" r="90" class="face"/>
+        <g class="ticks" id="dialTicks"></g>
+        <g class="needle" id="dialNeedle">
+          <path d="M100 110 L97.4 100 L100 67 L102.6 100 Z"/>
+          <path d="M100 100 L100 122" class="tail"/>
+        </g>
+        <circle cx="100" cy="100" r="6" class="hub"/>
+        <circle cx="100" cy="100" r="2" class="hub-dot"/>
+      </svg>
+      <nav class="dial-labels" id="dialLabels" aria-label="Sections"></nav>
+      <p class="dial-readout" aria-live="polite"><span id="dialName"></span><small>tap to go</small></p>
+    </div>
   </dialog>
 
   <!-- Photo viewer -->
