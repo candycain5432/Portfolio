@@ -583,6 +583,19 @@ window.PORTFOLIO = {
 
   // Sayings. `terminal` runs in the terminal card in "Off the clock"; `signoff` is the
   // sign-off at the very bottom of the page.
+  // The menu on small screens: an altimeter dial. `id` is the section it jumps to,
+  // `dial` the short name on the dial, `label` the full name in its readout.
+  menu: [
+    { id: "work", label: "Work", dial: "Work" },
+    { id: "learning", label: "How I learn", dial: "Learn" },
+    { id: "philosophy", label: "Philosophy", dial: "Philosophy" },
+    { id: "life", label: "Off the clock", dial: "Life" },
+    { id: "animation", label: "3D animation", dial: "3D" },
+    { id: "scrapbook", label: "Scrapbook", dial: "Scrapbook" },
+    { id: "photos", label: "Planes", dial: "Planes" },
+    { id: "contact", label: "Say hi", dial: "Say hi" },
+  ],
+
   sayings: {
     // My favorite quote. It gets its own moment between "How I learn" and "Off the clock".
     favorite: "The quieter you become, the more you are able to hear.",

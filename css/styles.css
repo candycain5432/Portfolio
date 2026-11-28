@@ -1113,6 +1113,142 @@ a.scrap-pic { cursor: zoom-in; }
 .photo-more .hand { flex-basis: 100%; margin: 0; font-size: clamp(1.4rem, 2.2vw, 1.75rem); color: var(--ink-2, var(--ink)); rotate: -1.5deg; }
 .photo-more-url { font: .75rem/1 var(--mono); letter-spacing: .08em; color: var(--ink-3); }
 
+/* ---------- small-screen menu: an altimeter dial ---------- */
+.dial-btn { display: none; }
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .dial-btn {
+    display: block; flex: none;
+    width: 44px; height: 44px; margin-left: auto; padding: 0;
+    border: 0; background: none; cursor: pointer;
+    transition: rotate .3s var(--pop);
+  }
+  .dial-btn:hover { rotate: -10deg; }
+}
+.dial-btn svg { display: block; width: 100%; height: 100%; }
+.mini-face { fill: var(--paper); stroke: var(--ink); stroke-width: 2.2; }
+.mini-ticks line { stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; }
+.mini-needle { transform-origin: 20px 20px; rotate: var(--r, 0deg); transition: rotate .6s var(--pop); }
+.mini-needle path { stroke: var(--orange); stroke-width: 2.6; stroke-linecap: round; }
+.mini-hub { fill: var(--ink); }
+
+.dial {
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; padding: 0; border: 0;
+  display: none; place-items: center;
+  background: transparent;
+}
+.dial[open] { display: grid; }
+.dial::backdrop { background: rgb(255 253 248 / .28); -webkit-backdrop-filter: blur(14px) saturate(120%); backdrop-filter: blur(14px) saturate(120%); }
+/* a soft shadow so the dial lifts off the blurred page */
+.gauge-face { filter: drop-shadow(0 24px 30px rgb(21 32 43 / .28)); }
+.dial-x {
+  position: fixed; top: 14px; right: 16px;
+  width: 44px; height: 44px;
+  border: 2px solid var(--ink); border-radius: 50%;
+  background: var(--paper); color: var(--ink);
+  font: 700 1rem/1 var(--mona); cursor: pointer;
+}
+.dial-x:hover { background: var(--ink); color: var(--paper); }
+
+.gauge {
+  --s: min(86vw, 58vh, 440px);
+  margin-bottom: 70px;
+  position: relative;
+  width: var(--s); height: var(--s);
+  container-type: inline-size;
+}
+.gauge { touch-action: none; }
+.gauge-face { position: absolute; inset: 0; width: 100%; height: 100%; cursor: pointer; }
+.gauge.turning, .gauge.turning * { cursor: grabbing; }
+.bezel { fill: var(--ink); }
+.face { fill: #fbf7ec; }
+.ticks line { stroke: var(--ink-3); stroke-width: .8; stroke-linecap: round; }
+.ticks line.major { stroke: var(--ink); stroke-width: 1.8; }
+.needle { transform-origin: 100px 100px; rotate: var(--r, 0deg); transition: rotate .65s var(--pop); }
+.needle.instant { transition: none; }
+.needle path { fill: var(--orange); stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; }
+.needle .tail { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.hub { fill: var(--ink); }
+.hub-dot { fill: var(--orange); }
+
+/* labels sit on a ring inside the ticks, always upright */
+.dial-labels { position: absolute; inset: 0; pointer-events: none; }
+.dial-label {
+  position: absolute; left: 50%; top: 50%;
+  display: grid; justify-items: center; gap: 2px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font: 780 3.8cqi/1 var(--mona); font-stretch: 96%; letter-spacing: -.01em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) rotate(var(--a)) translateY(-29.5cqi) rotate(calc(-1 * var(--a)));
+  transition: color .2s, background-color .2s;
+}
+.dial-label small { font: 700 2.6cqi/1 var(--mono); color: var(--ink-3); letter-spacing: .08em; }
+.dial-label:hover, .dial-label.on { color: var(--orange-deep); }
+.dial-label.on small { color: var(--orange-deep); }
+.dial-label[aria-current]::after {
+  content: ""; justify-self: center; width: 5px; height: 5px; margin-top: 3px; border-radius: 50%; background: var(--ink);
+}
+.dial-label:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.gauge:focus { outline: none; }
+
+/* the readout, like a little cockpit display under the hub */
+.dial-readout {
+  position: absolute; left: 50%; top: calc(100% + 22px);
+  translate: -50% 0;
+  display: grid; justify-items: center; gap: 4px;
+  margin: 0; padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--ink);
+  font: 700 clamp(.8rem, 3.4cqi, 1rem)/1 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--yellow); white-space: nowrap;
+  pointer-events: none;
+}
+.dial-readout small { font-size: .625rem; letter-spacing: .14em; color: #8b9bb0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .dial[open] .gauge { animation: dial-in .42s var(--ease) both; }
+  .dial[open]::backdrop { animation: fade-in .3s ease; }
+  .dial.closing .gauge { animation: dial-out .26s ease-in both; }
+  .dial.closing::backdrop { opacity: 0; transition: opacity .26s; }
+  @keyframes dial-in { from { transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(.1); opacity: 0; } }
+  @keyframes dial-out { to { transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(.1); opacity: 0; } }
+  @keyframes fade-in { from { opacity: 0; } }
+}
+
+/* ---------- open for commissions ---------- */
+.nav-open {
+  display: inline-block;
+  margin-left: 8px; padding: 7px 12px 6px;
+  border: 2px solid var(--ink); border-radius: 999px;
+  background: var(--yellow);
+  box-shadow: 2px 2px 0 var(--ink);
+  font: 800 .6875rem/1 var(--mona); font-stretch: 115%; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  rotate: -3deg;
+  transition: rotate .15s var(--pop), scale .15s var(--pop);
+}
+.nav-open:hover { rotate: 0deg; scale: 1.06; }
+.commish-plane { flex: none; width: 18px; height: 18px; fill: var(--orange); rotate: 45deg; }
+@media (max-width: 1240px) { .nav-open { display: none; } }
+
+.anim-commish { margin: 18px 0 0; font-size: 1.35rem; color: var(--orange-deep); rotate: -1.5deg; transform-origin: left; }
+.anim-commish a { text-decoration: underline wavy var(--orange); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+
+.commish {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px 24px;
+  max-width: 980px; margin: 30px 0 0; padding: 18px 22px;
+  border: 2px dashed rgb(21 32 43 / .35); border-radius: 18px;
+  background: rgb(255 253 248 / .6);
+}
+.commish-badge { display: inline-flex; align-items: center; gap: 9px; margin: 0; font: 800 .8125rem/1 var(--mona); font-stretch: 115%; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.commish-text { margin: 0; color: var(--ink-2); font-size: .9688rem; }
+@media (max-width: 860px) {
+  .commish { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+}
+
 /* ---------- contact ---------- */
 .contact { padding-bottom: clamp(88px, 10vw, 150px); }
 .title--huge { font-size: clamp(4.5rem, 16vw, 14rem); line-height: .82; }
@@ -1225,9 +1361,6 @@ a.scrap-pic { cursor: zoom-in; }
 @media (max-width: 720px) {
   .nav-in { height: 60px; gap: 12px; }
   .brand-name { display: none; }
-  .nav-links { gap: 0; overflow-x: auto; scrollbar-width: none; }
-  .nav-links::-webkit-scrollbar { display: none; }
-  .nav-links a { padding: 8px 9px; font-size: .875rem; }
   .card-top { padding-right: 96px; }
   .stamp { top: 20px; right: 16px; font-size: .75rem; }
   .notebook {
@@ -1274,7 +1407,6 @@ a.scrap-pic { cursor: zoom-in; }
 }
 
 @media (max-width: 420px) {
-  .nav-links a { padding: 8px 7px; font-size: .8125rem; }
   .btn { padding: 13px 18px; }
 }
 
@@ -1284,11 +1416,10 @@ a.scrap-pic { cursor: zoom-in; }
   .marquee-track, .term-body .cursor { animation: none; }
 }
 
-/* very narrow phones: keep all five nav links in view */
+/* very narrow phones: a smaller logo */
 @media (max-width: 380px) {
   .nav-in { gap: 8px; }
   .logo { width: 36px; height: 36px; }
-  .nav-links a { padding: 8px 5px; }
 }
 
 

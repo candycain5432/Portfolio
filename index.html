@@ -37,13 +37,23 @@
         <img class="logo" src="assets/favicon.svg" width="44" height="44" alt="">
         <span class="brand-name">William Cain</span>
       </a>
+      <a class="nav-open" href="#contact">Commissions open</a>
       <nav class="nav-links" aria-label="Sections">
         <a href="#work">Work</a>
         <a href="#learning">Learning</a>
         <a href="#life">Life</a>
+        <a href="#animation">3D</a>
         <a href="#photos">Photos</a>
         <a href="#contact">Contact</a>
       </nav>
+      <button class="dial-btn" type="button" id="dialOpen" aria-haspopup="dialog" aria-controls="dial" aria-label="Sections menu">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="17.5" class="mini-face"/>
+          <g class="mini-ticks"></g>
+          <g class="mini-needle"><path d="M20 21.5V7"/></g>
+          <circle cx="20" cy="20" r="2.6" class="mini-hub"/>
+        </svg>
+      </button>
       <a class="btn btn-fuel nav-fuel" data-kofi href="https://ko-fi.com/williamcain" target="_blank" rel="noopener">Buy me a Red Bull<span aria-hidden="true">&nbsp;↗</span></a>
     </div>
   </header>
@@ -80,7 +90,7 @@
             <div class="cta">
               <a class="btn btn-ink" href="#work">See what I've built <span aria-hidden="true">↓</span></a>
               <a class="btn btn-line" href="#contact" data-email>Email me</a>
-              <p class="hand looking"><svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg><span>looking for internships &amp; people to build things with!</span></p>
+              <p class="hand looking"><svg class="arr" viewBox="0 0 40 24" aria-hidden="true"><use href="#scribble"/></svg><span>open to internships &amp; commissions!</span></p>
             </div>
           </div>
           <ul class="stickers" id="stickers" aria-label="A few facts"></ul>
@@ -228,6 +238,11 @@
       <div class="wrap">
         <h2 class="title title--huge" id="contact-h" data-stretch>Say hi</h2>
         <p class="lede">If you have an internship, a project idea, or just want to talk about planes or Linux, send me an email.</p>
+        <div class="commish">
+          <p class="commish-badge"><svg class="commish-plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.9 0 1.4 1 1.4 2.2v5.5l7.6 4.5v2.2l-7.6-2.3v4.8l2.3 1.7v1.5L12 20.5l-3.7 1.1v-1.5l2.3-1.7v-4.8L3 15.9v-2.2l7.6-4.5V3.7c0-1.2.5-2.2 1.4-2.2z"/></svg>Open for commissions</p>
+          <p class="commish-text">Websites, 3D animation, photography, small Python tools, Arduino builds. Tell me what you have in mind and I'll get back to you.</p>
+          <a class="btn btn-fuel btn-sm" href="#contact" data-email data-subject="Commission">Ask about a commission <span aria-hidden="true">→</span></a>
+        </div>
         <p class="mail"><a href="#contact" data-email data-email-text>Email me</a></p>
         <div class="contact-row">
           <ul class="socials" id="socials" aria-label="Elsewhere"></ul>
@@ -244,6 +259,26 @@
       <p>Set in Mona Sans, Source Serif, Gochi Hand and B612 Mono (the typeface Airbus commissioned for its cockpit displays).</p>
     </div>
   </footer>
+
+  <!-- Small-screen menu: a hand of polaroids, one per section -->
+  <dialog class="dial" id="dial" aria-label="Sections">
+    <button class="dial-x" type="button" data-close aria-label="Close menu">✕</button>
+    <div class="gauge" id="gauge" tabindex="-1">
+      <svg class="gauge-face" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="97" class="bezel"/>
+        <circle cx="100" cy="100" r="90" class="face"/>
+        <g class="ticks" id="dialTicks"></g>
+        <g class="needle" id="dialNeedle">
+          <path d="M100 110 L97.4 100 L100 67 L102.6 100 Z"/>
+          <path d="M100 100 L100 122" class="tail"/>
+        </g>
+        <circle cx="100" cy="100" r="6" class="hub"/>
+        <circle cx="100" cy="100" r="2" class="hub-dot"/>
+      </svg>
+      <nav class="dial-labels" id="dialLabels" aria-label="Sections"></nav>
+      <p class="dial-readout" aria-live="polite"><span id="dialName"></span><small>tap to go</small></p>
+    </div>
+  </dialog>
 
   <!-- Photo viewer -->
   <dialog class="viewer" id="viewer" aria-label="Photo viewer">
